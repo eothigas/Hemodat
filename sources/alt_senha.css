@@ -1,0 +1,130 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
+
+/* Reset Página */
+* {
+    margin: 0;
+    padding: 0;
+    font-family: Outfit, sans-serif;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    position: relative;
+}
+
+a {
+    text-decoration: none;
+    color: white;
+}
+
+#principal {
+    background-color: rgb(156, 156, 156);
+    border-radius: 10px;
+}
+
+#conteudo-cima {
+    display: flex;
+    background-color: rgb(209, 0, 0);
+    padding: 10px 30px 10px;
+    border-radius: 10px;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    width: 500px;
+    height: 130px;
+}
+
+#conteudo-cima i {
+    text-align: left;
+    background-color: rgb(255, 255, 255,0.3);
+    padding: 0 2px;
+    border-radius: 5px;
+    color: white;
+    font-size: 20px;
+    position: absolute;
+    left: 6px;
+    top: 6px;
+}
+
+#conteudo-cima i:hover {
+    background-color: rgb(255, 255, 255,0.8);
+    color:rgb(209, 0, 0);
+}
+
+#conteudo-cima h1, p {
+    text-align: center;
+    color: white;
+}
+
+#text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+h1 {
+    margin: 5px auto;
+    width: 300px;
+    font-weight: 600;
+    font-size: 20px;
+}
+
+p {
+    font-weight: 100;
+    text-align: center;
+    width: 290px;
+    font-size: 16px;
+}
+
+#conteudo-baixo {
+    padding: 10px 30px 15px;
+}
+
+#rec-pass {
+    display: grid;
+    gap: 5px;
+}
+
+#rec-pass input {
+    width: 100%;
+    max-width: 460px;
+    /* margin: 0 auto; */
+    padding: 10px;
+    padding-left: 30px;
+    background-color: rgb(230, 230, 230);
+    border: none;
+    z-index: 0;
+}
+
+#rec-pass i {
+    color: gray;
+    position: absolute;
+    margin-top: auto auto;
+    font-size: 18px;
+    padding-top: 8px;
+    padding-left: 5px;
+}
+
+#send {
+    display: flex;
+    margin: 0 auto;
+    height: 30px;
+    padding: 0 10px;
+    align-items: center;
+    font-size: 16px;
+    font-weight: 500;
+    border-radius: 30px;
+    border: none;
+    background-color: red;
+    color: white;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+#send:hover {
+    background-color: rgb(209, 0, 0, 0.75);
+}
