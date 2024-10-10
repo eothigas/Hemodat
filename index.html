@@ -14,29 +14,32 @@
 
         <div id="conteudo-esquerda">
             <img src="./images/logo.png" id="logo" alt="LOGO">
-            <h1>Seja Bem-Vindo.</h1>
+            <h1>Seja Bem-Vindo!</h1>
             <p>Acesse sua conta agora mesmo.</p>
 
-            <button type="submit" id="login">ENTRAR</button>
-            <a href="./forgot_password.html"><p id="forgot">Esqueci minha senha.</p></a>
-
+            <a href="./login.html">
+                <button type="submit" id="login">ENTRAR</button>
+            </a>
         </div>
         <div id="conteudo-direita">
             <h1>Crie sua conta</h1>
-            <h2>Preencha seus dados.</h2>
+            <h2>Preencha seus dados</h2>
 
             <form id="register" action="" method="post">
                 <div class="input-container">
                     <i class="bi bi-person-plus"></i>
-                    <input type="name" name="nome" placeholder="Nome">
+                    <input type="name" name="nome" placeholder="Nome" required minlength="3" maxlength="50">
                 </div>
                 <div class="input-container">
                     <i class="bi bi-envelope"></i>
-                    <input type="email" name="email" placeholder="Email">
+                    <input type="email" name="email" placeholder="Email" required>
                 </div>
                 <div class="input-container">
                     <i class="bi bi-lock"></i>
-                    <input type="password" name="senha" placeholder="Senha">
+                    <input type="password" name="senha" placeholder="Senha" required minlength="9" maxlength="9" ><br>
+                    <fontsize>Crie uma senha, de 8 dígitos alfanuméricos
+                        e 1 caractere especial.
+                    </fontsize>
                 </div>
             </form>
 

@@ -14,7 +14,6 @@ body {
     height: 100vh;
     margin: 0;
     position: relative;
-    overflow: hidden;
 }
 
 #principal {
@@ -52,7 +51,7 @@ body {
     max-width: 260px;
 }
 
-#login {
+#cadastro {
     font-weight: bold;
     border: 2px solid white;
     background-color: transparent;
@@ -65,14 +64,25 @@ body {
     cursor: pointer;
 }
 
-#login:hover {
+#cadastro:hover {
     background-color: white;
     color: red;
 }
 
+a {
+    text-decoration: none;
+}
+
 #forgot {
-    margin-top: 2px;
     font-size: 14px !important;
+    color: rgb(209, 0, 0);
+    font-weight: 500;
+    text-decoration: none;
+    text-align: end;
+}
+
+#forgot:hover {
+    color: rgb(209, 0, 0, 0.8);
 }
 
 #conteudo-esquerda a {
@@ -105,13 +115,13 @@ body {
     font-size: 24px;
 }
 
-#register {
+#login {
     display: grid;
     gap: 10px;
     margin: 30px 0;
 }
 
-#register input {
+#login input {
     width: 400px;
     margin: 0 auto;
     padding: 10px;
@@ -122,7 +132,7 @@ body {
     z-index: 0;
 }
 
-#register i {
+#login i {
     color: gray;
     position: absolute;
     margin-top: auto auto;
@@ -131,13 +141,7 @@ body {
     padding-left: 5px;
 }
 
-.input-container {
-    font-size: 12px;
-    text-align: right;
-    color: gray;
-}
-
-#new-register {
+#logar {
     border: none;
     padding: 10px;
     background-color: rgb(209, 0, 0);
@@ -148,7 +152,7 @@ body {
     cursor: pointer;
 }
 
-#new-register:hover {
+#logar:hover {
     background-color: rgb(209, 0, 0, 0.75);
 }
 
@@ -173,7 +177,7 @@ body {
         font-size: 16px;
     }
 
-    #login {
+    #cadastro {
         width: 100px;
         height: 30px;
         padding: 0;
@@ -190,6 +194,7 @@ body {
         width: 90%;
         height: 60%;
         flex-direction: column;
+        margin: auto auto;
     }
 
     #conteudo-esquerda {
@@ -207,5 +212,4 @@ body {
         margin: 0;
         padding: 30px 0;
     }
-
 }
