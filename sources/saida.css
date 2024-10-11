@@ -110,12 +110,12 @@ p {
     padding: 10px 30px 15px;
 }
 
-#entrada {
+#saida {
     display: grid;
     gap: 10px;
 }
 
-#entrada input {
+#saida input {
     width: 100%;
     max-width: 600px;
     padding: 10px;
@@ -126,18 +126,18 @@ p {
     z-index: 0;
 }
 
-#entrada input[type=number]::-webkit-inner-spin-button { 
+#saida input[type=number]::-webkit-inner-spin-button { 
     -webkit-appearance: none;
     
 }
 
-#entrada input[type=number] { 
+#saida input[type=number] { 
    -moz-appearance: textfield;
    appearance: textfield;
 
 }
 
-#entrada i {
+#saida i {
     color: gray;
     position: absolute;
     margin-top: auto auto;
