@@ -16,10 +16,18 @@
         
         <div id="list">
             <ul>
-                <li>HOME</li>
-                <li>ENTRADA</li>
-                <li>SAÍDA</li>
-                <li>RELATÓRIO</li>
+                <a href="./home.html">
+                    <li>HOME</li>
+                </a>
+                <a href="">
+                    <li>ENTRADA</li>
+                </a>
+                <a href="./saida.html">
+                    <li>SAÍDA</li>
+                </a>
+                <a href="./relatorio.html">
+                    <li>RELATÓRIO</li>
+                </a>
             </ul>
         </div>
 
@@ -49,11 +57,11 @@
                 </div>
                 <div class="input-container">
                     <i class="bi bi-calendar"></i>
-                    <input type="text" name="coleta" placeholder="Data de Coleta" maxlength="10" oninput="formatDate(this)">
+                    <input type="text" inputmode="numeric" name="coleta" placeholder="Data de Coleta" max="10" oninput="formatDate(this)">
                 </div>
                 <div class="input-container">
                     <i class="bi bi-calendar-event"></i>
-                    <input type="text" name="validade" placeholder="Data de Validade" maxlength="10" oninput="formatDate(this)">
+                    <input type="text" inputmode="numeric" name="validade" placeholder="Data de Validade" max="10" oninput="formatDate(this)">
                 </div>
             </form>
 
