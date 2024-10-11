@@ -14,6 +14,11 @@ body {
     overflow: hidden;
 }
 
+a{
+    text-decoration: none;
+    color: white;
+}
+
 #menu-up {
     display: flex;
     justify-content: space-between;
@@ -55,7 +60,6 @@ li:hover {
     position: absolute;
     top: 10px;
     left: 10px; 
-    /* transform: translate(-50%, -50%);  */
     display: flex;
     justify-content: center;
     width: 25%;
