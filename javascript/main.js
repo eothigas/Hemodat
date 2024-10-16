@@ -10,10 +10,15 @@ document.getElementById("btn-home").addEventListener("click", function() {
 
     // Exibe o conteúdo #list com transição
     const list = document.getElementById("list");
-    list.style.display = "block";
-    setTimeout(() => {
-        list.style.opacity = "1";
-    }, 10);
+    list.style.display = "flex";
+
+    // Mudar a justificação da nav
+    const menUp = document.getElementById("menu-up");
+    menUp.style.justifyContent = "left";
+
+    // Oculta a logo, quando mostrar a list
+    const logoExb = document.getElementById("logo");
+    setTimeout(() => { logoExb.style.opacity = "0"; }, 10);
 });
 
 document.querySelector(".open").addEventListener("click", function() {
@@ -28,7 +33,14 @@ document.querySelector(".open").addEventListener("click", function() {
 
     // Oculta o conteúdo #list com transição
     const list = document.getElementById("list");
-    list.style.opacity = "0";
-    setTimeout(() => { list.style.display = "none"; }, 200); // Tempo igual ao da transição
+    setTimeout(() => { list.style.display = "none"; }, 100); // Tempo igual ao da transição
+    
+    // Mudar a justificação da nav
+    const menUp = document.getElementById("menu-up");
+    menUp.style.justifyContent = "space-between";
+
+    // Exibe a logo, quando mostra a list
+    const logoExb = document.getElementById("logo");
+    setTimeout(() => { logoExb.style.opacity = "1"; }, 10);
 });
 
