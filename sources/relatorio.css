@@ -22,15 +22,30 @@ a {
 
 #menu-up {
     display: flex;
-    justify-content: space-between;
+    /* justify-content: space-between; */
     align-items: center;
     background-color: rgb(209, 0, 0);
     color: white;
     padding: 0 20px;
 }
 
+#logo {
+    position: absolute;
+    right: 20px;
+    transition: opacity 0.5s ease, height 0.5s ease;
+}
+
 #btn-home {
     font-size: 40px;
+    cursor: pointer;
+}
+
+.open {
+    cursor: pointer;
+    display: none;
+    opacity: 0;
+    font-size: 40px;
+    transition: opacity 0.9s ease, transform 0.9s ease;
 }
 
 ul {
@@ -38,6 +53,12 @@ ul {
     gap: 60px;
     text-decoration: none;
     list-style: none;
+}
+
+#list {
+    display: none;
+    transition: opacity 0.5s ease, height 0.5s ease;
+    margin: 0 auto;
 }
 
 li {

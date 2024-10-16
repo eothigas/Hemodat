@@ -6,7 +6,7 @@ document.getElementById("btn-home").addEventListener("click", function() {
     // Exibe o ícone de fechar com transição
     const openIcon = document.querySelector(".open");
     openIcon.style.display = "inline";
-    setTimeout(() => { openIcon.style.opacity = "1"; }, 10);
+    setTimeout(() => { openIcon.style.opacity = "1"; }, 0);
 
     // Exibe o conteúdo #list com transição
     const list = document.getElementById("list");
@@ -29,7 +29,7 @@ document.querySelector(".open").addEventListener("click", function() {
     setTimeout(() => {
         openIcon.style.display = "none";
         document.getElementById("btn-home").style.display = "inline";
-    }, 200);
+    }, 100);
 
     // Oculta o conteúdo #list com transição
     const list = document.getElementById("list");
@@ -41,6 +41,6 @@ document.querySelector(".open").addEventListener("click", function() {
 
     // Exibe a logo, quando mostra a list
     const logoExb = document.getElementById("logo");
-    setTimeout(() => { logoExb.style.opacity = "1"; }, 10);
+    setTimeout(() => { logoExb.style.opacity = "1"; }, 0);
 });
 
