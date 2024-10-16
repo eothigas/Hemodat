@@ -11,6 +11,7 @@ document.getElementById("btn-home").addEventListener("click", function() {
     // Exibe o conteúdo #list com transição
     const list = document.getElementById("list");
     list.style.display = "flex";
+    setTimeout(() => { list.style.opacity = "1"; }, 10);
 
     // Mudar a justificação da nav
     const menUp = document.getElementById("menu-up");
@@ -33,7 +34,7 @@ document.querySelector(".open").addEventListener("click", function() {
 
     // Oculta o conteúdo #list com transição
     const list = document.getElementById("list");
-    setTimeout(() => { list.style.display = "none"; }, 100); // Tempo igual ao da transição
+    setTimeout(() => { list.style.opacity = "0"; }, 10);
     
     // Mudar a justificação da nav
     const menUp = document.getElementById("menu-up");

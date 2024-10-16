@@ -52,6 +52,7 @@ ul {
 
 #list {
     display: none;
+    opacity: 0;
     transition: opacity 0.5s ease, height 0.5s ease;
     margin: 0 auto;
 }

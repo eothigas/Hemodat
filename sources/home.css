@@ -56,7 +56,8 @@ ul {
 
 #list {
     display: none;
-    transition: opacity 0.5s ease, height 0.5s ease;
+    opacity: 0;
+    transition: opacity 0.9s ease, height 0.9s ease;
     margin: 0 auto;
 }
 
