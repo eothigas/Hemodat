@@ -32,11 +32,23 @@ a{
     font-size: 40px;
 }
 
+.open {
+    display: none;
+    opacity: 0;
+    font-size: 40px;
+    transition: opacity 0.9s ease, transform 0.9s ease;
+}
+
 ul {
     display: flex;
     gap: 60px;
     text-decoration: none;
     list-style: none;
+}
+
+#list {
+    opacity: 0;
+    transition: opacity 0.3s ease, height 0.3s ease;
 }
 
 li {
