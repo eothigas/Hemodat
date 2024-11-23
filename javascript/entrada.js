@@ -33,3 +33,23 @@ function limitDigits(input, maxDigits) {
         input.value = input.value.slice(0, maxDigits);
     }
 }
+
+document.getElementById('entrada').addEventListener('submit', async (e) => {
+    e.preventDefault(); // Impede o envio padrão do formulário
+
+    const form = new FormData(e.target);
+    const response = await fetch('/php/entrada.php', {
+        method: 'POST',
+        body: form
+    });
+
+    const result = await response.json();
+
+    if (result.status === 'success') {
+        alert(result.message);
+        // Redireciona para outra página ou recarrega
+        location.reload();
+    } else {
+        alert(result.message);
+    }
+});

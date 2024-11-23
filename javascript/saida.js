@@ -33,3 +33,67 @@ function limitDigits(input, maxDigits) {
         input.value = input.value.slice(0, maxDigits);
     }
 }
+
+// Preenche as opções com os tipos sanguíneos cadastrados no banco de dados
+document.addEventListener("DOMContentLoaded", async function() {
+    try {
+        // Fazer a requisição para pegar os tipos sanguíneos
+        const response = await fetch('/php/buscar_tipo.php'); // Altere o caminho conforme necessário
+        const tiposSanguineosUnicos = await response.json();
+
+        // Referência ao select
+        const tipoSelect = document.getElementById('tipo');
+
+        // Criar as opções do select
+        tiposSanguineosUnicos.forEach(tipo => {
+            const option = document.createElement('option');
+            option.value = tipo;
+            option.textContent = tipo;
+            tipoSelect.appendChild(option);
+        });
+    } catch (error) {
+        console.error('Erro ao carregar os tipos sanguíneos:', error);
+    }
+});
+
+// Realiza a operação de saída de sangue
+document.getElementById('saida').addEventListener('submit', function(event) {
+    event.preventDefault(); // Previne o envio do formulário padrão
+
+    // Obter os dados do formulário
+    const tipo = document.getElementById('tipo').value;
+    const litros = document.querySelector('input[name="litros"]').value;
+    const saida = document.querySelector('input[name="saida"]').value;
+
+    // Validar campos (exemplo simples)
+    if (!tipo || !litros || !saida) {
+        alert('Por favor, preencha todos os campos!');
+        return;
+    }
+
+    // Criar o objeto de dados para enviar
+    const formData = new FormData();
+    formData.append('tipo', tipo);
+    formData.append('litros', litros);
+    formData.append('saida', saida);
+
+    // Enviar o formulário via AJAX (fetch)
+    fetch('/php/saida.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(result => {
+        // Verificar o status da resposta
+        if (result.status === 'success') {
+            alert(result.message);
+            // Recarregar a página para atualizar o estado
+            window.location.reload();
+        } else {
+            alert(result.message);
+        }
+    })
+    .catch(error => {
+        alert('Erro ao enviar dados: ' + error);
+    });
+});
