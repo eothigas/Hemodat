@@ -8,7 +8,7 @@
 }
 
 body {
-    height: 100vh;
+    height: 100%;
     margin: 0;
     position: relative;
     overflow: hidden;
@@ -67,6 +67,10 @@ li {
 
 li:hover {
     color: rgba(255, 255, 255, 0.8);
+}
+
+#logout {
+    cursor: pointer;
 }
 
 #home {

@@ -8,88 +8,37 @@
 }
 
 body {
-    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
     margin: 0;
     position: relative;
-    /* overflow: hidden; */
+    overflow: hidden;
     background-color: rgb(230, 230, 230);
 }
 
-#menu-up {
-    display: flex;
-    /* justify-content: space-between; */
-    align-items: center;
-    background-color: rgb(209, 0, 0);
-    color: white;
-    padding: 0 20px;
-}
-
-#logo {
-    position: absolute;
-    right: 20px;
-    transition: opacity 0.5s ease, height 0.5s ease;
-}
-
-#btn-home {
-    font-size: 40px;
-    cursor: pointer;
-}
-
-.open {
-    cursor: pointer;
-    display: none;
-    opacity: 0;
-    font-size: 40px;
-    transition: opacity 0.9s ease, transform 0.9s ease;
-}
-
-ul {
-    display: flex;
-    gap: 60px;
+a {
     text-decoration: none;
-    list-style: none;
-}
-
-#list {
-    display: none;
-    opacity: 0;
-    transition: opacity 0.5s ease, height 0.5s ease;
-    margin: 0 auto;
-}
-
-li {
-    font-weight: 600;
-}
-
-li:hover {
-    color: rgba(255, 255, 255, 0.8);
-}
-
-#logout {
-    cursor: pointer;
+    color: white;
 }
 
 #principal {
-    display: flex;
-    flex-direction: column;
-    max-width: 700px;
-    width: 700px;
     background-color: rgb(156, 156, 156);
     border-radius: 10px;
     box-shadow: 5px 5px 5px rgb(0, 0, 0, 0.3);
-    margin: 0 auto;
-    margin-top: 30px;   
 }
 
 #conteudo-cima {
     display: flex;
     background-color: rgb(209, 0, 0);
+    padding: 20px 30px 0px;
     border-radius: 10px;
     position: relative;
     justify-content: center;
     align-items: center;
-    width: 700px;
-    height: 150px;
+    width: 500px;
+    height: 130px;
 }
 
 #conteudo-cima i {
@@ -124,78 +73,50 @@ h1 {
     margin: auto auto;
     width: 300px;
     font-weight: 600;
-    font-size: 28px;
+    font-size: 20px;
 }
 
 p {
-    font-weight: 200;
-    font-size: 20PX;
+    font-weight: 300;
 }
 
 #conteudo-baixo {
     padding: 10px 30px 15px;
 }
 
-#entrada {
+#rec-pass {
     display: grid;
     gap: 10px;
+    margin-top: 30px;
 }
 
-.input-up, .input-down {
-    display: flex;
-    width: auto;
-    gap: 80px;
+#rec-pass input {
+    width: 100%;
+    max-width: 460px;
     padding: 10px;
-    border: none;
-    border-radius: 5px;
-    justify-content: center;
-    align-items: center
-}
-
-#entrada input {
-    width: auto;
-    /* max-width: 600px; */
-    padding: 10px;
-    padding-left: 35px;
+    padding-left: 30px;
     background-color: rgb(230, 230, 230);
-    border: 2px solid rgb(20, 20, 20);
+    border: none;
     border-radius: 5px;
     z-index: 0;
 }
 
-#entrada input[type=number]::-webkit-inner-spin-button { 
-    -webkit-appearance: none;
-    
-}
-
-#entrada input[type=number] { 
-   -moz-appearance: textfield;
-   appearance: textfield;
-
-}
-
-#entrada i {
+#rec-pass i {
     color: gray;
     position: absolute;
     margin-top: auto auto;
     font-size: 18px;
     padding-top: 8px;
-    padding-left: 8px;
+    padding-left: 5px;
 }
 
-a{
-    text-decoration: none;
-    color: white;
-}
 
-#registrar {
+#send {
     display: flex;
     margin: 0 auto;
-    width: 150px;
     height: 30px;
     padding: 0 10px;
     align-items: center;
-    justify-content: center;
     font-size: 16px;
     font-weight: 500;
     border-radius: 30px;
@@ -206,6 +127,85 @@ a{
     cursor: pointer;
 }
 
-#registrar:hover {
+#send:hover {
     background-color: rgb(209, 0, 0, 0.75);
+}
+
+@media screen and (min-width: 600px) {
+
+    #principal {
+        width: 400px;
+        height: 320px;
+        margin: auto auto;
+        overflow: hidden;
+    }
+
+    #conteudo-cima{
+        max-width: 400px;
+        width: 400px;
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    #conteudo-cima h1 {
+        font-size: 20px;
+    }
+
+    #conteudo-cima p {
+        font-size: 16px;
+    }
+
+    #conteudo-baixo {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    #rec-pass {
+        width: 100%;
+        overflow: hidden;
+    }
+
+    #rec-pass input {
+        width: 340px;
+    }
+}
+
+@media screen and (min-width: 400px) and (max-width: 599px){
+
+    #principal {
+        width: 400px;
+        height: 380px;
+        margin: auto auto;
+        overflow: hidden;
+    }
+    
+    #conteudo-cima{
+        max-width: 400px;
+        width: 400px;
+        height: 180px;
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    #conteudo-cima h1 {
+        font-size: 20px;
+    }
+
+    #conteudo-cima p {
+        font-size: 16px;
+    }
+
+    #conteudo-baixo {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    #rec-pass {
+        width: 100%;
+        overflow: hidden;
+    }
+
+    #rec-pass input {
+        width: 340px;
+    }
 }
