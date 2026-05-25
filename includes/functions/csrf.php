@@ -27,8 +27,9 @@ function csrf_validate(): void {
     }
 }
 
-// Endpoint GET: retorna token para o JS
-if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+// Endpoint GET: retorna token apenas quando csrf.php é acessado diretamente
+if ($_SERVER['REQUEST_METHOD'] === 'GET' &&
+    realpath($_SERVER['SCRIPT_FILENAME']) === realpath(__FILE__)) {
     header('Content-Type: application/json');
     echo json_encode(['token' => csrf_generate()]);
     exit;

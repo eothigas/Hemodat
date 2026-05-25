@@ -45,7 +45,6 @@ function action_login(): void {
     $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($usuario && password_verify($senha, $usuario['senha'])) {
-        session_regenerate_id(true);
         $_SESSION['usuario_id']     = $usuario['id'];
         $_SESSION['usuario_email']  = $email;
         $_SESSION['usuario_logado'] = true;
