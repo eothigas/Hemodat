@@ -1,88 +1,128 @@
 <?php
-session_start(); // Inicia a sessão para pegar o email do usuário
+session_start();
 
-// Verifica se o formulário foi enviado
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Dados do formulário
-    $tipo = $_POST['tipo'] ?? null;
-    $quantidade = $_POST['litros'] ?? null;
-    $data_saida = $_POST['saida'] ?? null;
+require_once __DIR__ . '/config.php';
+require_once __DIR__ . '/csrf.php';
 
-    // Verifica se os campos obrigatórios foram preenchidos
-    if (!$tipo || !$quantidade || !$data_saida) {
-        echo json_encode(['status' => 'error', 'message' => 'Todos os campos são obrigatórios.']);
-        exit;
-    }
+header('Content-Type: application/json');
 
-    // Converte a data para o formato YYYY-MM-DD
-    $data_saida_formatada = DateTime::createFromFormat('d/m/Y', $data_saida);
-    if (!$data_saida_formatada) {
-        echo json_encode(['status' => 'error', 'message' => 'Formato de data inválido.']);
-        exit;
-    }
-    $data_saida_formatada = $data_saida_formatada->format('Y-m-d'); // Formata para o formato correto
+// Verifica sessão completa
+if (!isset($_SESSION['usuario_logado']) || $_SESSION['usuario_logado'] !== true ||
+    !isset($_SESSION['usuario_email'])) {
+    echo json_encode(['status' => 'error', 'message' => 'Sessão inválida.']);
+    exit;
+}
 
-    // Conexão com o banco de dados
-    $host = "localhost";
-    $dbname = "efegduik_gphemodat";
-    $username = "efegduik_gphemodat";
-    $password = "fHCXpD4sACYN8EyEd4QG";
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    echo json_encode(['status' => 'error', 'message' => 'Método inválido.']);
+    exit;
+}
 
-    try {
-        // Conexão com o banco de dados
-        $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
-        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    } catch (PDOException $e) {
-        echo json_encode(['status' => 'error', 'message' => 'Erro ao conectar ao banco de dados: ' . $e->getMessage()]);
-        exit;
-    }
+csrf_validate();
 
-    // Verifica a quantidade disponível para o tipo sanguíneo
-    $sql = "SELECT quantidade, data_validade FROM bolsas_sangue WHERE tipo_sanguineo = :tipo";
-    $stmt = $pdo->prepare($sql);
+$tipo       = trim($_POST['tipo']   ?? '');
+$quantidade = trim($_POST['litros'] ?? '');
+$data_saida = trim($_POST['saida']  ?? '');
+
+if (!$tipo || !$quantidade || !$data_saida) {
+    echo json_encode(['status' => 'error', 'message' => 'Todos os campos são obrigatórios.']);
+    exit;
+}
+
+// Whitelist tipo sanguíneo
+if (!in_array($tipo, TIPOS_VALIDOS, true)) {
+    echo json_encode(['status' => 'error', 'message' => 'Tipo sanguíneo inválido.']);
+    exit;
+}
+
+// Validação de quantidade
+$quantidade = (float) $quantidade;
+if ($quantidade <= 0) {
+    echo json_encode(['status' => 'error', 'message' => 'Quantidade deve ser maior que zero.']);
+    exit;
+}
+
+// Validação de data
+$data_saida_obj = DateTime::createFromFormat('d/m/Y', $data_saida);
+if (!$data_saida_obj) {
+    echo json_encode(['status' => 'error', 'message' => 'Formato de data inválido. Use DD/MM/AAAA.']);
+    exit;
+}
+$data_saida_fmt = $data_saida_obj->format('Y-m-d');
+$data_atual     = date('Y-m-d');
+
+$pdo = db_connect();
+
+try {
+    $pdo->beginTransaction();
+
+    // Busca o lote mais antigo disponível deste tipo (FIFO por validade)
+    $stmt = $pdo->prepare(
+        "SELECT id, quantidade, data_validade
+         FROM bolsas_sangue
+         WHERE tipo_sanguineo = :tipo
+         ORDER BY data_validade ASC
+         LIMIT 1
+         FOR UPDATE"
+    );
     $stmt->execute([':tipo' => $tipo]);
     $bolsa = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if (!$bolsa) {
-        echo json_encode(['status' => 'error', 'message' => 'Tipo sanguíneo não encontrado.']);
+        $pdo->rollBack();
+        echo json_encode(['status' => 'error', 'message' => 'Tipo sanguíneo não encontrado no estoque.']);
         exit;
     }
 
-    // Verifica a quantidade disponível
     if ($quantidade > $bolsa['quantidade']) {
-        echo json_encode(['status' => 'error', 'message' => 'Quantidade indisponível para este tipo sanguíneo.']);
-        exit;
-    }
-
-    // Verifica a validade da data de saída
-    $data_validade = $bolsa['data_validade'];
-    $data_atual = date('Y-m-d');
-
-    if ($data_saida_formatada > $data_validade || $data_saida_formatada < $data_atual) {
-        echo json_encode(['status' => 'error', 'message' => 'Data de saída inválida. A data deve estar entre a data atual e a data de validade.']);
-        exit;
-    }
-
-    // Insere as informações na tabela saída_bolsas_sangue
-    $email = $_SESSION['usuario_email']; // Assume que o email já está na sessão
-
-    $sql = "INSERT INTO saida_bolsas_sangue (email, tipo_sanguineo, quantidade, data_saida) 
-            VALUES (:email, :tipo, :litros, :saida)";
-    
-    try {
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute([
-            ':tipo' => $tipo,
-            ':email' => $email,
-            ':litros' => $quantidade,
-            ':saida' => $data_saida_formatada,
+        $pdo->rollBack();
+        echo json_encode([
+            'status'  => 'error',
+            'message' => "Quantidade indisponível. Estoque atual: {$bolsa['quantidade']} litros.",
         ]);
-        
-        // Se a inserção for bem-sucedida
-        echo json_encode(['status' => 'success', 'message' => 'Registro de saída realizado com sucesso!']);
-    } catch (PDOException $e) {
-        // Se houver erro na execução da query
-        echo json_encode(['status' => 'error', 'message' => 'Erro ao registrar a saída: ' . $e->getMessage()]);
+        exit;
     }
+
+    // Data de saída deve ser entre hoje e a validade do lote
+    if ($data_saida_fmt > $bolsa['data_validade'] || $data_saida_fmt < $data_atual) {
+        $pdo->rollBack();
+        $validade_fmt = DateTime::createFromFormat('Y-m-d', $bolsa['data_validade'])->format('d/m/Y');
+        echo json_encode([
+            'status'  => 'error',
+            'message' => "Data de saída inválida. Deve ser entre hoje e {$validade_fmt} (validade do lote).",
+        ]);
+        exit;
+    }
+
+    // Registra saída
+    $email = $_SESSION['usuario_email'];
+    $stmt = $pdo->prepare(
+        "INSERT INTO saida_bolsas_sangue (email, tipo_sanguineo, quantidade, data_saida)
+         VALUES (:email, :tipo, :qtd, :saida)"
+    );
+    $stmt->execute([
+        ':email' => $email,
+        ':tipo'  => $tipo,
+        ':qtd'   => $quantidade,
+        ':saida' => $data_saida_fmt,
+    ]);
+
+    // Decrementa o estoque (FIX: bug crítico — antes nunca decrementava)
+    $nova_quantidade = $bolsa['quantidade'] - $quantidade;
+
+    if ($nova_quantidade <= 0) {
+        // Lote esgotado: remove a linha
+        $stmt = $pdo->prepare("DELETE FROM bolsas_sangue WHERE id = :id");
+        $stmt->execute([':id' => $bolsa['id']]);
+    } else {
+        $stmt = $pdo->prepare("UPDATE bolsas_sangue SET quantidade = :qtd WHERE id = :id");
+        $stmt->execute([':qtd' => $nova_quantidade, ':id' => $bolsa['id']]);
+    }
+
+    $pdo->commit();
+    echo json_encode(['status' => 'success', 'message' => 'Registro de saída realizado com sucesso!']);
+
+} catch (PDOException $e) {
+    $pdo->rollBack();
+    echo json_encode(['status' => 'error', 'message' => 'Erro ao registrar a saída: ' . $e->getMessage()]);
 }
-?>

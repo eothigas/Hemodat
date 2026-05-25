@@ -1,30 +1,18 @@
 <?php
-// Configuração do banco de dados
-$host = "localhost";
-$dbname = "efegduik_gphemodat";
-$username = "efegduik_gphemodat";
-$password = "fHCXpD4sACYN8EyEd4QG";
+require_once __DIR__ . '/config.php';
 
-try {
-    // Conectar ao banco de dados
-    $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-    echo json_encode(['status' => 'error', 'message' => 'Erro ao conectar ao banco de dados.']);
-    exit;
-}
+header('Content-Type: application/json');
 
-// Consultar os tipos sanguíneos
-$stmt = $pdo->prepare("SELECT tipo_sanguineo FROM bolsas_sangue");
+$pdo = db_connect();
+
+// DISTINCT direto no SQL — mais eficiente que array_unique() no PHP
+$stmt = $pdo->prepare(
+    "SELECT DISTINCT tipo_sanguineo
+     FROM bolsas_sangue
+     WHERE quantidade > 0
+     ORDER BY tipo_sanguineo"
+);
 $stmt->execute();
-$tiposSanguineos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$tipos = $stmt->fetchAll(PDO::FETCH_COLUMN);
 
-// Extrair apenas os valores de tipo_sanguineo em um array
-$tiposSanguineosArray = array_column($tiposSanguineos, 'tipo_sanguineo');
-
-// Remover duplicatas
-$tiposSanguineosUnicos = array_unique($tiposSanguineosArray);
-
-// Enviar a resposta em formato JSON
-echo json_encode($tiposSanguineosUnicos);
-?>
+echo json_encode($tipos);

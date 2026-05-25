@@ -1,59 +1,49 @@
 <?php
-session_start(); // Inicia a sessão
+session_start();
 
-// Configuração da conexão com o banco de dados
-$host = "localhost";
-$dbname = "efegduik_gphemodat";
-$username = "efegduik_gphemodat";
-$password = "fHCXpD4sACYN8EyEd4QG";
+require_once __DIR__ . '/config.php';
+require_once __DIR__ . '/csrf.php';
 
-try {
-    // Conectar ao banco de dados
-    $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-    // Retornar erro de conexão como JSON
-    echo json_encode(['status' => 'error', 'message' => 'Erro ao conectar ao banco de dados.']);
+header('Content-Type: application/json');
+
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    echo json_encode(['status' => 'error', 'message' => 'Método inválido.']);
     exit;
 }
 
-// Verificar se o formulário foi enviado
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $nome = trim($_POST['nome']);
-    $email = trim($_POST['email']);
-    $senha = trim($_POST['senha']);
+csrf_validate();
 
-    // Validação básica
-    if (empty($nome) || empty($email) || empty($senha)) {
-        echo json_encode(['status' => 'error', 'message' => 'Por favor, preencha todos os campos!']);
-        exit;
-    }
+$pdo   = db_connect();
+$nome  = trim($_POST['nome']  ?? '');
+$email = trim($_POST['email'] ?? '');
+$senha = trim($_POST['senha'] ?? '');
 
-    // Verificar se o e-mail já está cadastrado
-    $stmt = $pdo->prepare("SELECT id FROM usuarios WHERE email = :email");
-    $stmt->bindParam(':email', $email);
-    $stmt->execute();
-    $usuarioExistente = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    if ($usuarioExistente) {
-        echo json_encode(['status' => 'error', 'message' => 'O e-mail informado já está cadastrado. Tente novamente.']);
-    } else {
-        // Inserir no banco de dados
-        $stmt = $pdo->prepare("INSERT INTO usuarios (nome, email, senha) VALUES (:nome, :email, :senha)");
-
-        // Hash da senha para maior segurança
-        $senhaHash = password_hash($senha, PASSWORD_BCRYPT);
-
-        $stmt->bindParam(':nome', $nome);
-        $stmt->bindParam(':email', $email);
-        $stmt->bindParam(':senha', $senhaHash);
-
-        if ($stmt->execute()) {
-            // Responder com sucesso
-            echo json_encode(['status' => 'success', 'message' => 'Usuário cadastrado com sucesso!']);
-        } else {
-            echo json_encode(['status' => 'error', 'message' => 'Erro ao cadastrar o usuário.']);
-        }
-    }
+if (empty($nome) || empty($email) || empty($senha)) {
+    echo json_encode(['status' => 'error', 'message' => 'Por favor, preencha todos os campos!']);
+    exit;
 }
-?>
+
+if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    echo json_encode(['status' => 'error', 'message' => 'E-mail inválido.']);
+    exit;
+}
+
+if (strlen($senha) < 9) {
+    echo json_encode(['status' => 'error', 'message' => 'A senha deve ter pelo menos 9 caracteres (8 alfanuméricos + 1 especial).']);
+    exit;
+}
+
+// Verifica e-mail duplicado
+$stmt = $pdo->prepare("SELECT id FROM usuarios WHERE email = :email LIMIT 1");
+$stmt->execute([':email' => $email]);
+
+if ($stmt->fetch()) {
+    echo json_encode(['status' => 'error', 'message' => 'O e-mail informado já está cadastrado. Tente novamente.']);
+    exit;
+}
+
+$senhaHash = password_hash($senha, PASSWORD_BCRYPT);
+$stmt = $pdo->prepare("INSERT INTO usuarios (nome, email, senha) VALUES (:nome, :email, :senha)");
+$stmt->execute([':nome' => $nome, ':email' => $email, ':senha' => $senhaHash]);
+
+echo json_encode(['status' => 'success', 'message' => 'Usuário cadastrado com sucesso!']);
