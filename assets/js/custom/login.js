@@ -17,7 +17,7 @@ document.getElementById('logar').addEventListener('click', async (event) => {
     }
 
     try {
-        const response = await fetch('/php/login.php', {
+        const response = await fetch('/includes/actions/auth.php?action=login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body: `email=${encodeURIComponent(email)}&senha=${encodeURIComponent(senha)}&csrf_token=${encodeURIComponent(csrfToken)}`,

@@ -20,7 +20,7 @@ require_once __DIR__ . '/includes/other/header.php';
             <h1>Crie sua conta</h1>
             <h2>Preencha seus dados</h2>
 
-            <form id="register" action="/php/cadastro.php" method="post">
+            <form id="register" action="/includes/actions/auth.php?action=cadastro" method="post">
                 <div class="input-container">
                     <i class="bi bi-person-plus"></i>
                     <input type="text" name="nome" placeholder="Nome" required minlength="3" maxlength="50">

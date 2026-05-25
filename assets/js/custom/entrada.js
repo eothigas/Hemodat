@@ -13,7 +13,7 @@ document.getElementById('entrada').addEventListener('submit', async (e) => {
     const form = new FormData(e.target);
     form.append('csrf_token', csrfToken);
 
-    const response = await fetch('/php/entrada.php', {
+    const response = await fetch('/includes/actions/bolsas.php?action=entrada', {
         method: 'POST',
         body: form,
     });

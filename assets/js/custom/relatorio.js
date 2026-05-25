@@ -2,7 +2,7 @@
 let ctx;
 
 // Busca os dados do servidor
-fetch('/php/buscar_total.php') // Caminho para o arquivo PHP que retorna os dados
+fetch('/includes/actions/bolsas.php?action=buscar_total') // Caminho para o arquivo PHP que retorna os dados
   .then(response => {
       if (!response.ok) {
           throw new Error('Erro ao buscar os dados do servidor');

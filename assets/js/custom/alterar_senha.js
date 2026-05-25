@@ -20,7 +20,7 @@ document.getElementById('send').addEventListener('click', async (event) => {
     }
 
     try {
-        const response = await fetch('/php/alterar_senha.php', {
+        const response = await fetch('/includes/actions/senha.php?action=alterar', {
             method: 'POST',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body: `senha=${encodeURIComponent(senha)}&confirm-senha=${encodeURIComponent(confirmSenha)}`,

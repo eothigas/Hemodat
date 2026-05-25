@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     function verificarSessao() {
-        fetch('/includes/functions/session.php')
+        fetch('/includes/actions/auth.php?action=session')
             .then(r => {
                 if (!r.ok) throw new Error('Erro ao consultar servidor.');
                 return r.json();

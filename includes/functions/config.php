@@ -1,15 +1,25 @@
 <?php
 /**
- * config.php — Configuração central do banco de dados e constantes da aplicação.
- * Inclua este arquivo via require_once em todos os arquivos PHP que precisam de DB.
+ * config.php — Configuração central da aplicação Hemodat.
  */
 
-define('DB_HOST',     'localhost');
-define('DB_NAME',     'efegduik_gphemodat');
-define('DB_USER',     'efegduik_gphemodat');
-define('DB_PASS',     'fHCXpD4sACYN8EyEd4QG');
+// ─── URLs ────────────────────────────────────────────────────────────────────
+define('BASE_URL_LOCAL',  'http://localhost/_Pessoal/Hemodat');
+define('BASE_URL_ONLINE', 'https://hemodatgp.com');
+
+// Detecção automática de ambiente por hostname
+$_host = $_SERVER['HTTP_HOST'] ?? 'localhost';
+define('IS_LOCAL',  in_array($_host, ['localhost', '127.0.0.1'], true));
+define('BASE_URL',  IS_LOCAL ? BASE_URL_LOCAL : BASE_URL_ONLINE);
+
+// ─── Banco de dados ───────────────────────────────────────────────────────────
+define('DB_HOST',    'localhost');
+define('DB_NAME',    'efegduik_gphemodat');
+define('DB_USER',    'efegduik_gphemodat');
+define('DB_PASS',    'fHCXpD4sACYN8EyEd4QG');
 define('DB_CHARSET', 'utf8mb4');
 
+// ─── Constantes de negócio ───────────────────────────────────────────────────
 // Tipos sanguíneos aceitos (whitelist)
 define('TIPOS_VALIDOS', ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-']);
 

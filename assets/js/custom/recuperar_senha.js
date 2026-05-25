@@ -10,7 +10,7 @@ document.getElementById('send').addEventListener('click', async (event) => {
     }
 
     try {
-        const response = await fetch('/php/recuperar_senha.php', {
+        const response = await fetch('/includes/actions/senha.php?action=recuperar', {
             method: 'POST',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body: `usuario=${encodeURIComponent(usuario)}&email=${encodeURIComponent(email)}`,
