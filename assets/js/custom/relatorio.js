@@ -1,4 +1,4 @@
-// relatorio.js — Gráfico de barras (Chart.js) + exportação em PDF
+// relatorio.js - Gráfico de barras (Chart.js) + exportação em PDF
 
 fetch(BASE_URL + '/includes/actions/bolsas.php?action=buscar_total')
     .then(response => {
@@ -61,12 +61,12 @@ fetch(BASE_URL + '/includes/actions/bolsas.php?action=buscar_total')
         document.getElementById('export').addEventListener('click', () => {
             const { jsPDF } = window.jspdf;
 
-            // Cores PDF (já são escuras — sem troca necessária)
+            // Cores PDF (já são escuras - sem troca necessária)
             const doc = new jsPDF('landscape');
 
             doc.setFont('helvetica', 'bold');
             doc.setFontSize(16);
-            doc.text('Relatório de Bolsas de Sangue — Hemodat', 148, 20, { align: 'center' });
+            doc.text('Relatório de Bolsas de Sangue - Hemodat', 148, 20, { align: 'center' });
 
             setTimeout(() => {
                 const dataURL = canvas.toDataURL('image/png');

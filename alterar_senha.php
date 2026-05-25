@@ -1,5 +1,5 @@
 <?php
-$titulo     = 'Hemodat — Alterar Senha';
+$titulo     = 'Hemodat - Alterar Senha';
 $body_class = 'auth-page';
 require_once __DIR__ . '/includes/other/header.php';
 ?>

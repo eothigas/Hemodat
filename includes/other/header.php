@@ -1,6 +1,6 @@
 <?php
 /**
- * header.php — <head> compartilhado de todas as páginas.
+ * header.php - <head> compartilhado de todas as páginas.
  *
  * Variáveis aceitas (defina antes de incluir):
  *   $titulo        string   Título da aba

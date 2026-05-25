@@ -1,11 +1,12 @@
--- schema.sql - Schema completo do banco de dados Hemodat
--- Execute: mysql -u root -p < schema.sql
+-- schema_local.sql - Schema para desenvolvimento local (XAMPP)
+-- Execute no phpMyAdmin ou via terminal:
+--   mysql -u root < database/schema_local.sql
 
-CREATE DATABASE IF NOT EXISTS efegduik_gphemodat
+CREATE DATABASE IF NOT EXISTS hemodat
     CHARACTER SET utf8mb4
     COLLATE utf8mb4_unicode_ci;
 
-USE efegduik_gphemodat;
+USE hemodat;
 
 -- ─── Usuários ────────────────────────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS usuarios (

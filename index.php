@@ -1,5 +1,5 @@
 <?php
-$titulo     = 'Hemodat — Cadastro';
+$titulo     = 'Hemodat - Cadastro';
 $body_class = 'auth-page';
 require_once __DIR__ . '/includes/other/header.php';
 ?>

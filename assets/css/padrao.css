@@ -1,5 +1,5 @@
 /* ============================================================
-   padrao.css — Design system Hemodat (Bootstrap 5 overrides)
+   padrao.css - Design system Hemodat (Bootstrap 5 overrides)
    Cores: vermelho rgb(209,0,0) | bg rgb(230,230,230)
    Fonte: Outfit (Google Fonts)
    ============================================================ */
@@ -130,7 +130,7 @@ img { display: block; max-width: 100%; }
     filter: brightness(0) invert(1);
 }
 
-/* ── Auth pages — split-card layout ──────────────────────── */
+/* ── Auth pages - split-card layout ──────────────────────── */
 .auth-wrapper {
     min-height: 100vh;
     display: flex;

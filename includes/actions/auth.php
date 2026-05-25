@@ -1,6 +1,6 @@
 <?php
 /**
- * auth.php — Actions de autenticação.
+ * auth.php - Actions de autenticação.
  * Rota via ?action=login | cadastro | logout | session
  */
 

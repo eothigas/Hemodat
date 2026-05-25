@@ -1,6 +1,6 @@
 <?php
 /**
- * nav.php — Bootstrap navbar compartilhada (páginas autenticadas).
+ * nav.php - Bootstrap navbar compartilhada (páginas autenticadas).
  * Defina $active antes de incluir: 'home' | 'entrada' | 'saida' | 'relatorio'
  */
 $active = $active ?? '';

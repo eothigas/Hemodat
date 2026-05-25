@@ -1,6 +1,6 @@
 <?php
 /**
- * bolsas.php — Actions de gestão de bolsas de sangue.
+ * bolsas.php - Actions de gestão de bolsas de sangue.
  * Rota via ?action=entrada | saida | buscar_tipo | buscar_total
  */
 

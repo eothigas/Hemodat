@@ -1,4 +1,4 @@
--- migrate.sql — Migrações de banco de dados necessárias para as melhorias implementadas.
+-- migrate.sql - Migrações de banco de dados necessárias para as melhorias implementadas.
 -- Execute no phpMyAdmin ou via CLI: mysql -u <user> -p <dbname> < migrate.sql
 
 -- 1. Adiciona coluna de timestamp para expiração do código de recuperação de senha

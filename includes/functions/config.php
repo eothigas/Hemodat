@@ -1,6 +1,6 @@
 <?php
 /**
- * config.php — Configuração central da aplicação Hemodat.
+ * config.php - Configuração central da aplicação Hemodat.
  */
 
 // ─── URLs ────────────────────────────────────────────────────────────────────
@@ -12,11 +12,21 @@ $_host = $_SERVER['HTTP_HOST'] ?? 'localhost';
 define('IS_LOCAL',  in_array($_host, ['localhost', '127.0.0.1'], true));
 define('BASE_URL',  IS_LOCAL ? BASE_URL_LOCAL : BASE_URL_ONLINE);
 
-// ─── Banco de dados ───────────────────────────────────────────────────────────
-define('DB_HOST',    'localhost');
-define('DB_NAME',    'efegduik_gphemodat');
-define('DB_USER',    'efegduik_gphemodat');
-define('DB_PASS',    'fHCXpD4sACYN8EyEd4QG');
+// ─── Banco de dados (local × produção) ───────────────────────────────────────
+if (IS_LOCAL) {
+    // XAMPP local — MySQL padrão: root sem senha
+    // Crie o banco "hemodat" via phpMyAdmin ou rode: CREATE DATABASE hemodat CHARACTER SET utf8mb4;
+    define('DB_HOST',    'localhost');
+    define('DB_NAME',    'efegduik_gphemodat');
+    define('DB_USER',    'root');
+    define('DB_PASS',    '');
+} else {
+    // Produção (Hostinger / servidor online)
+    define('DB_HOST',    'localhost');
+    define('DB_NAME',    'efegduik_gphemodat');
+    define('DB_USER',    'efegduik_gphemodat');
+    define('DB_PASS',    'fHCXpD4sACYN8EyEd4QG');
+}
 define('DB_CHARSET', 'utf8mb4');
 
 // ─── Constantes de negócio ───────────────────────────────────────────────────

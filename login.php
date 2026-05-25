@@ -1,5 +1,5 @@
 <?php
-$titulo     = 'Hemodat — Login';
+$titulo     = 'Hemodat - Login';
 $body_class = 'auth-page';
 require_once __DIR__ . '/includes/other/header.php';
 ?>
@@ -52,7 +52,7 @@ require_once __DIR__ . '/includes/other/header.php';
                 </div>
 
                 <div class="d-flex justify-content-center">
-                    <button type="submit" class="btn btn-primary px-5">
+                    <button type="submit" id="logar" class="btn btn-primary px-5">
                         ENTRAR
                     </button>
                 </div>

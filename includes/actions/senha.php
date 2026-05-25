@@ -1,6 +1,6 @@
 <?php
 /**
- * senha.php — Actions de recuperação e alteração de senha.
+ * senha.php - Actions de recuperação e alteração de senha.
  * Rota via ?action=recuperar | validar | alterar
  */
 

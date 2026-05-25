@@ -1,5 +1,5 @@
 <?php
-$titulo        = 'Hemodat — Relatório';
+$titulo        = 'Hemodat - Relatório';
 $body_class    = 'dashboard-page';
 $requer_sessao = true;
 $head_extras   = ['<script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>'];

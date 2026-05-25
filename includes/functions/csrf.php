@@ -1,6 +1,6 @@
 <?php
 /**
- * csrf.php — Geração e validação de tokens CSRF.
+ * csrf.php - Geração e validação de tokens CSRF.
  * GET  /includes/functions/csrf.php → retorna {'token':'<hex>'}
  */
 

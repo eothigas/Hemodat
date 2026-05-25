@@ -1,4 +1,4 @@
-// main.js — Utilitários de formulário compartilhados (Bootstrap gerencia o menu)
+// main.js - Utilitários de formulário compartilhados (Bootstrap gerencia o menu)
 
 /**
  * Formata input de texto como data DD/MM/AAAA ao digitar.

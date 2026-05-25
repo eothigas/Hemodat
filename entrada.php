@@ -1,5 +1,5 @@
 <?php
-$titulo        = 'Hemodat — Entrada';
+$titulo        = 'Hemodat - Entrada';
 $body_class    = 'dashboard-page';
 $requer_sessao = true;
 require_once __DIR__ . '/includes/other/header.php';

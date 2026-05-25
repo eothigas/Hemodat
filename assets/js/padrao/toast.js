@@ -1,5 +1,5 @@
 /**
- * toast.js — Sistema de notificação não-bloqueante.
+ * toast.js - Sistema de notificação não-bloqueante.
  * Uso: showToast('mensagem', 'success' | 'error' | 'info')
  */
 

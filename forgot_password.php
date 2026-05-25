@@ -1,5 +1,5 @@
 <?php
-$titulo     = 'Hemodat — Recuperação de Senha';
+$titulo     = 'Hemodat - Recuperação de Senha';
 $body_class = 'auth-page';
 require_once __DIR__ . '/includes/other/header.php';
 ?>

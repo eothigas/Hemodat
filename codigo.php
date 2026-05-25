@@ -1,5 +1,5 @@
 <?php
-$titulo     = 'Hemodat — Validar Código';
+$titulo     = 'Hemodat - Validar Código';
 $body_class = 'auth-page';
 require_once __DIR__ . '/includes/other/header.php';
 ?>

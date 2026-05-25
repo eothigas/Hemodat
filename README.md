@@ -1,4 +1,4 @@
-# Hemodat — Sistema de Gestão de Banco de Sangue
+# Hemodat - Sistema de Gestão de Banco de Sangue
 
 Sistema web para controle de estoque de bolsas de sangue em hemocentros. Registra entrada e saída de bolsas, gerencia usuários com autenticação por sessão PHP e exibe relatório gráfico com exportação em PDF.
 
@@ -135,7 +135,7 @@ forgot_password.html → recuperar_senha.php → email com código
 
 ## Problemas Identificados
 
-### 🔴 Crítico — Segurança
+### 🔴 Crítico - Segurança
 
 | # | Arquivo(s) | Problema | Impacto |
 |---|-----------|----------|---------|
@@ -145,39 +145,39 @@ forgot_password.html → recuperar_senha.php → email com código
 | 4 | Todos os forms | **Sem CSRF token** | Ataques cross-site request forgery |
 | 5 | `saida.php` | Não verifica `$_SESSION['usuario_logado']`, só `usuario_email` | Bypass parcial de sessão |
 
-### 🟠 Alto — Bug Funcional
+### 🟠 Alto - Bug Funcional
 
 | # | Arquivo(s) | Problema |
 |---|-----------|----------|
-| 6 | `saida.php` | **Não decrementa `bolsas_sangue.quantidade`** após saída registrada — estoque nunca diminui |
-| 7 | `buscar_total.php` | Retorna todas as linhas de `bolsas_sangue` sem `SUM()`/`GROUP BY` — se houver múltiplas entradas do mesmo tipo, gráfico mostra duplicatas em vez de total |
-| 8 | `buscar_tipo.php` | Mesmo problema — busca todas as linhas e deduplica em PHP com `array_unique()` em vez de `SELECT DISTINCT` |
+| 6 | `saida.php` | **Não decrementa `bolsas_sangue.quantidade`** após saída registrada - estoque nunca diminui |
+| 7 | `buscar_total.php` | Retorna todas as linhas de `bolsas_sangue` sem `SUM()`/`GROUP BY` - se houver múltiplas entradas do mesmo tipo, gráfico mostra duplicatas em vez de total |
+| 8 | `buscar_tipo.php` | Mesmo problema - busca todas as linhas e deduplica em PHP com `array_unique()` em vez de `SELECT DISTINCT` |
 
-### 🟡 Médio — Inconsistência / UX
+### 🟡 Médio - Inconsistência / UX
 
 | # | Arquivo(s) | Problema |
 |---|-----------|----------|
 | 9 | `index.html:39` | `maxlength="9"` mas texto diz "8 dígitos + 1 especial". `alterar_senha.php:42` valida `strlen < 8`. Regra de senha inconsistente entre frontend e backend |
 | 10 | `index.html:41` | Tag `<fontsize>` não existe em HTML5 |
-| 11 | Todos os JS | `alert()` nativo para feedback — bloqueia UI, UX ruim |
+| 11 | Todos os JS | `alert()` nativo para feedback - bloqueia UI, UX ruim |
 | 12 | `entrada.js` / `saida.js` | `formatDate()` duplicada nos dois arquivos |
 | 13 | `relatorio.html:59` | `chart.js` importado duas vezes (head + fim do body) |
-| 14 | `saida.php:41` | `SELECT quantidade, data_validade FROM bolsas_sangue WHERE tipo_sanguineo = :tipo` retorna apenas o primeiro registro — não considera múltiplas entradas do mesmo tipo |
+| 14 | `saida.php:41` | `SELECT quantidade, data_validade FROM bolsas_sangue WHERE tipo_sanguineo = :tipo` retorna apenas o primeiro registro - não considera múltiplas entradas do mesmo tipo |
 
-### 🔵 Baixo — Qualidade de Código
+### 🔵 Baixo - Qualidade de Código
 
 | # | Problema |
 |---|----------|
-| 15 | Config de DB repetida em 9 arquivos PHP — sem arquivo central `config.php` |
+| 15 | Config de DB repetida em 9 arquivos PHP - sem arquivo central `config.php` |
 | 16 | Sem `.env` ou separação de ambiente (dev/prod) |
 | 17 | Sem validação de tipo sanguíneo no backend (aceita qualquer string) |
-| 18 | `logout.php` não referenciado — `logout.js` pode estar chamando endpoint diferente |
+| 18 | `logout.php` não referenciado - `logout.js` pode estar chamando endpoint diferente |
 
 ---
 
 ## Melhorias Prioritárias
 
-### P0 — Antes de qualquer deploy
+### P0 - Antes de qualquer deploy
 
 1. **Centralizar config DB** → criar `php/config.php` com credenciais, incluir via `require_once`
 2. **Corrigir decremento de estoque** → `saida.php` deve fazer `UPDATE bolsas_sangue SET quantidade = quantidade - :qtd WHERE tipo_sanguineo = :tipo` após INSERT
@@ -185,7 +185,7 @@ forgot_password.html → recuperar_senha.php → email com código
 4. **Expiração de código** → adicionar coluna `criado_em TIMESTAMP` em `recuperar_senha`, rejeitar códigos > 15 min
 5. **Código seguro** → trocar `str_shuffle` por `bin2hex(random_bytes(4))`
 
-### P1 — Qualidade
+### P1 - Qualidade
 
 6. **Validação de tipo sanguíneo** → whitelist `[A+, A-, B+, B-, AB+, AB-, O+, O-]` no backend
 7. **Unificar regra de senha** → decidir entre 8 ou 9 chars, aplicar igual em HTML + PHP
@@ -193,7 +193,7 @@ forgot_password.html → recuperar_senha.php → email com código
 9. **Deduplicar `formatDate()`** → mover para `main.js`
 10. **CSRF tokens** → implementar em todos os forms POST
 
-### P2 — Funcionalidades Futuras
+### P2 - Funcionalidades Futuras
 
 - Alerta de bolsas próximas do vencimento (dashboard)
 - Histórico paginado de entradas e saídas
@@ -231,11 +231,11 @@ http://localhost/_Pessoal/Hemodat/
 
 ---
 
-## Segurança — Estado Atual vs. Alvo
+## Segurança - Estado Atual vs. Alvo
 
 | Item | Atual | Alvo |
 |------|-------|------|
-| Senha | bcrypt ✅ | — |
+| Senha | bcrypt ✅ | - |
 | Config DB | hardcoded em cada arquivo ❌ | `config.php` centralizado |
 | Sessão | PHP session básica ⚠️ | + session regeneration + timeout |
 | Recuperação senha | código sem expiração ❌ | TTL 15 min + `random_bytes` |
