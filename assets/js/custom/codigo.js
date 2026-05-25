@@ -9,7 +9,7 @@ document.getElementById('send').addEventListener('click', async (event) => {
     }
 
     try {
-        const response = await fetch('/includes/actions/senha.php?action=validar', {
+        const response = await fetch(BASE_URL + '/includes/actions/senha.php?action=validar', {
             method: 'POST',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body: `code=${encodeURIComponent(codigo)}`,

@@ -1,6 +1,6 @@
 // Busca token CSRF antes de permitir submit
 let csrfToken = '';
-fetch('/includes/functions/csrf.php')
+fetch(BASE_URL + '/includes/functions/csrf.php')
     .then(r => r.json())
     .then(d => { csrfToken = d.token; })
     .catch(() => {});
@@ -21,7 +21,7 @@ document.getElementById('register').addEventListener('submit', async function (e
 
         if (result.status === 'success') {
             showToast(result.message, 'success');
-            setTimeout(() => { window.location.href = '/login.php'; }, 1800);
+            setTimeout(() => { window.location.href = BASE_URL + '/login.php'; }, 1800);
         } else {
             showToast(result.message, 'error');
         }

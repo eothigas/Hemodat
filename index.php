@@ -1,5 +1,5 @@
 <?php
-$titulo    = 'Hemodat - Bem Vindo';
+$titulo     = 'Hemodat - Bem Vindo';
 $css_pagina = '/assets/css/paginas/index.css';
 require_once __DIR__ . '/includes/other/header.php';
 ?>
@@ -7,11 +7,10 @@ require_once __DIR__ . '/includes/other/header.php';
     <div id="principal">
 
         <div id="conteudo-esquerda">
-            <img src="/imagens/logo/logo.png" id="logo" alt="LOGO">
+            <img src="<?= BASE_URL ?>/imagens/logo/logo.png" id="logo" alt="LOGO">
             <h1>Seja Bem-Vindo!</h1>
             <p>Acesse sua conta agora mesmo.</p>
-
-            <a href="/login.php">
+            <a href="<?= BASE_URL ?>/login.php">
                 <button type="button" id="login">ENTRAR</button>
             </a>
         </div>
@@ -20,7 +19,7 @@ require_once __DIR__ . '/includes/other/header.php';
             <h1>Crie sua conta</h1>
             <h2>Preencha seus dados</h2>
 
-            <form id="register" action="/includes/actions/auth.php?action=cadastro" method="post">
+            <form id="register" action="<?= BASE_URL ?>/includes/actions/auth.php?action=cadastro" method="post">
                 <div class="input-container">
                     <i class="bi bi-person-plus"></i>
                     <input type="text" name="nome" placeholder="Nome" required minlength="3" maxlength="50">
@@ -39,8 +38,8 @@ require_once __DIR__ . '/includes/other/header.php';
         </div>
     </div>
 
-    <script src="/assets/js/padrao/toast.js"></script>
-    <script src="/assets/js/custom/cadastro.js"></script>
+    <script src="<?= BASE_URL ?>/assets/js/padrao/toast.js"></script>
+    <script src="<?= BASE_URL ?>/assets/js/custom/cadastro.js"></script>
 
 </body>
 </html>

@@ -1,6 +1,6 @@
 // Busca token CSRF antes de permitir submit
 let csrfToken = '';
-fetch('/includes/functions/csrf.php')
+fetch(BASE_URL + '/includes/functions/csrf.php')
     .then(r => r.json())
     .then(d => { csrfToken = d.token; })
     .catch(() => {});
@@ -17,7 +17,7 @@ document.getElementById('logar').addEventListener('click', async (event) => {
     }
 
     try {
-        const response = await fetch('/includes/actions/auth.php?action=login', {
+        const response = await fetch(BASE_URL + '/includes/actions/auth.php?action=login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body: `email=${encodeURIComponent(email)}&senha=${encodeURIComponent(senha)}&csrf_token=${encodeURIComponent(csrfToken)}`,

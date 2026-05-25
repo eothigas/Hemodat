@@ -10,14 +10,14 @@ require_once __DIR__ . '/includes/other/nav.php';
 
     <div id="principal">
         <div id="conteudo-cima">
-            <a href="/home.php"><i class="bi bi-arrow-left"></i></a>
+            <a href="<?= BASE_URL ?>/home.php"><i class="bi bi-arrow-left"></i></a>
             <div id="text">
                 <h1>ENTRADA</h1>
                 <p>Insira os dados</p>
             </div>
         </div>
         <div id="conteudo-baixo">
-            <form id="entrada" action="/php/entrada.php" method="post">
+            <form id="entrada" action="<?= BASE_URL ?>/includes/actions/bolsas.php?action=entrada" method="post">
                 <div class="input-up">
                     <div class="input-container">
                         <i class="bi bi-droplet"></i>
@@ -53,10 +53,10 @@ require_once __DIR__ . '/includes/other/nav.php';
         </div>
     </div>
 
-    <script src="/assets/js/padrao/toast.js"></script>
-    <script src="/assets/js/custom/entrada.js"></script>
-    <script src="/assets/js/padrao/main.js"></script>
-    <script src="/assets/js/padrao/logout.js"></script>
+    <script src="<?= BASE_URL ?>/assets/js/padrao/toast.js"></script>
+    <script src="<?= BASE_URL ?>/assets/js/custom/entrada.js"></script>
+    <script src="<?= BASE_URL ?>/assets/js/padrao/main.js"></script>
+    <script src="<?= BASE_URL ?>/assets/js/padrao/logout.js"></script>
 
 </body>
 </html>

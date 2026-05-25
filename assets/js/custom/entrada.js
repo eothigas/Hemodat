@@ -2,7 +2,7 @@
 
 // Busca token CSRF
 let csrfToken = '';
-fetch('/includes/functions/csrf.php')
+fetch(BASE_URL + '/includes/functions/csrf.php')
     .then(r => r.json())
     .then(d => { csrfToken = d.token; })
     .catch(() => {});
@@ -13,7 +13,7 @@ document.getElementById('entrada').addEventListener('submit', async (e) => {
     const form = new FormData(e.target);
     form.append('csrf_token', csrfToken);
 
-    const response = await fetch('/includes/actions/bolsas.php?action=entrada', {
+    const response = await fetch(BASE_URL + '/includes/actions/bolsas.php?action=entrada', {
         method: 'POST',
         body: form,
     });

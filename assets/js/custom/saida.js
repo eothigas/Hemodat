@@ -2,7 +2,7 @@
 
 // Busca token CSRF
 let csrfToken = '';
-fetch('/includes/functions/csrf.php')
+fetch(BASE_URL + '/includes/functions/csrf.php')
     .then(r => r.json())
     .then(d => { csrfToken = d.token; })
     .catch(() => {});
@@ -10,7 +10,7 @@ fetch('/includes/functions/csrf.php')
 // Popula select com tipos sanguíneos disponíveis em estoque
 document.addEventListener('DOMContentLoaded', async function () {
     try {
-        const response = await fetch('/includes/actions/bolsas.php?action=buscar_tipo');
+        const response = await fetch(BASE_URL + '/includes/actions/bolsas.php?action=buscar_tipo');
         const tipos = await response.json();
         const tipoSelect = document.getElementById('tipo');
 
@@ -45,7 +45,7 @@ document.getElementById('saida').addEventListener('submit', function (event) {
     formData.append('saida',       saida);
     formData.append('csrf_token',  csrfToken);
 
-    fetch('/includes/actions/bolsas.php?action=saida', { method: 'POST', body: formData })
+    fetch(BASE_URL + '/includes/actions/bolsas.php?action=saida', { method: 'POST', body: formData })
         .then(r => r.json())
         .then(result => {
             if (result.status === 'success') {

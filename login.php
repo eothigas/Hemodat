@@ -7,11 +7,10 @@ require_once __DIR__ . '/includes/other/header.php';
     <div id="principal">
 
         <div id="conteudo-esquerda">
-            <img src="/imagens/logo/logo.png" id="logo" alt="LOGO">
+            <img src="<?= BASE_URL ?>/imagens/logo/logo.png" id="logo" alt="LOGO">
             <h1>Seja Bem-Vindo!</h1>
             <p>Se não tiver uma conta, cadastre-se agora mesmo!</p>
-
-            <a href="/index.php">
+            <a href="<?= BASE_URL ?>/index.php">
                 <button type="button" id="cadastro">CADASTRAR</button>
             </a>
         </div>
@@ -19,7 +18,7 @@ require_once __DIR__ . '/includes/other/header.php';
         <div id="conteudo-direita">
             <h1>Entre com sua conta</h1>
 
-            <form id="login" action="/php/login.php" method="post">
+            <form id="login" action="<?= BASE_URL ?>/includes/actions/auth.php?action=login" method="post">
                 <div class="input-container">
                     <i class="bi bi-envelope"></i>
                     <input type="email" name="email" placeholder="Email" id="email">
@@ -27,15 +26,15 @@ require_once __DIR__ . '/includes/other/header.php';
                 <div class="input-container">
                     <i class="bi bi-lock"></i>
                     <input type="password" name="senha" placeholder="Senha" id="senha">
-                    <a href="/forgot_password.php"><p id="forgot">Esqueci minha senha</p></a>
+                    <a href="<?= BASE_URL ?>/forgot_password.php"><p id="forgot">Esqueci minha senha</p></a>
                 </div>
                 <button type="submit" id="logar">ENTRAR</button>
             </form>
         </div>
     </div>
 
-    <script src="/assets/js/padrao/toast.js"></script>
-    <script src="/assets/js/custom/login.js"></script>
+    <script src="<?= BASE_URL ?>/assets/js/padrao/toast.js"></script>
+    <script src="<?= BASE_URL ?>/assets/js/custom/login.js"></script>
 
 </body>
 </html>

@@ -6,14 +6,14 @@ require_once __DIR__ . '/includes/other/header.php';
 
     <div id="principal">
         <div id="conteudo-cima">
-            <a href="/forgot_password.php"><i class="bi bi-arrow-left"></i></a>
+            <a href="<?= BASE_URL ?>/forgot_password.php"><i class="bi bi-arrow-left"></i></a>
             <div id="text">
                 <h1>ALTERAR SENHA</h1>
                 <p>Crie uma senha com mínimo 9 caracteres (8 alfanuméricos + 1 especial).</p>
             </div>
         </div>
         <div id="conteudo-baixo">
-            <form id="rec-pass" action="/php/alterar_senha.php" method="post">
+            <form id="rec-pass" action="<?= BASE_URL ?>/includes/actions/senha.php?action=alterar" method="post">
                 <div class="input-container">
                     <i class="bi bi-lock"></i>
                     <input type="password" name="senha" placeholder="Senha Nova" minlength="9" maxlength="50" required>
@@ -27,8 +27,8 @@ require_once __DIR__ . '/includes/other/header.php';
         </div>
     </div>
 
-    <script src="/assets/js/padrao/toast.js"></script>
-    <script src="/assets/js/custom/alterar_senha.js"></script>
+    <script src="<?= BASE_URL ?>/assets/js/padrao/toast.js"></script>
+    <script src="<?= BASE_URL ?>/assets/js/custom/alterar_senha.js"></script>
 
 </body>
 </html>

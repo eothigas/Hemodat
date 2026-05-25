@@ -1,13 +1,13 @@
 document.addEventListener('DOMContentLoaded', () => {
     function verificarSessao() {
-        fetch('/includes/actions/auth.php?action=session')
+        fetch(BASE_URL + '/includes/actions/auth.php?action=session')
             .then(r => {
                 if (!r.ok) throw new Error('Erro ao consultar servidor.');
                 return r.json();
             })
             .then(data => {
                 if (!data.usuario_logado) {
-                    window.location.href = '/login.php';
+                    window.location.href = BASE_URL + '/login.php';
                 }
             })
             .catch(() => {
