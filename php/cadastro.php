@@ -1,8 +1,8 @@
 <?php
 session_start();
 
-require_once __DIR__ . '/config.php';
-require_once __DIR__ . '/csrf.php';
+require_once __DIR__ . '/../includes/functions/config.php';
+require_once __DIR__ . '/../includes/functions/csrf.php';
 
 header('Content-Type: application/json');
 
@@ -33,12 +33,11 @@ if (strlen($senha) < 9) {
     exit;
 }
 
-// Verifica e-mail duplicado
 $stmt = $pdo->prepare("SELECT id FROM usuarios WHERE email = :email LIMIT 1");
 $stmt->execute([':email' => $email]);
 
 if ($stmt->fetch()) {
-    echo json_encode(['status' => 'error', 'message' => 'O e-mail informado já está cadastrado. Tente novamente.']);
+    echo json_encode(['status' => 'error', 'message' => 'O e-mail informado já está cadastrado.']);
     exit;
 }
 

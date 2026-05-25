@@ -2,7 +2,7 @@
 
 // Busca token CSRF
 let csrfToken = '';
-fetch('/php/csrf.php')
+fetch('/includes/functions/csrf.php')
     .then(r => r.json())
     .then(d => { csrfToken = d.token; })
     .catch(() => {});

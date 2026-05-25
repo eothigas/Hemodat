@@ -6,7 +6,7 @@ document.getElementById('logout').addEventListener('click', function(event) {
         .then(response => {
             if (response.ok) {
                 // Redireciona ou faz algo após o logout
-                window.location.href = '/login.html'; // Exemplo: redirecionar para a página de login
+                window.location.href = '/login.php';
             } else {
                 console.error('Erro ao tentar fazer logout');
             }

@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-require_once __DIR__ . '/config.php';
+require_once __DIR__ . '/../includes/functions/config.php';
 
 header('Content-Type: application/json');
 
@@ -11,14 +11,14 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 }
 
 if (!isset($_SESSION['usuario_email'])) {
-    echo json_encode(['status' => 'error', 'message' => 'Sessão inválida. Por favor, tente novamente.']);
+    echo json_encode(['status' => 'error', 'message' => 'Sessão inválida.']);
     exit;
 }
 
-$pdo         = db_connect();
-$email       = $_SESSION['usuario_email'];
-$senha       = trim($_POST['senha']         ?? '');
-$confirmSenha = trim($_POST['confirm-senha'] ?? '');
+$pdo          = db_connect();
+$email        = $_SESSION['usuario_email'];
+$senha        = trim($_POST['senha']          ?? '');
+$confirmSenha = trim($_POST['confirm-senha']  ?? '');
 
 if (empty($senha) || empty($confirmSenha)) {
     echo json_encode(['status' => 'error', 'message' => 'Por favor, preencha todos os campos.']);
@@ -30,9 +30,8 @@ if ($senha !== $confirmSenha) {
     exit;
 }
 
-// Padronizado: mínimo 9 caracteres (8 alfanuméricos + 1 especial)
 if (strlen($senha) < 9) {
-    echo json_encode(['status' => 'error', 'message' => 'A senha deve ter pelo menos 9 caracteres (8 alfanuméricos + 1 especial).']);
+    echo json_encode(['status' => 'error', 'message' => 'A senha deve ter pelo menos 9 caracteres.']);
     exit;
 }
 
@@ -43,8 +42,4 @@ $stmt->execute([':senha' => $senhaHash, ':email' => $email]);
 session_unset();
 session_destroy();
 
-echo json_encode([
-    'status'   => 'success',
-    'message'  => 'Senha alterada com sucesso! Faça login novamente.',
-    'redirect' => './login.html',
-]);
+echo json_encode(['status' => 'success', 'message' => 'Senha alterada! Faça login novamente.', 'redirect' => '/login.php']);

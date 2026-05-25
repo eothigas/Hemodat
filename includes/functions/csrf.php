@@ -1,9 +1,7 @@
 <?php
 /**
  * csrf.php — Geração e validação de tokens CSRF.
- *
- * GET  /php/csrf.php  → retorna {'token': '<hex>'} e armazena na sessão.
- * Inclua este arquivo e chame csrf_validate() em endpoints POST.
+ * GET  /includes/functions/csrf.php → retorna {'token':'<hex>'}
  */
 
 if (session_status() === PHP_SESSION_NONE) {
@@ -29,7 +27,7 @@ function csrf_validate(): void {
     }
 }
 
-// Endpoint GET: retorna token para o JS incluir nos formulários
+// Endpoint GET: retorna token para o JS
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     header('Content-Type: application/json');
     echo json_encode(['token' => csrf_generate()]);

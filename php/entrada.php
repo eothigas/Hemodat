@@ -1,8 +1,8 @@
 <?php
 session_start();
 
-require_once __DIR__ . '/config.php';
-require_once __DIR__ . '/csrf.php';
+require_once __DIR__ . '/../includes/functions/config.php';
+require_once __DIR__ . '/../includes/functions/csrf.php';
 
 header('Content-Type: application/json');
 
@@ -19,9 +19,9 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 csrf_validate();
 
 $pdo      = db_connect();
-$tipo     = trim($_POST['tipo']    ?? '');
-$litros   = trim($_POST['litros']  ?? '');
-$coleta   = trim($_POST['coleta']  ?? '');
+$tipo     = trim($_POST['tipo']     ?? '');
+$litros   = trim($_POST['litros']   ?? '');
+$coleta   = trim($_POST['coleta']   ?? '');
 $validade = trim($_POST['validade'] ?? '');
 
 if (empty($tipo) || empty($litros) || empty($coleta) || empty($validade)) {
@@ -29,20 +29,17 @@ if (empty($tipo) || empty($litros) || empty($coleta) || empty($validade)) {
     exit;
 }
 
-// Validação de tipo sanguíneo
 if (!in_array($tipo, TIPOS_VALIDOS, true)) {
     echo json_encode(['status' => 'error', 'message' => 'Tipo sanguíneo inválido.']);
     exit;
 }
 
-// Validação de quantidade
 $litros = (float) $litros;
 if ($litros <= 0) {
     echo json_encode(['status' => 'error', 'message' => 'Quantidade deve ser maior que zero.']);
     exit;
 }
 
-// Conversão e validação de datas
 $data_coleta   = DateTime::createFromFormat('d/m/Y', $coleta);
 $data_validade = DateTime::createFromFormat('d/m/Y', $validade);
 

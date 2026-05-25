@@ -8,7 +8,7 @@ define('DB_HOST',     'localhost');
 define('DB_NAME',     'efegduik_gphemodat');
 define('DB_USER',     'efegduik_gphemodat');
 define('DB_PASS',     'fHCXpD4sACYN8EyEd4QG');
-define('DB_CHARSET',  'utf8');
+define('DB_CHARSET', 'utf8mb4');
 
 // Tipos sanguíneos aceitos (whitelist)
 define('TIPOS_VALIDOS', ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-']);
@@ -17,7 +17,7 @@ define('TIPOS_VALIDOS', ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-']);
 define('RESET_CODE_TTL', 15);
 
 /**
- * Cria e retorna uma conexão PDO reutilizável.
+ * Cria e retorna uma conexão PDO.
  * Em caso de falha, emite JSON de erro e encerra.
  */
 function db_connect(): PDO {

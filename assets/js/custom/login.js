@@ -1,9 +1,9 @@
 // Busca token CSRF antes de permitir submit
 let csrfToken = '';
-fetch('/php/csrf.php')
+fetch('/includes/functions/csrf.php')
     .then(r => r.json())
     .then(d => { csrfToken = d.token; })
-    .catch(() => { /* continua sem CSRF — server vai rejeitar */ });
+    .catch(() => {});
 
 document.getElementById('logar').addEventListener('click', async (event) => {
     event.preventDefault();

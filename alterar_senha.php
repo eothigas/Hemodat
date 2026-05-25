@@ -1,20 +1,12 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./sources/alt_senha.css">
-    <link rel="stylesheet" href="./sources/toast.css">
-    <link rel="icon" href="./images/logo.ico" type="image/ico">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <title>Hemodat - Alterar Senha</title>
-</head>
-<body>
+<?php
+$titulo     = 'Hemodat - Alterar Senha';
+$css_pagina = '/assets/css/paginas/alt_senha.css';
+require_once __DIR__ . '/includes/other/header.php';
+?>
 
     <div id="principal">
-
         <div id="conteudo-cima">
-            <a href="./forgot_password.html"><i class="bi bi-arrow-left"></i></a>
+            <a href="/forgot_password.php"><i class="bi bi-arrow-left"></i></a>
             <div id="text">
                 <h1>ALTERAR SENHA</h1>
                 <p>Crie uma senha com mínimo 9 caracteres (8 alfanuméricos + 1 especial).</p>
@@ -30,14 +22,13 @@
                     <i class="bi bi-lock"></i>
                     <input type="password" name="confirm-senha" placeholder="Repita a Senha" minlength="9" maxlength="50" required>
                 </div>
-
                 <button type="submit" id="send">Alterar</button>
             </form>
         </div>
     </div>
 
-    <script src="./javascript/toast.js"></script>
-    <script src='/javascript/alterar_senha.js'></script>
+    <script src="/assets/js/padrao/toast.js"></script>
+    <script src="/assets/js/custom/alterar_senha.js"></script>
 
 </body>
 </html>

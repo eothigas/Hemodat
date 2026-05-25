@@ -1,50 +1,16 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./sources/entrada.css">
-    <link rel="stylesheet" href="./sources/toast.css">
-    <link rel="icon" href="./images/logo.ico" type="image/ico">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <script src="./javascript/verificar_sessao.js"></script>
-    <title>Hemodat - Entrada</title>
-</head>
-<body>
-    <nav id="menu-up">
-        <div id="btn-home">
-            <i class="bi bi-list"></i>
-        </div>
+<?php
+$titulo        = 'Hemodat - Entrada';
+$css_pagina    = '/assets/css/paginas/entrada.css';
+$requer_sessao = true;
+require_once __DIR__ . '/includes/other/header.php';
 
-        <i class="open bi bi-x"></i>
-
-        <div id="list">
-            <ul>
-                <a href="./home.html">
-                    <li>HOME</li>
-                </a>
-                <a href="">
-                    <li>ENTRADA</li>
-                </a>
-                <a href="./saida.html">
-                    <li>SAÍDA</li>
-                </a>
-                <a href="./relatorio.html">
-                    <li>RELATÓRIO</li>
-                </a>
-                <li id="logout">SAIR</li>
-            </ul>
-        </div>
-
-        <div id="logo">
-            <img src="./images/logo.png" width="130px" height="40px" alt="Hemodat">
-        </div>
-    </nav>
+$active = 'entrada';
+require_once __DIR__ . '/includes/other/nav.php';
+?>
 
     <div id="principal">
-
         <div id="conteudo-cima">
-            <a href="./home.html"><i class="bi bi-arrow-left"></i></a>
+            <a href="/home.php"><i class="bi bi-arrow-left"></i></a>
             <div id="text">
                 <h1>ENTRADA</h1>
                 <p>Insira os dados</p>
@@ -82,17 +48,15 @@
                         <input type="text" inputmode="numeric" name="validade" placeholder="Data de Validade (DD/MM/AAAA)" maxlength="10" oninput="formatDate(this)" required>
                     </div>
                 </div>
-
                 <button type="submit" id="registrar">Registrar</button>
             </form>
-
         </div>
     </div>
 
-    <script src="./javascript/toast.js"></script>
-    <script src="./javascript/entrada.js"></script>
-    <script src="./javascript/main.js"></script>
-    <script src="./javascript/logout.js"></script>
+    <script src="/assets/js/padrao/toast.js"></script>
+    <script src="/assets/js/custom/entrada.js"></script>
+    <script src="/assets/js/padrao/main.js"></script>
+    <script src="/assets/js/padrao/logout.js"></script>
 
 </body>
 </html>

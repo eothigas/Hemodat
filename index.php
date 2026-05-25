@@ -1,27 +1,21 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./sources/index.css">
-    <link rel="stylesheet" href="./sources/toast.css">
-    <link rel="icon" href="./images/logo.ico" type="image/ico">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <title>Hemodat - Bem Vindo</title>
-</head>
-<body>
+<?php
+$titulo    = 'Hemodat - Bem Vindo';
+$css_pagina = '/assets/css/paginas/index.css';
+require_once __DIR__ . '/includes/other/header.php';
+?>
 
     <div id="principal">
 
         <div id="conteudo-esquerda">
-            <img src="./images/logo.png" id="logo" alt="LOGO">
+            <img src="/imagens/logo/logo.png" id="logo" alt="LOGO">
             <h1>Seja Bem-Vindo!</h1>
             <p>Acesse sua conta agora mesmo.</p>
 
-            <a href="./login.html">
+            <a href="/login.php">
                 <button type="button" id="login">ENTRAR</button>
             </a>
         </div>
+
         <div id="conteudo-direita">
             <h1>Crie sua conta</h1>
             <h2>Preencha seus dados</h2>
@@ -38,17 +32,15 @@
                 <div class="input-container">
                     <i class="bi bi-lock"></i>
                     <input type="password" name="senha" placeholder="Senha" required minlength="9" maxlength="50">
-                    <small>Crie uma senha com mínimo 9 caracteres (8 alfanuméricos + 1 especial).</small>
+                    <small>Mínimo 9 caracteres (8 alfanuméricos + 1 especial).</small>
                 </div>
-
                 <button type="submit" id="new-register">CADASTRAR</button>
             </form>
-
         </div>
     </div>
 
-    <script src="./javascript/toast.js"></script>
-    <script src='/javascript/cadastro.js'></script>
+    <script src="/assets/js/padrao/toast.js"></script>
+    <script src="/assets/js/custom/cadastro.js"></script>
 
 </body>
 </html>

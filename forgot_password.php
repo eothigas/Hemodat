@@ -1,20 +1,12 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./sources/f_password.css">
-    <link rel="stylesheet" href="./sources/toast.css">
-    <link rel="icon" href="./images/logo.ico" type="image/ico">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <title>Hemodat - Esqueci minha senha</title>
-</head>
-<body>
+<?php
+$titulo     = 'Hemodat - Esqueci minha senha';
+$css_pagina = '/assets/css/paginas/f_password.css';
+require_once __DIR__ . '/includes/other/header.php';
+?>
 
     <div id="principal">
-
         <div id="conteudo-cima">
-            <a href="./login.html"><i class="bi bi-arrow-left"></i></a>
+            <a href="/login.php"><i class="bi bi-arrow-left"></i></a>
             <div id="text">
                 <h1>RECUPERAÇÃO DE SENHA</h1>
                 <p>Insira os dados</p>
@@ -30,15 +22,13 @@
                     <i class="bi bi-envelope"></i>
                     <input type="email" name="email" placeholder="Email Registrado" required>
                 </div>
-
                 <button type="submit" id="send">Enviar Email</button>
             </form>
         </div>
-
     </div>
 
-    <script src="./javascript/toast.js"></script>
-    <script src='/javascript/recuperar_senha.js'></script>
+    <script src="/assets/js/padrao/toast.js"></script>
+    <script src="/assets/js/custom/recuperar_senha.js"></script>
 
 </body>
 </html>

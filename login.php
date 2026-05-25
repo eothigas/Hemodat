@@ -1,27 +1,21 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./sources/login.css">
-    <link rel="stylesheet" href="./sources/toast.css">
-    <link rel="icon" href="./images/logo.ico" type="image/ico">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <title>Hemodat - Login</title>
-</head>
-<body>
+<?php
+$titulo     = 'Hemodat - Login';
+$css_pagina = '/assets/css/paginas/login.css';
+require_once __DIR__ . '/includes/other/header.php';
+?>
 
     <div id="principal">
 
         <div id="conteudo-esquerda">
-            <img src="./images/logo.png" id="logo" alt="LOGO">
+            <img src="/imagens/logo/logo.png" id="logo" alt="LOGO">
             <h1>Seja Bem-Vindo!</h1>
             <p>Se não tiver uma conta, cadastre-se agora mesmo!</p>
 
-            <a href="./index.html">
+            <a href="/index.php">
                 <button type="button" id="cadastro">CADASTRAR</button>
             </a>
         </div>
+
         <div id="conteudo-direita">
             <h1>Entre com sua conta</h1>
 
@@ -33,18 +27,15 @@
                 <div class="input-container">
                     <i class="bi bi-lock"></i>
                     <input type="password" name="senha" placeholder="Senha" id="senha">
-                    <a href="./forgot_password.html"><p id="forgot">Esqueci minha senha</p></a>
+                    <a href="/forgot_password.php"><p id="forgot">Esqueci minha senha</p></a>
                 </div>
-
                 <button type="submit" id="logar">ENTRAR</button>
             </form>
-
         </div>
-
     </div>
 
-    <script src="./javascript/toast.js"></script>
-    <script src='/javascript/login.js'></script>
+    <script src="/assets/js/padrao/toast.js"></script>
+    <script src="/assets/js/custom/login.js"></script>
 
 </body>
 </html>

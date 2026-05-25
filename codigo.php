@@ -1,20 +1,12 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./sources/codigo.css">
-    <link rel="stylesheet" href="./sources/toast.css">
-    <link rel="icon" href="./images/logo.ico" type="image/ico">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <title>Hemodat - Validar Código</title>
-</head>
-<body>
+<?php
+$titulo     = 'Hemodat - Validar Código';
+$css_pagina = '/assets/css/paginas/codigo.css';
+require_once __DIR__ . '/includes/other/header.php';
+?>
 
     <div id="principal">
-
         <div id="conteudo-cima">
-            <a href="./forgot_password.html"><i class="bi bi-arrow-left"></i></a>
+            <a href="/forgot_password.php"><i class="bi bi-arrow-left"></i></a>
             <div id="text">
                 <h1>RECUPERAÇÃO DE SENHA</h1>
                 <p>Insira o código enviado por e-mail (válido por 15 minutos)</p>
@@ -29,11 +21,10 @@
                 <button type="submit" id="send">Validar Código</button>
             </form>
         </div>
-
     </div>
 
-    <script src="./javascript/toast.js"></script>
-    <script src='/javascript/codigo.js'></script>
+    <script src="/assets/js/padrao/toast.js"></script>
+    <script src="/assets/js/custom/codigo.js"></script>
 
 </body>
 </html>
