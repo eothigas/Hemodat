@@ -1,4 +1,7 @@
 <?php
+require_once __DIR__ . '/includes/functions/config.php';
+require_auth();
+
 $titulo        = 'Hemodat - Saída';
 $body_class    = 'dashboard-page';
 $requer_sessao = true;

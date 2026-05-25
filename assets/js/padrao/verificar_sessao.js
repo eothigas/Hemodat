@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             })
             .catch(() => {
-                window.location.href = '/login.php';
+                window.location.href = BASE_URL + '/login.php';
             });
     }
 

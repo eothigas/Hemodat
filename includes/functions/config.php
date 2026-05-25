@@ -3,6 +3,11 @@
  * config.php - Configuração central da aplicação Hemodat.
  */
 
+// ─── Sessão ───────────────────────────────────────────────────────────────────
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
 // ─── URLs ────────────────────────────────────────────────────────────────────
 define('BASE_URL_LOCAL',  'http://localhost/_Pessoal/Hemodat');
 define('BASE_URL_ONLINE', 'https://hemodatgp.com');
@@ -11,6 +16,17 @@ define('BASE_URL_ONLINE', 'https://hemodatgp.com');
 $_host = $_SERVER['HTTP_HOST'] ?? 'localhost';
 define('IS_LOCAL',  in_array($_host, ['localhost', '127.0.0.1'], true));
 define('BASE_URL',  IS_LOCAL ? BASE_URL_LOCAL : BASE_URL_ONLINE);
+
+/**
+ * Protege página: redireciona para login se não estiver autenticado.
+ * Chame no topo de qualquer página que exija login (após include config.php).
+ */
+function require_auth(): void {
+    if (empty($_SESSION['usuario_logado']) || $_SESSION['usuario_logado'] !== true) {
+        header('Location: ' . BASE_URL . '/login.php');
+        exit;
+    }
+}
 
 // ─── Banco de dados (local × produção) ───────────────────────────────────────
 if (IS_LOCAL) {
