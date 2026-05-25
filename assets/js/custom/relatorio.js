@@ -1,106 +1,80 @@
-// Declara ctx globalmente
-let ctx;
+// relatorio.js — Gráfico de barras (Chart.js) + exportação em PDF
 
-// Busca os dados do servidor
-fetch(BASE_URL + '/includes/actions/bolsas.php?action=buscar_total') // Caminho para o arquivo PHP que retorna os dados
-  .then(response => {
-      if (!response.ok) {
-          throw new Error('Erro ao buscar os dados do servidor');
-      }
-      return response.json();
-  })
-  .then(data => {
-      const tiposSanguineos = data.tipos_sanguineos;
-      const quantidades = data.quantidades;
+fetch(BASE_URL + '/includes/actions/bolsas.php?action=buscar_total')
+    .then(response => {
+        if (!response.ok) throw new Error('Erro ao buscar os dados do servidor');
+        return response.json();
+    })
+    .then(data => {
+        const tiposSanguineos = data.tipos_sanguineos;
+        const quantidades     = data.quantidades;
 
-      // Obtém o contexto do canvas
-      const canvas = document.getElementById('graficoBar');
-      ctx = canvas.getContext('2d');
+        const canvas = document.getElementById('graficoBar');
+        const ctx    = canvas.getContext('2d');
 
-      const dados = {
-          labels: tiposSanguineos, // Tipos sanguíneos como rótulos
-          datasets: [{
-              label: 'Bolsas de Sangue',
-              data: quantidades, // Quantidades como valores
-              backgroundColor: 'rgb(156, 156, 156)',
-              borderColor: 'rgba(0, 0, 0, 0.6)',
-              borderWidth: 1
-          }]
-      };
+        // Paleta: barras vermelhas, fundo branco (card branco)
+        const TICK_COLOR   = '#444';
+        const BAR_COLOR    = 'rgba(209, 0, 0, 0.80)';
+        const BAR_BORDER   = 'rgba(175, 0, 0, 1)';
+        const GRID_COLOR   = 'rgba(0,0,0,0.08)';
 
-      // Cria o gráfico
-      const chart = new Chart(ctx, {
-          type: 'bar', // Gráfico de barras
-          data: dados,
-          options: {
-              responsive: true,
-              plugins: {
-                  legend: {
-                      display: true, // Ativa a legenda
-                      labels: {
-                          color: 'rgb(255, 255, 255)', // Fonte branca para exibição
-                          font: { size: 18 }
-                      }
-                  }
-              },
-              scales: {
-                  x: {
-                      ticks: {
-                          color: 'rgb(255, 255, 255)', // Fonte branca para exibição
-                          font: { size: 18 }
-                      }
-                  },
-                  y: {
-                      beginAtZero: true,
-                      ticks: {
-                          color: 'rgb(255, 255, 255)', // Fonte branca para exibição
-                          font: { size: 18 }
-                      }
-                  }
-              }
-          }
-      });
+        const chart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: tiposSanguineos,
+                datasets: [{
+                    label: 'Bolsas disponíveis (litros)',
+                    data: quantidades,
+                    backgroundColor: BAR_COLOR,
+                    borderColor:     BAR_BORDER,
+                    borderWidth: 1.5,
+                    borderRadius: 4,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: true,
+                        labels: {
+                            color: TICK_COLOR,
+                            font: { size: 14, family: 'Outfit' }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        ticks: { color: TICK_COLOR, font: { size: 14, family: 'Outfit' } },
+                        grid:  { color: GRID_COLOR }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        ticks: { color: TICK_COLOR, font: { size: 14, family: 'Outfit' } },
+                        grid:  { color: GRID_COLOR }
+                    }
+                }
+            }
+        });
 
-      // Adiciona evento de exportação ao botão
-      document.getElementById('export').addEventListener('click', () => {
-          const { jsPDF } = window.jspdf;
+        // ── Exportação PDF ──────────────────────────────────────────────
+        document.getElementById('export').addEventListener('click', () => {
+            const { jsPDF } = window.jspdf;
 
-          // Troca as cores das fontes para preto antes de exportar
-          chart.options.plugins.legend.labels.color = 'rgb(0, 0, 0)'; // Fonte preta
-          chart.options.scales.x.ticks.color = 'rgb(0, 0, 0)'; // Eixo X preto
-          chart.options.scales.y.ticks.color = 'rgb(0, 0, 0)'; // Eixo Y preto
+            // Cores PDF (já são escuras — sem troca necessária)
+            const doc = new jsPDF('landscape');
 
-          // Atualiza o gráfico para aplicar as mudanças
-          chart.update();
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(16);
+            doc.text('Relatório de Bolsas de Sangue — Hemodat', 148, 20, { align: 'center' });
 
-          // Adiciona um pequeno atraso para garantir a renderização antes da captura
-          setTimeout(() => {
-              // Criação de um novo documento PDF com orientação paisagem
-              const doc = new jsPDF('landscape');
-
-              // Adiciona um título ao PDF
-              doc.setFontSize(16);
-              doc.text('Relatório de Bolsas de Sangue', 45, 20, { align: 'center' });
-
-              // Captura a imagem do gráfico
-              const dataURL = canvas.toDataURL("image/png");
-
-              // Adiciona a imagem ao PDF
-              doc.addImage(dataURL, 'PNG', 5, 40, 280, 110); // Ajuste conforme necessário
-
-              // Salva o PDF com o nome especificado
-              doc.save('Relatório Bolsas de Sangue.pdf');
-
-              // Restaura as cores brancas para a exibição
-              chart.options.plugins.legend.labels.color = 'rgb(255, 255, 255)'; // Fonte branca
-              chart.options.scales.x.ticks.color = 'rgb(255, 255, 255)'; // Eixo X branco
-              chart.options.scales.y.ticks.color = 'rgb(255, 255, 255)'; // Eixo Y branco
-
-              // Atualiza o gráfico para exibição
-              chart.update();
-          }, 300); // 300ms para garantir que o gráfico seja renderizado
-      });
-  })
-  .catch(error => {
-      console.error('Erro ao carregar os dados para o gráfico:', error);
-  });
+            setTimeout(() => {
+                const dataURL = canvas.toDataURL('image/png');
+                doc.addImage(dataURL, 'PNG', 10, 35, 277, 150);
+                doc.save('Relatorio_Bolsas_Sangue.pdf');
+            }, 200);
+        });
+    })
+    .catch(error => {
+        console.error('Erro ao carregar os dados para o gráfico:', error);
+    });

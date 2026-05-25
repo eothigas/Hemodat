@@ -1,40 +1,68 @@
 <?php
-$titulo     = 'Hemodat - Login';
-$css_pagina = '/assets/css/paginas/login.css';
+$titulo     = 'Hemodat — Login';
+$body_class = 'auth-page';
 require_once __DIR__ . '/includes/other/header.php';
 ?>
 
-    <div id="principal">
+<div class="auth-wrapper">
+    <div class="split-card">
 
-        <div id="conteudo-esquerda">
-            <img src="<?= BASE_URL ?>/imagens/logo/logo.png" id="logo" alt="LOGO">
+        <!-- Painel esquerdo -->
+        <div class="split-left">
+            <img src="<?= BASE_URL ?>/imagens/logo/logo.png" width="140" alt="Hemodat">
             <h1>Seja Bem-Vindo!</h1>
-            <p>Se não tiver uma conta, cadastre-se agora mesmo!</p>
-            <a href="<?= BASE_URL ?>/index.php">
-                <button type="button" id="cadastro">CADASTRAR</button>
+            <p>Não tem uma conta? Cadastre-se agora mesmo!</p>
+            <a href="<?= BASE_URL ?>/index.php" class="btn btn-outline-light mt-3 px-4">
+                CADASTRAR
             </a>
         </div>
 
-        <div id="conteudo-direita">
+        <!-- Painel direito -->
+        <div class="split-right">
             <h1>Entre com sua conta</h1>
+            <h2>Preencha seus dados abaixo</h2>
 
-            <form id="login" action="<?= BASE_URL ?>/includes/actions/auth.php?action=login" method="post">
-                <div class="input-container">
-                    <i class="bi bi-envelope"></i>
-                    <input type="email" name="email" placeholder="Email" id="email">
+            <form id="login"
+                  action="<?= BASE_URL ?>/includes/actions/auth.php?action=login"
+                  method="post"
+                  class="w-100" style="max-width:380px;">
+
+                <div class="mb-3">
+                    <div class="input-icon">
+                        <i class="bi bi-envelope"></i>
+                        <input type="email" name="email"
+                               class="form-control"
+                               placeholder="Email" required>
+                    </div>
                 </div>
-                <div class="input-container">
-                    <i class="bi bi-lock"></i>
-                    <input type="password" name="senha" placeholder="Senha" id="senha">
-                    <a href="<?= BASE_URL ?>/forgot_password.php"><p id="forgot">Esqueci minha senha</p></a>
+
+                <div class="mb-1">
+                    <div class="input-icon">
+                        <i class="bi bi-lock"></i>
+                        <input type="password" name="senha"
+                               class="form-control"
+                               placeholder="Senha" required>
+                    </div>
                 </div>
-                <button type="submit" id="logar">ENTRAR</button>
+
+                <div class="mb-4">
+                    <a href="<?= BASE_URL ?>/forgot_password.php" class="forgot-link">
+                        Esqueci minha senha
+                    </a>
+                </div>
+
+                <div class="d-flex justify-content-center">
+                    <button type="submit" class="btn btn-primary px-5">
+                        ENTRAR
+                    </button>
+                </div>
             </form>
         </div>
+
     </div>
+</div>
 
-    <script src="<?= BASE_URL ?>/assets/js/padrao/toast.js"></script>
-    <script src="<?= BASE_URL ?>/assets/js/custom/login.js"></script>
-
+<script src="<?= BASE_URL ?>/assets/js/padrao/toast.js"></script>
+<script src="<?= BASE_URL ?>/assets/js/custom/login.js"></script>
 </body>
 </html>
