@@ -33,9 +33,7 @@ Hemodat/
 ├── historico.php               # Histórico paginado de movimentações
 ├── admin.php                   # Painel admin: usuários + estoque mínimo
 ├── login.php                   # Autenticação
-├── forgot_password.php         # Recuperação de senha — step 1
-├── codigo.php                  # Validação do código — step 2
-├── alterar_senha.php           # Nova senha — step 3
+├── forgot_password.php         # Recuperação de senha — wizard 3 steps em página única
 │
 ├── includes/
 │   ├── actions/
@@ -90,9 +88,7 @@ Todas as páginas usam URLs sem `.php` via mod_rewrite:
 | `/relatorio` | relatorio.php |
 | `/historico` | historico.php |
 | `/admin` | admin.php |
-| `/forgot_password` | forgot_password.php |
-| `/codigo` | codigo.php |
-| `/alterar_senha` | alterar_senha.php |
+| `/forgot_password` | forgot_password.php (wizard: solicitar → validar → nova senha) |
 
 > **Endpoints de API** (fetch direto por JS) mantêm `.php`: `includes/actions/*.php`, `includes/functions/csrf.php`
 
@@ -161,12 +157,12 @@ Páginas protegidas:
     require_auth() em config.php  →  verifica sessão  →  redirect /login se inválida
     verificar_sessao.js  →  heartbeat AJAX  →  redirect /login se expirada
 
-Recuperação de senha:
-    /forgot_password  →  POST senha.php?action=recuperar
+Recuperação de senha (wizard em página única — /forgot_password):
+    Step 1: usuário + email  →  POST senha.php?action=recuperar
         → código 8 chars (random_bytes) salvo em recuperar_senha
-        → e-mail HTML enviado via mail()
-    /codigo           →  POST senha.php?action=validar   →  verifica TTL 15 min
-    /alterar_senha    →  POST senha.php?action=alterar   →  bcrypt UPDATE  →  /login
+        → e-mail HTML enviado via mail()  [local: código aparece no JSON de debug]
+    Step 2: código           →  POST senha.php?action=validar   →  verifica TTL 15 min
+    Step 3: nova senha       →  POST senha.php?action=alterar   →  bcrypt UPDATE  →  /login
 ```
 
 ---

@@ -119,11 +119,20 @@ HTML;
     $headers  = "From: Hemodat <noreply@hemodatgp.com>\r\nReply-To: suporte@hemodatgp.com\r\n";
     $headers .= "Content-Type: text/html; charset=UTF-8\r\nMIME-Version: 1.0\r\n";
 
+    // Em ambiente local mail() não envia — expõe código no JSON para testes
+    if (IS_LOCAL) {
+        echo json_encode([
+            'status'  => 'success',
+            'message' => 'Código enviado com sucesso!',
+            'debug'   => "[LOCAL] Código: $codigo",   // visível só no DevTools Network
+        ]);
+        return;
+    }
+
     if (mail($email, $subject, $message, $headers)) {
         echo json_encode([
-            'status'   => 'success',
-            'message'  => 'Código enviado com sucesso!',
-            'redirect' => BASE_URL . '/codigo',
+            'status'  => 'success',
+            'message' => 'Código enviado com sucesso!',
         ]);
     } else {
         echo json_encode(['status' => 'error', 'message' => 'Erro ao enviar o e-mail. Tente novamente.']);
