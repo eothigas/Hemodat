@@ -842,27 +842,54 @@ img { display: block; max-width: 100%; }
 }
 
 /* ── Password toggle ──────────────────────────────────────── */
-.input-icon--password .form-control { padding-right: 2.75rem; }
+/* Container owns the border/bg — overflow:hidden impede toggle de vazar */
+.input-icon--password {
+    background: var(--hemo-card);
+    border: 1px solid var(--hemo-border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+}
+
+.input-icon--password:focus-within {
+    border-color: var(--hemo-red);
+    box-shadow: 0 0 0 3px rgba(220, 38, 38, .12);
+}
+
+.input-icon--password .form-control {
+    border: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    width: 100%;
+    padding-right: 2.75rem;
+}
+
+.input-icon--password .form-control:focus {
+    border: none !important;
+    box-shadow: none !important;
+}
 
 .pwd-toggle {
     position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
+    right: 0;
+    top: 0;
+    bottom: 0;
+    padding: 0 12px;
+    display: flex;
+    align-items: center;
     background: none;
     border: none;
-    padding: 2px 4px;
     color: var(--hemo-text-3);
     font-size: 15px;
     cursor: pointer;
-    z-index: 6;
-    line-height: 1;
-    border-radius: var(--radius-sm);
     transition: color .15s;
+    z-index: 9991;
+    padding-left: 25px;
 }
 
 .pwd-toggle:hover { color: var(--hemo-text-1); }
 
+html[data-theme="dark"] .input-icon--password { background: var(--hemo-bg); }
 html[data-theme="dark"] .pwd-toggle:hover { color: var(--hemo-text-1); }
 
 /* ── Narrow card (forgot/codigo/alterar senha) ────────────── */
@@ -951,6 +978,44 @@ html[data-theme="dark"] .pwd-toggle:hover { color: var(--hemo-text-1); }
     transition: background .25s;
 }
 .rec-step.done + .rec-step-line { background: var(--hemo-success); }
+
+/* ── Password strength indicator ─────────────────────────── */
+.pwd-strength-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: -6px;
+}
+.pwd-strength-bar {
+    flex: 1;
+    height: 5px;
+    background: var(--hemo-border);
+    border-radius: 99px;
+    overflow: hidden;
+}
+.pwd-strength-fill {
+    height: 100%;
+    width: 0%;
+    border-radius: 99px;
+    transition: width .35s ease, background-color .35s ease;
+}
+.pwd-strength-fill[data-score="1"] { width: 25%; background: #EF4444; }
+.pwd-strength-fill[data-score="2"] { width: 50%; background: #F97316; }
+.pwd-strength-fill[data-score="3"] { width: 75%; background: #EAB308; }
+.pwd-strength-fill[data-score="4"] { width: 100%; background: #22C55E; }
+.pwd-strength-label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    min-width: 52px;
+    text-align: right;
+    white-space: nowrap;
+    color: var(--hemo-text-3);
+    transition: color .35s;
+}
+.pwd-strength-label[data-score="1"] { color: #EF4444; }
+.pwd-strength-label[data-score="2"] { color: #F97316; }
+.pwd-strength-label[data-score="3"] { color: #EAB308; }
+.pwd-strength-label[data-score="4"] { color: #22C55E; }
 
 /* ── Forgot-link ──────────────────────────────────────────── */
 .forgot-link {

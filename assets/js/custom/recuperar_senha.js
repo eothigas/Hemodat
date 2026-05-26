@@ -124,6 +124,34 @@
         this.setSelectionRange(pos, pos);
     });
 
+    // ── Password strength ─────────────────────────────────────────────────────
+    const strengthFill  = document.getElementById('pwd-strength-fill');
+    const strengthLabel = document.getElementById('pwd-strength-label');
+    const strengthLabels = ['', 'Fraca', 'Razoável', 'Boa', 'Forte'];
+
+    function calcStrength(pwd) {
+        if (!pwd) return 0;
+        let score = 0;
+        if (pwd.length >= 9)              score++;
+        if (/[A-Z]/.test(pwd))            score++;
+        if (/[0-9]/.test(pwd))            score++;
+        if (/[^A-Za-z0-9]/.test(pwd))     score++;
+        return score;
+    }
+
+    document.getElementById('nova-senha').addEventListener('input', function () {
+        if (!this.value) {
+            strengthFill.removeAttribute('data-score');
+            strengthLabel.removeAttribute('data-score');
+            strengthLabel.textContent = '';
+            return;
+        }
+        const score = calcStrength(this.value);
+        strengthFill.dataset.score  = score;
+        strengthLabel.dataset.score = score;
+        strengthLabel.textContent   = strengthLabels[score];
+    });
+
     // ── Step 3: Nova senha ────────────────────────────────────────────────────
     document.getElementById('form-alterar').addEventListener('submit', async (e) => {
         e.preventDefault();

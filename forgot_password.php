@@ -87,7 +87,7 @@ require_once __DIR__ . '/includes/other/header.php';
                 Crie uma senha com mínimo <strong>9 caracteres</strong>.
             </p>
             <form id="form-alterar" class="d-flex flex-column gap-3" novalidate>
-                <div class="input-icon" style="position:relative;">
+                <div class="input-icon input-icon--password">
                     <i class="bi bi-lock"></i>
                     <input type="password" name="senha" id="nova-senha"
                            class="form-control"
@@ -97,7 +97,16 @@ require_once __DIR__ . '/includes/other/header.php';
                         <i class="bi bi-eye"></i>
                     </button>
                 </div>
-                <div class="input-icon" style="position:relative;">
+
+                <!-- Indicador de força -->
+                <div id="pwd-strength-wrap" class="pwd-strength-wrap" aria-live="polite">
+                    <div class="pwd-strength-bar">
+                        <div id="pwd-strength-fill" class="pwd-strength-fill"></div>
+                    </div>
+                    <span id="pwd-strength-label" class="pwd-strength-label"></span>
+                </div>
+
+                <div class="input-icon input-icon--password">
                     <i class="bi bi-lock-fill"></i>
                     <input type="password" name="confirm-senha" id="conf-senha"
                            class="form-control"
