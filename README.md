@@ -1,20 +1,21 @@
-# Hemodat - Sistema de Gestão de Banco de Sangue
+# Hemodat — Sistema de Gestão de Banco de Sangue
 
-Sistema web para controle de estoque de bolsas de sangue em hemocentros. Registra entrada e saída de bolsas, gerencia usuários com autenticação por sessão PHP e exibe relatório gráfico com exportação em PDF.
+Sistema web para controle de estoque de bolsas de sangue em hemocentros. Registra entradas e saídas, gerencia usuários com autenticação por sessão PHP, exibe dashboard com gráficos e alertas, e envia e-mail de recuperação de senha.
 
 ---
 
 ## Stack
 
 | Camada | Tecnologia |
-|--------|-----------|
-| Frontend | HTML5, CSS3, Vanilla JS |
-| Backend | PHP (PDO) |
-| Banco de dados | MySQL |
+|--------|------------|
+| Frontend | HTML5, Bootstrap 5.3, Vanilla JS |
+| Backend | PHP 8.2, PDO |
+| Banco de dados | MySQL (InnoDB, utf8mb4_unicode_ci) |
 | Ícones | Bootstrap Icons 1.11.3 (CDN) |
-| Gráficos | Chart.js (CDN) |
+| Gráficos | Chart.js 4.4.3 (CDN) |
 | PDF Export | jsPDF 2.5.1 (CDN) |
-| Servidor local | XAMPP |
+| E-mail | PHP `mail()` nativa (relay Hostinger em produção) |
+| Servidor local | XAMPP (Apache + MySQL + PHP 8.2) |
 
 ---
 
@@ -22,96 +23,131 @@ Sistema web para controle de estoque de bolsas de sangue em hemocentros. Registr
 
 ```
 Hemodat/
-├── index.html              # Landing + cadastro de usuário
-├── login.html              # Login
-├── home.html               # Dashboard (autenticado)
-├── entrada.html            # Registro de entrada de bolsas
-├── saida.html              # Registro de saída de bolsas
-├── relatorio.html          # Gráfico de estoque + export PDF
-├── forgot_password.html    # Recuperação de senha (step 1)
-├── codigo.html             # Validação do código (step 2)
-├── alterar_senha.html      # Nova senha (step 3)
+├── .htaccess                   # Rewrite de URLs limpas, bloqueio de pastas, headers de segurança
+├── composer.json               # Dependências PHP
 │
-├── php/
-│   ├── login.php           # Auth → cria sessão
-│   ├── logout.php          # Destrói sessão
-│   ├── cadastro.php        # INSERT usuário (bcrypt)
-│   ├── session.php         # Endpoint: verifica sessão ativa
-│   ├── entrada.php         # INSERT bolsa_sangue
-│   ├── saida.php           # INSERT saida_bolsas + valida estoque/validade
-│   ├── buscar_tipo.php     # GET tipos sanguíneos (para select)
-│   ├── buscar_total.php    # GET tipo + quantidade (para gráfico)
-│   ├── recuperar_senha.php # Gera código 8 chars + envia email
-│   ├── codigo.php          # Valida código → DELETE registro
-│   └── alterar_senha.php   # UPDATE senha (bcrypt)
+├── home.php                    # Dashboard — stat cards, alertas, gráfico de estoque
+├── entrada.php                 # Registro de entrada de bolsas
+├── saida.php                   # Registro de saída de bolsas
+├── relatorio.php               # Gráfico filtrado + exportação PDF
+├── historico.php               # Histórico paginado de movimentações
+├── admin.php                   # Painel admin: usuários + estoque mínimo
+├── login.php                   # Autenticação
+├── forgot_password.php         # Recuperação de senha — step 1
+├── codigo.php                  # Validação do código — step 2
+├── alterar_senha.php           # Nova senha — step 3
 │
-├── javascript/
-│   ├── verificar_sessao.js # Fetch session.php → redireciona se não logado
-│   ├── cadastro.js         # Submit cadastro via fetch
-│   ├── login.js            # Submit login via fetch
-│   ├── logout.js           # Submit logout
-│   ├── entrada.js          # Submit entrada + mask de data
-│   ├── saida.js            # Submit saída + popula select via buscar_tipo.php
-│   ├── relatorio.js        # Renderiza Chart.js + exporta PDF
-│   ├── recuperar_senha.js  # Submit forgot_password
-│   ├── codigo.js           # Submit código de validação
-│   ├── alterar_senha.js    # Submit nova senha
-│   └── main.js             # Menu hamburguer (toggle nav)
+├── includes/
+│   ├── actions/
+│   │   ├── auth.php            # Login / logout
+│   │   ├── bolsas.php          # CRUD bolsas (entrada, saída, totais, alertas, histórico)
+│   │   ├── senha.php           # Recuperação e alteração de senha
+│   │   └── admin.php           # Ações admin (usuários, estoque mínimo)
+│   └── functions/
+│       ├── config.php          # Configuração central: DB, URLs, constantes de negócio
+│       ├── csrf.php            # Geração e validação de CSRF token
+│       ├── session.php         # Verificação de sessão ativa (endpoint AJAX)
+│       └── header.php          # Header HTML + assets globais + ob_start() minifier
+│   └── other/
+│       ├── sidebar.php         # Sidebar + topbar (layout de app)
+│       └── footer.php          # Fecha app-shell
 │
-├── sources/                # CSS por página
-│   ├── index.css
-│   ├── login.css
-│   ├── home.css
-│   ├── entrada.css
-│   ├── saida.css
-│   ├── relatorio.css
-│   ├── alt_senha.css
-│   ├── codigo.css
-│   └── f_password.css
+├── assets/
+│   ├── css/
+│   │   └── padrao.css          # Design system completo (tokens, dark mode, layout)
+│   └── js/
+│       ├── padrao/
+│       │   ├── darkmode.js     # Toggle light/dark + sync localStorage
+│       │   ├── security.js     # Console warning + bloqueia DevTools em produção
+│       │   ├── logout.js       # Fetch logout → redirect /login
+│       │   └── verificar_sessao.js  # Heartbeat de sessão → redirect /login
+│       └── custom/
+│           ├── login.js        # Submit login, toggle senha
+│           ├── home.js         # Stat cards, alertas, Chart.js estoque
+│           ├── entrada.js      # Blood chips, form entrada, estoque resumo
+│           ├── saida.js        # Blood chips, form saída, últimas saídas
+│           ├── relatorio.js    # Filtros, Chart.js, export PDF
+│           └── historico.js    # Tabela paginada, filtros
 │
-└── images/
-    ├── logo.png
-    ├── logo.ico
-    ├── logo_reduzido.ico
-    └── background.png
+└── imagens/
+    ├── logo/                   # logo.png, logo-white.png, logo.svg, logo-white.svg,
+    │                           # mark.svg, mark-white.svg
+    └── favicon/                # favicon.svg, favicon-32.png
 ```
+
+---
+
+## URLs
+
+Todas as páginas usam URLs sem `.php` via mod_rewrite:
+
+| URL | Arquivo |
+|-----|---------|
+| `/login` | login.php |
+| `/home` | home.php |
+| `/entrada` | entrada.php |
+| `/saida` | saida.php |
+| `/relatorio` | relatorio.php |
+| `/historico` | historico.php |
+| `/admin` | admin.php |
+| `/forgot_password` | forgot_password.php |
+| `/codigo` | codigo.php |
+| `/alterar_senha` | alterar_senha.php |
+
+> **Endpoints de API** (fetch direto por JS) mantêm `.php`: `includes/actions/*.php`, `includes/functions/csrf.php`
 
 ---
 
 ## Banco de Dados
 
-### Tabelas (inferidas do código)
+### Schema
 
 ```sql
+-- Usuários do sistema
 CREATE TABLE usuarios (
     id       INT AUTO_INCREMENT PRIMARY KEY,
     nome     VARCHAR(50)  NOT NULL,
     email    VARCHAR(255) NOT NULL UNIQUE,
-    senha    VARCHAR(255) NOT NULL  -- bcrypt hash
-);
+    senha    VARCHAR(255) NOT NULL,           -- bcrypt
+    papel    ENUM('admin','operador') NOT NULL DEFAULT 'operador',
+    criado_em DATETIME DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- Estoque de bolsas (FIFO por data de validade)
 CREATE TABLE bolsas_sangue (
-    id              INT AUTO_INCREMENT PRIMARY KEY,
-    tipo_sanguineo  VARCHAR(5)     NOT NULL,
-    quantidade      DECIMAL(10,2)  NOT NULL,
-    data_coleta     DATE           NOT NULL,
-    data_validade   DATE           NOT NULL
-);
+    id             INT AUTO_INCREMENT PRIMARY KEY,
+    tipo_sanguineo VARCHAR(5)    NOT NULL,
+    quantidade     DECIMAL(10,2) NOT NULL,
+    data_coleta    DATE          NOT NULL,
+    data_validade  DATE          NOT NULL,
+    criado_em      DATETIME      DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE TABLE saida_bolsas_sangue (
-    id              INT AUTO_INCREMENT PRIMARY KEY,
-    email           VARCHAR(255)   NOT NULL,
-    tipo_sanguineo  VARCHAR(5)     NOT NULL,
-    quantidade      DECIMAL(10,2)  NOT NULL,
-    data_saida      DATE           NOT NULL
-);
+-- Log de entradas e saídas
+CREATE TABLE historico_bolsas (
+    id             INT AUTO_INCREMENT PRIMARY KEY,
+    tipo_sanguineo VARCHAR(5)        NOT NULL,
+    quantidade     DECIMAL(10,2)     NOT NULL,
+    operacao       ENUM('entrada','saida') NOT NULL,
+    usuario        VARCHAR(100),
+    data_evento    DATETIME          DEFAULT CURRENT_TIMESTAMP,
+    observacao     TEXT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- Estoque mínimo por tipo sanguíneo (alerta no dashboard)
+CREATE TABLE estoque_minimo (
+    tipo_sanguineo VARCHAR(5)    NOT NULL PRIMARY KEY,
+    minimo         DECIMAL(10,2) NOT NULL DEFAULT 1.00
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Tokens de recuperação de senha (TTL = 15 min)
 CREATE TABLE recuperar_senha (
-    id      INT AUTO_INCREMENT PRIMARY KEY,
-    usuario VARCHAR(50)  NOT NULL,
-    email   VARCHAR(255) NOT NULL,
-    codigo  VARCHAR(8)   NOT NULL
-);
+    id        INT AUTO_INCREMENT PRIMARY KEY,
+    usuario   VARCHAR(50)  NOT NULL,
+    email     VARCHAR(255) NOT NULL,
+    codigo    VARCHAR(8)   NOT NULL,
+    criado_em DATETIME     DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 ```
 
 ---
@@ -119,96 +155,55 @@ CREATE TABLE recuperar_senha (
 ## Fluxo de Autenticação
 
 ```
-index.html → [cadastro] → cadastro.php → usuarios
-index.html → [entrar] → login.html → login.php → SESSION → home.html
+/login  →  POST auth.php?action=login  →  $_SESSION['usuario_logado'] = true  →  /home
 
-home.html / entrada.html / saida.html / relatorio.html
-    → verificar_sessao.js → session.php
-    → não logado? → redirect login.html
+Páginas protegidas:
+    require_auth() em config.php  →  verifica sessão  →  redirect /login se inválida
+    verificar_sessao.js  →  heartbeat AJAX  →  redirect /login se expirada
 
-forgot_password.html → recuperar_senha.php → email com código
-    → codigo.html → codigo.php → valida → DELETE código
-    → alterar_senha.html → alterar_senha.php → UPDATE senha → login.html
+Recuperação de senha:
+    /forgot_password  →  POST senha.php?action=recuperar
+        → código 8 chars (random_bytes) salvo em recuperar_senha
+        → e-mail HTML enviado via mail()
+    /codigo           →  POST senha.php?action=validar   →  verifica TTL 15 min
+    /alterar_senha    →  POST senha.php?action=alterar   →  bcrypt UPDATE  →  /login
 ```
 
 ---
 
-## Problemas Identificados
+## Segurança
 
-### 🔴 Crítico - Segurança
-
-| # | Arquivo(s) | Problema | Impacto |
-|---|-----------|----------|---------|
-| 1 | Todos os `.php` | **Credenciais DB hardcoded** em cada arquivo | Vazamento de senha em qualquer diff/log/push |
-| 2 | `recuperar_senha.php:48` | `str_shuffle()` não é criptograficamente seguro para código de recuperação | Código previsível |
-| 3 | `recuperar_senha.php` | Código de recuperação **sem expiração por tempo** | Código válido indefinidamente até ser usado |
-| 4 | Todos os forms | **Sem CSRF token** | Ataques cross-site request forgery |
-| 5 | `saida.php` | Não verifica `$_SESSION['usuario_logado']`, só `usuario_email` | Bypass parcial de sessão |
-
-### 🟠 Alto - Bug Funcional
-
-| # | Arquivo(s) | Problema |
-|---|-----------|----------|
-| 6 | `saida.php` | **Não decrementa `bolsas_sangue.quantidade`** após saída registrada - estoque nunca diminui |
-| 7 | `buscar_total.php` | Retorna todas as linhas de `bolsas_sangue` sem `SUM()`/`GROUP BY` - se houver múltiplas entradas do mesmo tipo, gráfico mostra duplicatas em vez de total |
-| 8 | `buscar_tipo.php` | Mesmo problema - busca todas as linhas e deduplica em PHP com `array_unique()` em vez de `SELECT DISTINCT` |
-
-### 🟡 Médio - Inconsistência / UX
-
-| # | Arquivo(s) | Problema |
-|---|-----------|----------|
-| 9 | `index.html:39` | `maxlength="9"` mas texto diz "8 dígitos + 1 especial". `alterar_senha.php:42` valida `strlen < 8`. Regra de senha inconsistente entre frontend e backend |
-| 10 | `index.html:41` | Tag `<fontsize>` não existe em HTML5 |
-| 11 | Todos os JS | `alert()` nativo para feedback - bloqueia UI, UX ruim |
-| 12 | `entrada.js` / `saida.js` | `formatDate()` duplicada nos dois arquivos |
-| 13 | `relatorio.html:59` | `chart.js` importado duas vezes (head + fim do body) |
-| 14 | `saida.php:41` | `SELECT quantidade, data_validade FROM bolsas_sangue WHERE tipo_sanguineo = :tipo` retorna apenas o primeiro registro - não considera múltiplas entradas do mesmo tipo |
-
-### 🔵 Baixo - Qualidade de Código
-
-| # | Problema |
-|---|----------|
-| 15 | Config de DB repetida em 9 arquivos PHP - sem arquivo central `config.php` |
-| 16 | Sem `.env` ou separação de ambiente (dev/prod) |
-| 17 | Sem validação de tipo sanguíneo no backend (aceita qualquer string) |
-| 18 | `logout.php` não referenciado - `logout.js` pode estar chamando endpoint diferente |
+| Item | Implementação |
+|------|---------------|
+| Senhas | bcrypt (`PASSWORD_BCRYPT`) |
+| Sessão | `session_start()` em `config.php`, verificação server-side em cada página |
+| CSRF | Token gerado em `csrf.php`, validado em todos os POSTs de formulário |
+| Acesso direto a pastas | `.htaccess` bloqueia `includes/functions/` e `includes/other/` |
+| Tipo sanguíneo | Whitelist `TIPOS_VALIDOS` em todas as entradas backend |
+| Headers HTTP | X-Content-Type-Options, X-Frame-Options, X-XSS-Protection, Referrer-Policy, Permissions-Policy |
+| DevTools | `security.js` bloqueia F12 / Ctrl+Shift+I/J/C / Ctrl+U / right-click em produção |
+| Código de recuperação | `bin2hex(random_bytes(4))`, TTL 15 min, DELETE após uso |
 
 ---
 
-## Melhorias Prioritárias
+## Dark Mode
 
-### P0 - Antes de qualquer deploy
+Implementado via CSS custom properties com troca de `html[data-theme="dark"]`.
 
-1. **Centralizar config DB** → criar `php/config.php` com credenciais, incluir via `require_once`
-2. **Corrigir decremento de estoque** → `saida.php` deve fazer `UPDATE bolsas_sangue SET quantidade = quantidade - :qtd WHERE tipo_sanguineo = :tipo` após INSERT
-3. **Corrigir queries agregadas** → `buscar_total.php` e `buscar_tipo.php` usar `GROUP BY` e `SUM()` / `SELECT DISTINCT`
-4. **Expiração de código** → adicionar coluna `criado_em TIMESTAMP` em `recuperar_senha`, rejeitar códigos > 15 min
-5. **Código seguro** → trocar `str_shuffle` por `bin2hex(random_bytes(4))`
-
-### P1 - Qualidade
-
-6. **Validação de tipo sanguíneo** → whitelist `[A+, A-, B+, B-, AB+, AB-, O+, O-]` no backend
-7. **Unificar regra de senha** → decidir entre 8 ou 9 chars, aplicar igual em HTML + PHP
-8. **Toast/modal** → substituir `alert()` por feedback visual não-bloqueante
-9. **Deduplicar `formatDate()`** → mover para `main.js`
-10. **CSRF tokens** → implementar em todos os forms POST
-
-### P2 - Funcionalidades Futuras
-
-- Alerta de bolsas próximas do vencimento (dashboard)
-- Histórico paginado de entradas e saídas
-- Controle de estoque mínimo por tipo sanguíneo
-- Perfil de usuário (nome exibido no dashboard)
-- Relatório com filtro por período e tipo sanguíneo
-- Roles: admin vs. operador
+- Toggle: botão 🌙 na sidebar
+- Persistência: `localStorage('hemodat_theme')`
+- Anti-FOUC: `<script>` inline no `<head>` aplica o tema antes de qualquer render
+- Sync entre abas: evento `storage` do localStorage
 
 ---
 
 ## Setup Local
 
 ### Pré-requisitos
-- XAMPP (Apache + MySQL + PHP 8+)
-- Banco criado: `efegduik_gphemodat`
+
+- XAMPP com Apache + MySQL + PHP 8.2+
+- Banco de dados: `efegduik_gphemodat` (ou ajustar em `config.php`)
+- `mod_rewrite` habilitado no Apache
 
 ### Passos
 
@@ -216,35 +211,41 @@ forgot_password.html → recuperar_senha.php → email com código
 # 1. Clonar no diretório correto
 git clone <repo> C:/xampp/htdocs/_Pessoal/Hemodat
 
-# 2. Importar schema no MySQL
-# Criar tabelas conforme seção "Banco de Dados" acima
+# 2. Criar banco e tabelas
+# Via phpMyAdmin: importar o schema da seção "Banco de Dados"
 
-# 3. Configurar credenciais
-# Editar host/dbname/username/password nos arquivos php/*.php
-# (ver P0 #1: mover para php/config.php)
+# 3. (Opcional) Popular dados de exemplo
+# Rodar seed via phpMyAdmin ou MySQL CLI
 
 # 4. Iniciar XAMPP → Apache + MySQL
 
 # 5. Acessar
-http://localhost/_Pessoal/Hemodat/
+http://localhost/_Pessoal/Hemodat/login
+```
+
+### Habilitar mod_rewrite no XAMPP
+
+Em `C:/xampp/apache/conf/httpd.conf`, certifique-se que:
+```apache
+LoadModule rewrite_module modules/mod_rewrite.so
+```
+E no VirtualHost ou diretório do projeto:
+```apache
+AllowOverride All
 ```
 
 ---
 
-## Segurança - Estado Atual vs. Alvo
+## Deploy (Hostinger)
 
-| Item | Atual | Alvo |
-|------|-------|------|
-| Senha | bcrypt ✅ | - |
-| Config DB | hardcoded em cada arquivo ❌ | `config.php` centralizado |
-| Sessão | PHP session básica ⚠️ | + session regeneration + timeout |
-| Recuperação senha | código sem expiração ❌ | TTL 15 min + `random_bytes` |
-| CSRF | sem proteção ❌ | tokens em todos os forms |
-| Validação backend | mínima ⚠️ | whitelist + sanitização completa |
-| HTTPS | depende do servidor | obrigatório em produção |
+1. Fazer upload dos arquivos (exceto `vendor/`) via FTP ou painel
+2. Em produção, `composer install --no-dev --optimize-autoloader` no servidor (se necessário)
+3. Banco já configurado: `efegduik_gphemodat` com credenciais em `config.php`
+4. URL limpa: domínio já aponta para raiz do projeto, `.htaccess` cuida do resto
+5. E-mail: `mail()` do PHP funciona via relay nativo do Hostinger — sem configuração adicional
 
 ---
 
 ## Autores
 
-Desenvolvido por **Thiago Ferraz** como projeto pessoal de gestão de hemocentro.
+Desenvolvido por **Thiago Ferraz** — projeto pessoal de gestão de hemocentro.

@@ -60,15 +60,63 @@ function action_recuperar(): void {
         )->execute([':usuario' => $usuario, ':email' => $email, ':codigo' => $codigo]);
     }
 
-    $subject  = mb_encode_mimeheader('Código de Recuperação de Senha', 'UTF-8', 'B', "\r\n");
-    $message  = "<html><body>
-        <p>Olá $usuario,</p>
-        <p>Seu código de recuperação: <strong>$codigo</strong></p>
-        <p>Expira em <strong>" . RESET_CODE_TTL . " minutos</strong>.</p>
-        <p>Se não foi você, ignore este e-mail.</p>
-        <p>Equipe Hemodat</p>
-    </body></html>";
-    $headers  = "From: no-reply@hemodatgp.com\r\nReply-To: suporte@hemodatgp.com\r\n";
+    $subject  = mb_encode_mimeheader('Código de Recuperação de Senha — Hemodat', 'UTF-8', 'B', "\r\n");
+    $ttl      = RESET_CODE_TTL;
+    $message  = <<<HTML
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
+<body style="margin:0;padding:0;background:#F1F5F9;font-family:'Segoe UI',Arial,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="padding:40px 0;">
+    <tr><td align="center">
+      <table width="520" cellpadding="0" cellspacing="0"
+             style="background:#fff;border-radius:12px;box-shadow:0 2px 16px rgba(0,0,0,.08);overflow:hidden;">
+        <!-- Header -->
+        <tr>
+          <td style="background:#DC2626;padding:28px 40px;text-align:center;">
+            <span style="font-size:22px;font-weight:700;color:#fff;letter-spacing:1px;">🩸 HEMODAT</span>
+          </td>
+        </tr>
+        <!-- Body -->
+        <tr>
+          <td style="padding:36px 40px;">
+            <p style="margin:0 0 12px;font-size:16px;color:#1E293B;">Olá, <strong>{$usuario}</strong>!</p>
+            <p style="margin:0 0 24px;font-size:14px;color:#475569;line-height:1.6;">
+              Recebemos uma solicitação de recuperação de senha para a sua conta no Hemodat.
+              Use o código abaixo para continuar:
+            </p>
+            <!-- Code box -->
+            <div style="text-align:center;margin:0 0 24px;">
+              <span style="display:inline-block;background:#FEF2F2;border:2px dashed #DC2626;
+                           border-radius:10px;padding:18px 40px;font-size:34px;font-weight:700;
+                           letter-spacing:8px;color:#DC2626;">{$codigo}</span>
+            </div>
+            <p style="margin:0 0 8px;font-size:13px;color:#94A3B8;text-align:center;">
+              ⏱ Este código expira em <strong>{$ttl} minutos</strong>.
+            </p>
+            <hr style="border:none;border-top:1px solid #E2E8F0;margin:24px 0;">
+            <p style="margin:0;font-size:12px;color:#94A3B8;line-height:1.6;">
+              Se você não solicitou a recuperação de senha, ignore este e-mail.
+              Sua senha permanece inalterada.
+            </p>
+          </td>
+        </tr>
+        <!-- Footer -->
+        <tr>
+          <td style="background:#F8FAFC;padding:16px 40px;text-align:center;border-top:1px solid #E2E8F0;">
+            <p style="margin:0;font-size:11px;color:#94A3B8;">
+              © 2025 Hemodat &nbsp;·&nbsp;
+              <a href="mailto:suporte@hemodatgp.com" style="color:#DC2626;text-decoration:none;">suporte@hemodatgp.com</a>
+            </p>
+          </td>
+        </tr>
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>
+HTML;
+    $headers  = "From: Hemodat <noreply@hemodatgp.com>\r\nReply-To: suporte@hemodatgp.com\r\n";
     $headers .= "Content-Type: text/html; charset=UTF-8\r\nMIME-Version: 1.0\r\n";
 
     if (mail($email, $subject, $message, $headers)) {

@@ -1,0 +1,23 @@
+# Composer
+vendor/
+composer.lock
+
+# Ambiente
+.env
+.env.local
+
+# IDE
+.vscode/
+.idea/
+*.code-workspace
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Seeds / dumps temporários
+*.sql
