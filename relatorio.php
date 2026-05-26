@@ -16,7 +16,8 @@ require_once __DIR__ . '/includes/other/nav.php';
     <div class="container">
         <div class="hemodat-card">
 
-            <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 mb-4">
+            <!-- Cabeçalho -->
+            <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 mb-3">
                 <div>
                     <h1 class="fw-bold mb-0" style="font-size:1.5rem; color:#222;">
                         <i class="bi bi-bar-chart-line me-2" style="color:var(--hemo-red);"></i>
@@ -31,9 +32,45 @@ require_once __DIR__ . '/includes/other/nav.php';
                 </button>
             </div>
 
+            <!-- Filtros -->
+            <div class="row g-2 mb-4 align-items-end">
+                <div class="col-sm-4">
+                    <label class="form-label text-muted small mb-1">Tipo Sanguíneo</label>
+                    <div class="input-icon">
+                        <i class="bi bi-droplet-fill"></i>
+                        <select id="filtro-tipo" class="form-select form-select-sm">
+                            <option value="">Todos</option>
+                            <?php foreach (TIPOS_VALIDOS as $t): ?>
+                                <option value="<?= $t ?>"><?= $t ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <label class="form-label text-muted small mb-1">Coleta a partir de</label>
+                    <input type="date" id="filtro-ini" class="form-control form-control-sm">
+                </div>
+                <div class="col-sm-3">
+                    <label class="form-label text-muted small mb-1">Coleta até</label>
+                    <input type="date" id="filtro-fim" class="form-control form-control-sm">
+                </div>
+                <div class="col-sm-2">
+                    <button id="limpar-filtros" class="btn btn-outline-danger btn-sm w-100">
+                        <i class="bi bi-x-circle me-1"></i>Limpar
+                    </button>
+                </div>
+            </div>
+
+            <!-- Gráfico -->
             <div style="position:relative; height:400px;">
                 <canvas id="graficoBar"></canvas>
             </div>
+
+            <!-- Mensagem sem dados -->
+            <p id="sem-dados" class="text-center text-muted py-4 d-none">
+                <i class="bi bi-inbox fs-3 d-block mb-2"></i>
+                Nenhum dado encontrado para os filtros selecionados.
+            </p>
 
         </div>
     </div>

@@ -52,6 +52,9 @@ define('TIPOS_VALIDOS', ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-']);
 // TTL do código de recuperação de senha (em minutos)
 define('RESET_CODE_TTL', 15);
 
+// Dias de antecedência para alerta de vencimento de bolsas
+define('DIAS_ALERTA_VENCIMENTO', 7);
+
 /**
  * Cria e retorna uma conexão PDO.
  * Em caso de falha, emite JSON de erro e encerra.

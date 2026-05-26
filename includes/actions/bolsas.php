@@ -14,10 +14,14 @@ header('Content-Type: application/json');
 $action = $_GET['action'] ?? $_POST['action'] ?? '';
 
 switch ($action) {
-    case 'entrada':      action_entrada();      break;
-    case 'saida':        action_saida();        break;
-    case 'buscar_tipo':  action_buscar_tipo();  break;
-    case 'buscar_total': action_buscar_total(); break;
+    case 'entrada':         action_entrada();         break;
+    case 'saida':           action_saida();           break;
+    case 'buscar_tipo':     action_buscar_tipo();     break;
+    case 'buscar_total':    action_buscar_total();    break;
+    case 'vencimento':      action_vencimento();      break;
+    case 'estoque_alerta':  action_estoque_alerta();  break;
+    case 'historico':       action_historico();       break;
+    case 'estoque_min_get': action_estoque_min_get(); break;
     default:
         http_response_code(400);
         echo json_encode(['status' => 'error', 'message' => 'Ação inválida.']);
@@ -71,16 +75,31 @@ function action_entrada(): void {
         echo json_encode(['status' => 'error', 'message' => 'Data de validade deve ser posterior à data de coleta.']); return;
     }
 
-    $stmt = $pdo->prepare(
+    $coletaFmt   = $data_coleta->format('Y-m-d');
+    $validadeFmt = $data_validade->format('Y-m-d');
+
+    $pdo->prepare(
         "INSERT INTO bolsas_sangue (tipo_sanguineo, quantidade, data_coleta, data_validade)
          VALUES (:tipo, :litros, :coleta, :validade)"
-    );
-    $stmt->execute([
+    )->execute([
         ':tipo'    => $tipo,
         ':litros'  => $litros,
-        ':coleta'  => $data_coleta->format('Y-m-d'),
-        ':validade'=> $data_validade->format('Y-m-d'),
+        ':coleta'  => $coletaFmt,
+        ':validade'=> $validadeFmt,
     ]);
+
+    // Log para histórico (silencioso se tabela não existir ainda)
+    try {
+        $pdo->prepare(
+            "INSERT INTO entradas_log (tipo_sanguineo, quantidade, data_coleta, data_validade)
+             VALUES (:tipo, :litros, :coleta, :validade)"
+        )->execute([
+            ':tipo'    => $tipo,
+            ':litros'  => $litros,
+            ':coleta'  => $coletaFmt,
+            ':validade'=> $validadeFmt,
+        ]);
+    } catch (PDOException $ignored) {}
 
     echo json_encode(['status' => 'success', 'message' => 'Dados registrados com sucesso!']);
 }
@@ -173,6 +192,173 @@ function action_saida(): void {
     }
 }
 
+// ─── Novos handlers P2 ───────────────────────────────────────────────────────
+
+/**
+ * Retorna bolsas que vencem em até DIAS_ALERTA_VENCIMENTO dias.
+ */
+function action_vencimento(): void {
+    $pdo  = db_connect();
+    $dias = DIAS_ALERTA_VENCIMENTO;
+    $stmt = $pdo->prepare(
+        "SELECT tipo_sanguineo,
+                SUM(quantidade)    AS quantidade,
+                MIN(data_validade) AS data_validade
+         FROM bolsas_sangue
+         WHERE quantidade > 0
+           AND data_validade BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL :dias DAY)
+         GROUP BY tipo_sanguineo
+         ORDER BY data_validade ASC"
+    );
+    $stmt->execute([':dias' => $dias]);
+    echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
+}
+
+/**
+ * Retorna tipos cujo estoque total está abaixo do mínimo configurado.
+ */
+function action_estoque_alerta(): void {
+    $pdo = db_connect();
+
+    // Minimums (fallback 2.0 se tabela não existir)
+    try {
+        $mins = $pdo->query("SELECT tipo_sanguineo, minimo_litros FROM estoque_minimo")
+                    ->fetchAll(PDO::FETCH_KEY_PAIR);
+    } catch (PDOException $e) {
+        $mins = array_fill_keys(TIPOS_VALIDOS, 2.0);
+    }
+
+    $estoques = $pdo->query(
+        "SELECT tipo_sanguineo, SUM(quantidade) AS total
+         FROM bolsas_sangue WHERE quantidade > 0
+         GROUP BY tipo_sanguineo"
+    )->fetchAll(PDO::FETCH_KEY_PAIR);
+
+    $alertas = [];
+    foreach ($mins as $tipo => $min) {
+        $atual = (float) ($estoques[$tipo] ?? 0);
+        if ($atual < (float) $min) {
+            $alertas[] = [
+                'tipo'    => $tipo,
+                'atual'   => round($atual, 2),
+                'minimo'  => round((float) $min, 2),
+            ];
+        }
+    }
+    echo json_encode($alertas);
+}
+
+/**
+ * Histórico paginado de entradas + saídas.
+ * GET params: page, tipo, operacao (entrada|saida|'')
+ */
+function action_historico(): void {
+    requer_sessao();
+    $pdo    = db_connect();
+    $page   = max(1, (int) ($_GET['page']     ?? 1));
+    $limit  = 15;
+    $offset = ($page - 1) * $limit;
+    $tipo   = trim($_GET['tipo']     ?? '');
+    $oper   = trim($_GET['operacao'] ?? '');
+
+    if ($tipo && !in_array($tipo, TIPOS_VALIDOS, true)) $tipo = '';
+    if (!in_array($oper, ['entrada', 'saida', ''], true)) $oper = '';
+
+    // Filtro de tipo como SQL literal (validado contra whitelist)
+    $tipo_sql_e = $tipo ? ("AND tipo_sanguineo = " . $pdo->quote($tipo)) : '';
+    $tipo_sql_s = $tipo ? ("AND tipo_sanguineo = " . $pdo->quote($tipo)) : '';
+
+    $parts = [];
+    if ($oper !== 'saida') {
+        $parts[] = "SELECT 'Entrada'        AS operacao,
+                           tipo_sanguineo,
+                           quantidade,
+                           data_coleta       AS data_evento,
+                           NULL              AS responsavel,
+                           criado_em
+                    FROM entradas_log
+                    WHERE 1=1 $tipo_sql_e";
+    }
+    if ($oper !== 'entrada') {
+        $parts[] = "SELECT 'Saída'           AS operacao,
+                           tipo_sanguineo,
+                           quantidade,
+                           data_saida        AS data_evento,
+                           email             AS responsavel,
+                           NULL              AS criado_em
+                    FROM saida_bolsas_sangue
+                    WHERE 1=1 $tipo_sql_s";
+    }
+
+    if (empty($parts)) {
+        echo json_encode(['rows' => [], 'total' => 0, 'page' => 1, 'pages' => 0]);
+        return;
+    }
+
+    $union = implode(' UNION ALL ', $parts);
+
+    try {
+        $stmt = $pdo->prepare(
+            "SELECT * FROM ($union) t
+             ORDER BY COALESCE(criado_em, data_evento) DESC, data_evento DESC
+             LIMIT :lim OFFSET :off"
+        );
+        $stmt->bindValue(':lim', $limit,  PDO::PARAM_INT);
+        $stmt->bindValue(':off', $offset, PDO::PARAM_INT);
+        $stmt->execute();
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $total = (int) $pdo->query("SELECT COUNT(*) FROM ($union) t")->fetchColumn();
+
+        echo json_encode([
+            'rows'  => $rows,
+            'total' => $total,
+            'page'  => $page,
+            'pages' => (int) ceil($total / $limit),
+        ]);
+
+    } catch (PDOException $e) {
+        // entradas_log ainda não existe — mostrar só saídas
+        $w    = $tipo ? ("AND tipo_sanguineo = " . $pdo->quote($tipo)) : '';
+        $stmt = $pdo->prepare(
+            "SELECT 'Saída' AS operacao, tipo_sanguineo, quantidade,
+                    data_saida AS data_evento, email AS responsavel
+             FROM saida_bolsas_sangue WHERE 1=1 $w
+             ORDER BY data_saida DESC
+             LIMIT :lim OFFSET :off"
+        );
+        $stmt->bindValue(':lim', $limit,  PDO::PARAM_INT);
+        $stmt->bindValue(':off', $offset, PDO::PARAM_INT);
+        $stmt->execute();
+        $rows  = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $total = (int) $pdo->query("SELECT COUNT(*) FROM saida_bolsas_sangue WHERE 1=1 $w")->fetchColumn();
+
+        echo json_encode([
+            'rows'  => $rows,
+            'total' => $total,
+            'page'  => $page,
+            'pages' => (int) ceil($total / $limit),
+        ]);
+    }
+}
+
+/**
+ * Retorna configurações de estoque mínimo (admin).
+ */
+function action_estoque_min_get(): void {
+    requer_sessao();
+    $pdo = db_connect();
+    try {
+        $rows = $pdo->query("SELECT tipo_sanguineo, minimo_litros FROM estoque_minimo ORDER BY tipo_sanguineo")
+                    ->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        $rows = array_map(fn($t) => ['tipo_sanguineo' => $t, 'minimo_litros' => '2.00'], TIPOS_VALIDOS);
+    }
+    echo json_encode($rows);
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+
 function action_buscar_tipo(): void {
     $pdo  = db_connect();
     $stmt = $pdo->prepare(
@@ -183,13 +369,41 @@ function action_buscar_tipo(): void {
 }
 
 function action_buscar_total(): void {
-    $pdo  = db_connect();
-    $stmt = $pdo->prepare(
+    $pdo      = db_connect();
+    $tipo     = trim($_GET['tipo']     ?? '');
+    $data_ini = trim($_GET['data_ini'] ?? '');
+    $data_fim = trim($_GET['data_fim'] ?? '');
+
+    // Validações
+    if ($tipo && !in_array($tipo, TIPOS_VALIDOS, true)) $tipo = '';
+    $data_ini_obj = $data_ini ? DateTime::createFromFormat('Y-m-d', $data_ini) : null;
+    $data_fim_obj = $data_fim ? DateTime::createFromFormat('Y-m-d', $data_fim) : null;
+    if (!$data_ini_obj) $data_ini = '';
+    if (!$data_fim_obj) $data_fim = '';
+
+    $conditions = ['quantidade > 0'];
+    $params     = [];
+
+    if ($tipo) {
+        $conditions[] = 'tipo_sanguineo = :tipo';
+        $params[':tipo'] = $tipo;
+    }
+    if ($data_ini) {
+        $conditions[] = 'data_coleta >= :data_ini';
+        $params[':data_ini'] = $data_ini;
+    }
+    if ($data_fim) {
+        $conditions[] = 'data_coleta <= :data_fim';
+        $params[':data_fim'] = $data_fim;
+    }
+
+    $where = 'WHERE ' . implode(' AND ', $conditions);
+    $stmt  = $pdo->prepare(
         "SELECT tipo_sanguineo, SUM(quantidade) AS quantidade
-         FROM bolsas_sangue WHERE quantidade > 0
+         FROM bolsas_sangue $where
          GROUP BY tipo_sanguineo ORDER BY tipo_sanguineo"
     );
-    $stmt->execute();
+    $stmt->execute($params);
     $bolsas = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     echo json_encode([

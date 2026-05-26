@@ -1,10 +1,12 @@
 <?php
 /**
  * nav.php - Bootstrap navbar compartilhada (páginas autenticadas).
- * Defina $active antes de incluir: 'home' | 'entrada' | 'saida' | 'relatorio'
+ * Defina $active antes de incluir: 'home' | 'entrada' | 'saida' | 'relatorio' | 'historico' | 'admin'
  */
-$active = $active ?? '';
-$B      = BASE_URL;
+$active    = $active    ?? '';
+$B         = BASE_URL;
+$nome      = htmlspecialchars($_SESSION['usuario_nome'] ?? 'Usuário');
+$role      = $_SESSION['usuario_role'] ?? 'operador';
 ?>
 <nav class="navbar navbar-expand-md navbar-hemodat py-0" style="min-height:60px;">
     <div class="container">
@@ -57,8 +59,30 @@ $B      = BASE_URL;
                     </a>
                 </li>
 
-                <li class="nav-item ms-md-2">
-                    <!-- id="logout" mantido para logout.js -->
+                <li class="nav-item">
+                    <a class="nav-link px-3 <?= $active === 'historico' ? 'active-page' : '' ?>"
+                       href="<?= $B ?>/historico.php">
+                        <i class="bi bi-clock-history me-1"></i>Histórico
+                    </a>
+                </li>
+
+                <?php if ($role === 'admin'): ?>
+                <li class="nav-item">
+                    <a class="nav-link px-3 <?= $active === 'admin' ? 'active-page' : '' ?>"
+                       href="<?= $B ?>/admin.php">
+                        <i class="bi bi-shield-lock me-1"></i>Admin
+                    </a>
+                </li>
+                <?php endif; ?>
+
+                <!-- Nome do usuário -->
+                <li class="nav-item ms-md-1 d-flex align-items-center">
+                    <span class="text-white opacity-75 small px-2 d-none d-md-inline">
+                        <i class="bi bi-person-circle me-1"></i><?= $nome ?>
+                    </span>
+                </li>
+
+                <li class="nav-item ms-md-1">
                     <span id="logout" role="button"
                           class="btn btn-outline-light btn-sm px-3">
                         <i class="bi bi-box-arrow-right me-1"></i>Sair
