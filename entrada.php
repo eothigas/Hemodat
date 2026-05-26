@@ -2,7 +2,7 @@
 require_once __DIR__ . '/includes/functions/config.php';
 require_auth();
 
-$titulo        = 'HEMODAT — Entrada de Bolsas';
+$titulo        = 'HEMODAT - Entrada de Bolsas';
 $body_class    = 'dashboard-page';
 $requer_sessao = true;
 require_once __DIR__ . '/includes/other/header.php';
@@ -27,7 +27,7 @@ require_once __DIR__ . '/includes/other/sidebar.php';
                   action="<?= BASE_URL ?>/includes/actions/bolsas.php?action=entrada"
                   method="post">
 
-                <!-- Tipo sanguíneo — blood chips -->
+                <!-- Tipo sanguíneo - blood chips -->
                 <div class="form-section-label">Tipo sanguíneo</div>
                 <div class="blood-chips mb-4">
                     <?php foreach (TIPOS_VALIDOS as $t): ?>

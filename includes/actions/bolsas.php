@@ -318,7 +318,7 @@ function action_historico(): void {
         ]);
 
     } catch (PDOException $e) {
-        // entradas_log ainda não existe — mostrar só saídas
+        // entradas_log ainda não existe - mostrar só saídas
         $w    = $tipo ? ("AND tipo_sanguineo = " . $pdo->quote($tipo)) : '';
         $stmt = $pdo->prepare(
             "SELECT 'Saída' AS operacao, tipo_sanguineo, quantidade,

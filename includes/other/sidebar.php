@@ -1,6 +1,6 @@
 <?php
 /**
- * sidebar.php — Sidebar fixa HEMODAT v2
+ * sidebar.php - Sidebar fixa HEMODAT v2
  * Vars esperadas (defina antes de incluir):
  *   $active        string  'home'|'entrada'|'saida'|'relatorio'|'historico'|'admin'
  *   $page_title    string  Título exibido na topbar

@@ -1,5 +1,5 @@
 /**
- * darkmode.js — tema claro/escuro com persistência em localStorage.
+ * darkmode.js - tema claro/escuro com persistência em localStorage.
  * Aplica `data-theme="dark"` no <html>.
  * Botão trigger: #btn-tema (topbar).
  */
@@ -43,7 +43,7 @@
         return window.matchMedia('(prefers-color-scheme: dark)').matches ? DARK : LIGHT;
     }
 
-    /* ── Init (executado imediatamente — sem flash) ─────────── */
+    /* ── Init (executado imediatamente - sem flash) ─────────── */
     applyTheme(preferredTheme());
 
     /* ── Bind toggle após DOM ───────────────────────────────── */

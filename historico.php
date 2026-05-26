@@ -2,7 +2,7 @@
 require_once __DIR__ . '/includes/functions/config.php';
 require_auth();
 
-$titulo        = 'HEMODAT — Histórico';
+$titulo        = 'HEMODAT - Histórico';
 $body_class    = 'dashboard-page';
 $requer_sessao = true;
 require_once __DIR__ . '/includes/other/header.php';

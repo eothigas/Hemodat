@@ -1,4 +1,4 @@
-// saida.js — blood chips + últimas saídas
+// saida.js - blood chips + últimas saídas
 
 // CSRF
 let csrfToken = '';
@@ -38,7 +38,7 @@ async function carregarUltimas() {
         const items = rows.slice(0, 8).map(r => {
             const raw = r.data_evento ?? '';
             const d   = raw ? new Date(raw + (raw.includes('T') ? '' : 'T00:00:00')) : null;
-            const fmt = d ? d.toLocaleDateString('pt-BR') : '—';
+            const fmt = d ? d.toLocaleDateString('pt-BR') : '-';
             return `<li>
                 <span class="estoque-tipo">${r.tipo_sanguineo}</span>
                 <span class="estoque-litros">${parseFloat(r.quantidade).toFixed(2)} L</span>

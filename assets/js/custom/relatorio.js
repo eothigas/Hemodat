@@ -1,4 +1,4 @@
-// relatorio.js — Gráfico de barras com filtros + exportação PDF
+// relatorio.js - Gráfico de barras com filtros + exportação PDF
 
 let chart = null;
 const canvas   = document.getElementById('graficoBar');
@@ -106,7 +106,7 @@ document.getElementById('export').addEventListener('click', () => {
     const doc = new jsPDF('landscape');
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(16);
-    doc.text('Relatório de Estoque — HEMODAT', 148, 20, { align: 'center' });
+    doc.text('Relatório de Estoque - HEMODAT', 148, 20, { align: 'center' });
     setTimeout(() => {
         doc.addImage(canvas.toDataURL('image/png'), 'PNG', 10, 35, 277, 150);
         doc.save('relatorio_hemodat.pdf');

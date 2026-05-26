@@ -1,4 +1,4 @@
-// entrada.js — blood chips + estoque resumo
+// entrada.js - blood chips + estoque resumo
 
 // CSRF
 let csrfToken = '';

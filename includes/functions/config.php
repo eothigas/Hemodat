@@ -30,7 +30,7 @@ function require_auth(): void {
 
 // ─── Banco de dados (local × produção) ───────────────────────────────────────
 if (IS_LOCAL) {
-    // XAMPP local — MySQL padrão: root sem senha
+    // XAMPP local - MySQL padrão: root sem senha
     // Crie o banco "hemodat" via phpMyAdmin ou rode: CREATE DATABASE hemodat CHARACTER SET utf8mb4;
     define('DB_HOST',    'localhost');
     define('DB_NAME',    'efegduik_gphemodat');

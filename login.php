@@ -1,5 +1,5 @@
 <?php
-$titulo     = 'HEMODAT — Login';
+$titulo     = 'HEMODAT - Login';
 $body_class = 'auth-page';
 require_once __DIR__ . '/includes/other/header.php';
 ?>
@@ -7,7 +7,7 @@ require_once __DIR__ . '/includes/other/header.php';
 <div class="auth-wrapper">
     <div class="split-card">
 
-        <!-- ── Painel esquerdo — navy + brand ─────────────── -->
+        <!-- ── Painel esquerdo - navy + brand ─────────────── -->
         <div class="split-left">
 
             <div class="auth-brand">
@@ -43,7 +43,7 @@ require_once __DIR__ . '/includes/other/header.php';
 
         </div>
 
-        <!-- ── Painel direito — formulário ────────────────── -->
+        <!-- ── Painel direito - formulário ────────────────── -->
         <div class="split-right">
 
             <div class="auth-form-header">

@@ -1,12 +1,12 @@
 /**
- * security.js — console hardening + aviso de segurança.
+ * security.js - console hardening + aviso de segurança.
  * Carregado em todas as páginas.
  */
 (function () {
     // ── Aviso de segurança ───────────────────────────────────
     if (typeof console !== 'undefined') {
         console.log(
-            '%c⚠  HEMODAT  —  Sistema Restrito',
+            '%c⚠  HEMODAT  -  Sistema Restrito',
             'color:#DC2626;font-size:22px;font-weight:800;font-family:sans-serif;'
         );
         console.log(

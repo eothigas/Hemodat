@@ -1,4 +1,4 @@
-// home.js — dashboard: stat cards + alertas + gráfico estoque
+// home.js - dashboard: stat cards + alertas + gráfico estoque
 
 (async function () {
 
@@ -79,7 +79,7 @@
                 const dias = Math.round((d - hoje) / 86400000);
                 return `<div class="d-flex justify-content-between align-items-center py-2"
                               style="border-bottom:1px solid rgba(226,232,240,.5); font-size:13px;">
-                    <span><strong>${b.tipo_sanguineo}</strong> — ${parseFloat(b.quantidade).toFixed(2)} L</span>
+                    <span><strong>${b.tipo_sanguineo}</strong> - ${parseFloat(b.quantidade).toFixed(2)} L</span>
                     <span class="badge bg-warning text-dark">Vence em ${dias}d</span>
                 </div>`;
             }).join('');
@@ -110,7 +110,7 @@
                     <div style="font-size:12px;font-weight:700;color:var(--hemo-red);
                                 display:flex;align-items:center;gap:6px;margin-bottom:.4rem;">
                         <i class="bi bi-droplet-half"></i>
-                        Estoque crítico — ${baixo.length} tipo${baixo.length > 1 ? 's' : ''}
+                        Estoque crítico - ${baixo.length} tipo${baixo.length > 1 ? 's' : ''}
                     </div>
                     ${linhas}
                 </div>

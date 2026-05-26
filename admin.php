@@ -7,7 +7,7 @@ if (($_SESSION['usuario_role'] ?? '') !== 'admin') {
     exit;
 }
 
-$titulo        = 'HEMODAT — Configurações';
+$titulo        = 'HEMODAT - Configurações';
 $body_class    = 'dashboard-page';
 $requer_sessao = true;
 require_once __DIR__ . '/includes/other/header.php';

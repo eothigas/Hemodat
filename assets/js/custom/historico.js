@@ -18,7 +18,7 @@ function badgeOperacao(op) {
 }
 
 function fmtData(val) {
-    if (!val) return '—';
+    if (!val) return '-';
     const d = new Date(val + (val.includes('T') ? '' : 'T00:00:00'));
     return d.toLocaleDateString('pt-BR');
 }
@@ -47,7 +47,7 @@ async function carregar(page) {
                 <td><strong>${r.tipo_sanguineo}</strong></td>
                 <td>${parseFloat(r.quantidade).toFixed(2)} L</td>
                 <td>${fmtData(r.data_evento)}</td>
-                <td class="text-muted small">${r.responsavel ?? '—'}</td>
+                <td class="text-muted small">${r.responsavel ?? '-'}</td>
             </tr>
         `).join('');
 

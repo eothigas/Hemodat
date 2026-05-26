@@ -1,5 +1,5 @@
 /* ============================================================
-   padrao.css — Design system HEMODAT v2
+   padrao.css - Design system HEMODAT v2
    Layout: sidebar fixa 280px + topbar 60px + content
    Tipografia: Inter (body) · Plus Jakarta Sans (headings)
    Paleta: #DC2626 (red-600) · #2563EB (blue) · #F8FAFC (bg)
@@ -1064,7 +1064,7 @@ html[data-theme="dark"] .pwd-toggle:hover { color: var(--hemo-text-1); }
 .estoque-bar.warn { background: var(--hemo-warning); }
 
 /* ══════════════════════════════════════════════════════════════
-   DARK MODE — html[data-theme="dark"]
+   DARK MODE - html[data-theme="dark"]
    ══════════════════════════════════════════════════════════════ */
 html[data-theme="dark"] {
     /* Superfícies */
@@ -1211,7 +1211,7 @@ html[data-theme="dark"] .input-group-text {
     color: var(--hemo-text-2);
 }
 
-/* Badges — ajuste de legibilidade */
+/* Badges - ajuste de legibilidade */
 html[data-theme="dark"] .badge.bg-warning { color: #92400E !important; }
 
 /* Skeleton dark */

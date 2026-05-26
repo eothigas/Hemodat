@@ -2,7 +2,7 @@
 require_once __DIR__ . '/includes/functions/config.php';
 require_auth();
 
-$titulo        = 'HEMODAT — Dashboard';
+$titulo        = 'HEMODAT - Dashboard';
 $body_class    = 'dashboard-page';
 $requer_sessao = true;
 $head_extras   = ['<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js" defer></script>'];
