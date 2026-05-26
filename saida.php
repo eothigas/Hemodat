@@ -2,78 +2,95 @@
 require_once __DIR__ . '/includes/functions/config.php';
 require_auth();
 
-$titulo        = 'Hemodat - Saída';
+$titulo        = 'HEMODAT — Saída de Bolsas';
 $body_class    = 'dashboard-page';
 $requer_sessao = true;
 require_once __DIR__ . '/includes/other/header.php';
 
-$active = 'saida';
-require_once __DIR__ . '/includes/other/nav.php';
+$active        = 'saida';
+$page_title    = 'Saída de Bolsas';
+$page_subtitle = 'Registre a saída de sangue do estoque';
+require_once __DIR__ . '/includes/other/sidebar.php';
 ?>
 
-<main class="dashboard-main">
-    <div class="container">
-        <div class="hemodat-card" style="max-width:560px; margin:0 auto;">
+<div class="app-content">
+    <div class="page-2col">
 
-            <!-- Cabeçalho -->
-            <div class="page-header">
-                <a href="<?= BASE_URL ?>/home.php" title="Voltar">
-                    <i class="bi bi-arrow-left-circle"></i>
-                </a>
-                <div>
-                    <h1>Saída de Bolsas</h1>
-                    <p>Registre a saída de sangue do estoque</p>
-                </div>
+        <!-- ── Formulário ───────────────────────────────────── -->
+        <div class="content-card" style="flex:1.2;">
+            <div class="content-card-title">
+                <i class="bi bi-arrow-up-circle-fill" style="color:var(--hemo-red);"></i>
+                Dados da saída
             </div>
 
-            <!-- Formulário -->
             <form id="saida"
                   action="<?= BASE_URL ?>/includes/actions/bolsas.php?action=saida"
                   method="post">
 
-                <div class="d-flex flex-column gap-3">
+                <!-- Tipo sanguíneo — blood chips -->
+                <div class="form-section-label">Tipo sanguíneo</div>
+                <div class="blood-chips mb-4">
+                    <?php foreach (TIPOS_VALIDOS as $t): ?>
+                    <button type="button" class="blood-chip" data-tipo="<?= $t ?>"><?= $t ?></button>
+                    <?php endforeach; ?>
+                </div>
+                <input type="hidden" name="tipo" id="tipo-hidden" required>
 
-                    <div class="input-icon">
-                        <i class="bi bi-droplet-fill"></i>
-                        <select id="tipo" name="tipo" class="form-select" required>
-                            <option value="">Escolha o Tipo Sanguíneo</option>
-                        </select>
+                <div class="row g-3">
+                    <div class="col-sm-6">
+                        <label class="form-label text-muted small">Quantidade (litros)</label>
+                        <div class="input-icon">
+                            <i class="bi bi-eyedropper"></i>
+                            <input type="number" name="litros"
+                                   class="form-control"
+                                   placeholder="Ex: 0.45"
+                                   min="0.01" step="0.01"
+                                   oninput="limitDigits(this, 10)" required>
+                        </div>
                     </div>
-
-                    <div class="input-icon">
-                        <i class="bi bi-eyedropper"></i>
-                        <input type="number" name="litros"
-                               class="form-control"
-                               placeholder="Quantidade (litros)"
-                               min="0.01" step="0.01"
-                               oninput="limitDigits(this, 10)" required>
+                    <div class="col-sm-6">
+                        <label class="form-label text-muted small">Data de Saída</label>
+                        <div class="input-icon">
+                            <i class="bi bi-calendar"></i>
+                            <input type="text" inputmode="numeric" name="saida"
+                                   class="form-control"
+                                   placeholder="DD/MM/AAAA"
+                                   maxlength="10"
+                                   oninput="formatDate(this)" required>
+                        </div>
                     </div>
-
-                    <div class="input-icon">
-                        <i class="bi bi-calendar"></i>
-                        <input type="text" inputmode="numeric" name="saida"
-                               class="form-control"
-                               placeholder="Data de Saída (DD/MM/AAAA)"
-                               maxlength="10"
-                               oninput="formatDate(this)" required>
-                    </div>
-
                 </div>
 
                 <div class="d-flex justify-content-end mt-4">
                     <button type="submit" class="btn btn-primary px-5">
-                        <i class="bi bi-check-circle me-1"></i> Registrar
+                        <i class="bi bi-check-circle me-1"></i> Registrar Saída
                     </button>
                 </div>
-            </form>
 
+            </form>
         </div>
+
+        <!-- ── Últimas saídas ────────────────────────────────── -->
+        <div class="content-card" style="flex:1;">
+            <div class="content-card-title">
+                <i class="bi bi-clock-history" style="color:var(--hemo-blue);"></i>
+                Últimas saídas
+            </div>
+            <div id="ultimas-saidas">
+                <div class="d-flex align-items-center gap-2 text-muted" style="font-size:13px;">
+                    <div class="spinner-border spinner-border-sm"></div> Carregando…
+                </div>
+            </div>
+        </div>
+
     </div>
-</main>
+</div><!-- /app-content -->
+</div><!-- /app-main -->
+</div><!-- /app-shell -->
 
 <script src="<?= BASE_URL ?>/assets/js/padrao/toast.js"></script>
 <script src="<?= BASE_URL ?>/assets/js/padrao/main.js"></script>
-<script src="<?= BASE_URL ?>/assets/js/custom/saida.js"></script>
 <script src="<?= BASE_URL ?>/assets/js/padrao/logout.js"></script>
+<script src="<?= BASE_URL ?>/assets/js/custom/saida.js"></script>
 </body>
 </html>

@@ -1,9 +1,4 @@
-// relatorio.js - Gráfico de barras (Chart.js) com filtros + exportação PDF
-
-const TICK_COLOR  = '#444';
-const BAR_COLOR   = 'rgba(209, 0, 0, 0.80)';
-const BAR_BORDER  = 'rgba(175, 0, 0, 1)';
-const GRID_COLOR  = 'rgba(0,0,0,0.08)';
+// relatorio.js — Gráfico de barras com filtros + exportação PDF
 
 let chart = null;
 const canvas   = document.getElementById('graficoBar');
@@ -27,7 +22,7 @@ async function carregarGrafico() {
         const data = await response.json();
 
         const tipos = data.tipos_sanguineos ?? [];
-        const qtds  = data.quantidades      ?? [];
+        const qtds  = (data.quantidades ?? []).map(Number);
 
         if (tipos.length === 0) {
             canvas.classList.add('d-none');
@@ -40,42 +35,47 @@ async function carregarGrafico() {
         semDados.classList.add('d-none');
 
         if (chart) {
-            chart.data.labels                  = tipos;
-            chart.data.datasets[0].data        = qtds;
+            chart.data.labels           = tipos;
+            chart.data.datasets[0].data = qtds;
             chart.update();
         } else {
-            const ctx = canvas.getContext('2d');
-            chart = new Chart(ctx, {
+            chart = new Chart(canvas.getContext('2d'), {
                 type: 'bar',
                 data: {
                     labels: tipos,
                     datasets: [{
-                        label: 'Bolsas disponíveis (litros)',
+                        label: 'Estoque (litros)',
                         data: qtds,
-                        backgroundColor: BAR_COLOR,
-                        borderColor:     BAR_BORDER,
-                        borderWidth: 1.5,
-                        borderRadius: 4,
+                        backgroundColor: qtds.map(v =>
+                            v <= 0 ? 'rgba(226,232,240,.6)' :
+                            v < 1  ? 'rgba(245,158,11,.8)'  :
+                                     'rgba(220,38,38,.8)'
+                        ),
+                        borderRadius: 6,
+                        borderSkipped: false,
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: {
-                        legend: {
-                            display: true,
-                            labels: { color: TICK_COLOR, font: { size: 14, family: 'Outfit' } }
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: { label: ctx => ` ${ctx.parsed.y.toFixed(2)} L` }
                         }
                     },
                     scales: {
                         x: {
-                            ticks: { color: TICK_COLOR, font: { size: 14, family: 'Outfit' } },
-                            grid:  { color: GRID_COLOR }
+                            grid: { display: false },
+                            ticks: { font: { family: 'Inter', size: 12, weight: '600' } }
                         },
                         y: {
                             beginAtZero: true,
-                            ticks: { color: TICK_COLOR, font: { size: 14, family: 'Outfit' } },
-                            grid:  { color: GRID_COLOR }
+                            grid: { color: 'rgba(226,232,240,.7)' },
+                            ticks: {
+                                font: { family: 'Inter', size: 11 },
+                                callback: v => v + ' L'
+                            }
                         }
                     }
                 }
@@ -87,11 +87,10 @@ async function carregarGrafico() {
     }
 }
 
-// ── Filtros ──────────────────────────────────────────────────────────────────
-
+// ── Filtros ──────────────────────────────────────────────────
 document.getElementById('filtro-tipo').addEventListener('change', carregarGrafico);
-document.getElementById('filtro-ini').addEventListener('change', carregarGrafico);
-document.getElementById('filtro-fim').addEventListener('change', carregarGrafico);
+document.getElementById('filtro-ini').addEventListener('change',  carregarGrafico);
+document.getElementById('filtro-fim').addEventListener('change',  carregarGrafico);
 
 document.getElementById('limpar-filtros').addEventListener('click', () => {
     document.getElementById('filtro-tipo').value = '';
@@ -100,24 +99,22 @@ document.getElementById('limpar-filtros').addEventListener('click', () => {
     carregarGrafico();
 });
 
-// ── Exportação PDF ───────────────────────────────────────────────────────────
-
+// ── Exportação PDF ───────────────────────────────────────────
 document.getElementById('export').addEventListener('click', () => {
     if (!chart) return;
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF('landscape');
-
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(16);
-    doc.text('Relatório de Bolsas de Sangue - Hemodat', 148, 20, { align: 'center' });
-
+    doc.text('Relatório de Estoque — HEMODAT', 148, 20, { align: 'center' });
     setTimeout(() => {
-        const dataURL = canvas.toDataURL('image/png');
-        doc.addImage(dataURL, 'PNG', 10, 35, 277, 150);
-        doc.save('Relatorio_Bolsas_Sangue.pdf');
+        doc.addImage(canvas.toDataURL('image/png'), 'PNG', 10, 35, 277, 150);
+        doc.save('relatorio_hemodat.pdf');
     }, 200);
 });
 
-// ── Carga inicial ─────────────────────────────────────────────────────────────
-
-carregarGrafico();
+// ── Carga inicial (aguarda Chart.js com defer) ───────────────
+(function waitAndLoad() {
+    if (typeof Chart !== 'undefined') { carregarGrafico(); return; }
+    setTimeout(waitAndLoad, 60);
+})();

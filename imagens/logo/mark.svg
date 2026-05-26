@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16.7 26.7" preserveAspectRatio="xMidYMid meet">
+  <title>HEMODAT — Pixel Drop mark</title>
+  <rect x="7.50" y="0.00" width="1.7" height="1.7" rx="0.34" fill="#DC2626" opacity="1"></rect>
+  <rect x="5.00" y="2.50" width="1.7" height="1.7" rx="0.34" fill="#DC2626" opacity="0.55"></rect>
+  <rect x="7.50" y="2.50" width="1.7" height="1.7" rx="0.34" fill="#DC2626" opacity="1"></rect>
+  <rect x="10.00" y="2.50" width="1.7" height="1.7" rx="0.34" fill="#DC2626" opacity="1"></rect>
+  <rect x="5.00" y="5.00" width="1.7" height="1.7" rx="0.34" fill="#DC2626" opacity="1"></rect>
+  <rect x="7.50" y="5.00" width="1.7" height="1.7" rx="0.34" fill="#DC2626" opacity="1"></rect>
+  <rect x="10.00" y="5.00" width="1.7" height="1.7" rx="0.34" fill="#DC2626" opacity="1"></rect>
+  <rect x="2.50" y="7.50" width="1.7" height="1.7" rx="0.34" fill="#DC2626" opacity="0.55"></rect>
+  <rect x="5.00" y="7.50" width="1.7" height="1.7" rx="0.34" fill="#DC2626" opacity="1"></rect>
+  <rect x="7.50" y="7.50" width="1.7" height="1.7" rx="0.34" fill="#DC2626" opacity="1"></rect>
+  <rect x="10.00" y="7.50" width="1.7" height="1.7" rx="0.34" fill="#DC2626" opacity="1"></rect>
+  <rect x="12.50" y="7.50" width="1.7" height="1.7" rx="0.34" fill="#DC2626" opacity="0.55"></rect>
+  <rect x="2.50" y="10.00" width="1.7" height="1.7" rx="0.34" fill="#DC2626" opacity="1"></rect>
+  <rect x="5.00" y="10.00" width="1.7" height="1.7" rx="0.34" fill="#DC2626" opacity="1"></rect>
+  <rect x="7.50" y="10.00" width="1.7" height="1.7" rx="0.34" fill="#DC2626" opacity="1"></rect>
+  <rect x="10.00" y="10.00" width="1.7" height="1.7" rx="0.34" fill="#DC2626" opacity="1"></rect>
+  <rect x="12.50" y="10.00" width="1.7" height="1.7" rx="0.34" fill="#DC2626" opacity="1"></rect>
+  <rect x="0.00" y="12.50" width="1.7" height="1.7" rx="0.34" fill="#DC2626" opacity="0.55"></rect>
+  <rect x="2.50" y="12.50" width="1.7" height="1.7" rx="0.34" fill="#DC2626" opacity="1"></rect>
+  <rect x="5.00" y="12.50" width="1.7" height="1.7" rx="0.34" fill="#DC2626" opacity="1"></rect>
+  <rect x="7.50" y="12.50" width="1.7" height="1.7" rx="0.34" fill="#DC2626" opacity="1"></rect>
+  <rect x="10.00" y="12.50" width="1.7" height="1.7" rx="0.34" fill="#DC2626" opacity="1"></rect>
+  <rect x="12.50" y="12.50" width="1.7" height="1.7" rx="0.34" fill="#DC2626" opacity="1"></rect>
+  <rect x="15.00" y="12.50" width="1.7" height="1.7" rx="0.34" fill="#DC2626" opacity="0.55"></rect>
+  <rect x="0.00" y="15.00" width="1.7" height="1.7" rx="0.34" fill="#DC2626" opacity="1"></rect>
+  <rect x="2.50" y="15.00" width="1.7" height="1.7" rx="0.34" fill="#DC2626" opacity="1"></rect>
+  <rect x="5.00" y="15.00" width="1.7" height="1.7" rx="0.34" fill="#DC2626" opacity="1"></rect>
+  <rect x="7.50" y="15.00" width="1.7" height="1.7" rx="0.34" fill="#DC2626" opacity="1"></rect>
+  <rect x="10.00" y="15.00" width="1.7" height="1.7" rx="0.34" fill="#DC2626" opacity="1"></rect>
+  <rect x="12.50" y="15.00" width="1.7" height="1.7" rx="0.34" fill="#DC2626" opacity="1"></rect>
+  <rect x="15.00" y="15.00" width="1.7" height="1.7" rx="0.34" fill="#DC2626" opacity="1"></rect>
+  <rect x="0.00" y="17.50" width="1.7" height="1.7" rx="0.34" fill="#DC2626" opacity="1"></rect>
+  <rect x="2.50" y="17.50" width="1.7" height="1.7" rx="0.34" fill="#DC2626" opacity="1"></rect>
+  <rect x="5.00" y="17.50" width="1.7" height="1.7" rx="0.34" fill="#DC2626" opacity="1"></rect>
+  <rect x="7.50" y="17.50" width="1.7" height="1.7" rx="0.34" fill="#DC2626" opacity="1"></rect>
+  <rect x="10.00" y="17.50" width="1.7" height="1.7" rx="0.34" fill="#DC2626" opacity="1"></rect>
+  <rect x="12.50" y="17.50" width="1.7" height="1.7" rx="0.34" fill="#DC2626" opacity="1"></rect>
+  <rect x="15.00" y="17.50" width="1.7" height="1.7" rx="0.34" fill="#DC2626" opacity="1"></rect>
+  <rect x="2.50" y="20.00" width="1.7" height="1.7" rx="0.34" fill="#DC2626" opacity="1"></rect>
+  <rect x="5.00" y="20.00" width="1.7" height="1.7" rx="0.34" fill="#DC2626" opacity="1"></rect>
+  <rect x="7.50" y="20.00" width="1.7" height="1.7" rx="0.34" fill="#DC2626" opacity="1"></rect>
+  <rect x="10.00" y="20.00" width="1.7" height="1.7" rx="0.34" fill="#DC2626" opacity="1"></rect>
+  <rect x="12.50" y="20.00" width="1.7" height="1.7" rx="0.34" fill="#DC2626" opacity="1"></rect>
+  <rect x="2.50" y="22.50" width="1.7" height="1.7" rx="0.34" fill="#DC2626" opacity="1"></rect>
+  <rect x="5.00" y="22.50" width="1.7" height="1.7" rx="0.34" fill="#DC2626" opacity="1"></rect>
+  <rect x="7.50" y="22.50" width="1.7" height="1.7" rx="0.34" fill="#DC2626" opacity="1"></rect>
+  <rect x="10.00" y="22.50" width="1.7" height="1.7" rx="0.34" fill="#DC2626" opacity="1"></rect>
+  <rect x="12.50" y="22.50" width="1.7" height="1.7" rx="0.34" fill="#DC2626" opacity="1"></rect>
+  <rect x="5.00" y="25.00" width="1.7" height="1.7" rx="0.34" fill="#DC2626" opacity="0.55"></rect>
+  <rect x="7.50" y="25.00" width="1.7" height="1.7" rx="0.34" fill="#DC2626" opacity="1"></rect>
+  <rect x="10.00" y="25.00" width="1.7" height="1.7" rx="0.34" fill="#DC2626" opacity="0.55"></rect>
+</svg>

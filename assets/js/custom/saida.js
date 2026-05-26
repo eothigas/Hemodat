@@ -1,61 +1,89 @@
-// formatDate e limitDigits definidos em main.js (carregado depois deste arquivo)
+// saida.js — blood chips + últimas saídas
 
-// Busca token CSRF
+// CSRF
 let csrfToken = '';
 fetch(BASE_URL + '/includes/functions/csrf.php')
     .then(r => r.json())
     .then(d => { csrfToken = d.token; })
     .catch(() => {});
 
-// Popula select com tipos sanguíneos disponíveis em estoque
-document.addEventListener('DOMContentLoaded', async function () {
-    try {
-        const response = await fetch(BASE_URL + '/includes/actions/bolsas.php?action=buscar_tipo');
-        const tipos = await response.json();
-        const tipoSelect = document.getElementById('tipo');
+// ── Blood chip selection ────────────────────────────────────
+const chips     = document.querySelectorAll('.blood-chip');
+const tipoInput = document.getElementById('tipo-hidden');
 
-        tipos.forEach(tipo => {
-            const option = document.createElement('option');
-            option.value = tipo;
-            option.textContent = tipo;
-            tipoSelect.appendChild(option);
-        });
-    } catch (error) {
-        console.error('Erro ao carregar os tipos sanguíneos:', error);
-        showToast('Erro ao carregar tipos sanguíneos.', 'error');
-    }
+chips.forEach(chip => {
+    chip.addEventListener('click', () => {
+        chips.forEach(c => c.classList.remove('selected'));
+        chip.classList.add('selected');
+        tipoInput.value = chip.dataset.tipo;
+    });
 });
 
-// Submissão do formulário de saída
-document.getElementById('saida').addEventListener('submit', function (event) {
-    event.preventDefault();
+// ── Últimas saídas (painel direito) ─────────────────────────
+async function carregarUltimas() {
+    const wrap = document.getElementById('ultimas-saidas');
+    if (!wrap) return;
+    try {
+        const r    = await fetch(
+            BASE_URL + '/includes/actions/bolsas.php?action=historico&operacao=saida&page=1'
+        );
+        const data = await r.json();
 
-    const tipo   = document.getElementById('tipo').value;
-    const litros = document.querySelector('input[name="litros"]').value;
-    const saida  = document.querySelector('input[name="saida"]').value;
+        const rows = data.rows ?? [];
+        if (rows.length === 0) {
+            wrap.innerHTML = '<p class="text-muted small">Nenhuma saída registrada.</p>';
+            return;
+        }
 
-    if (!tipo || !litros || !saida) {
-        showToast('Por favor, preencha todos os campos!', 'error');
+        const items = rows.slice(0, 8).map(r => {
+            const raw = r.data_evento ?? '';
+            const d   = raw ? new Date(raw + (raw.includes('T') ? '' : 'T00:00:00')) : null;
+            const fmt = d ? d.toLocaleDateString('pt-BR') : '—';
+            return `<li>
+                <span class="estoque-tipo">${r.tipo_sanguineo}</span>
+                <span class="estoque-litros">${parseFloat(r.quantidade).toFixed(2)} L</span>
+                <span style="font-size:11.5px;color:var(--hemo-text-3);margin-left:auto;">${fmt}</span>
+            </li>`;
+        }).join('');
+
+        wrap.innerHTML = `<ul class="estoque-list">${items}</ul>`;
+    } catch {
+        wrap.innerHTML = '<p class="text-muted small">Erro ao carregar saídas.</p>';
+    }
+}
+
+carregarUltimas();
+
+// ── Form submit ──────────────────────────────────────────────
+document.getElementById('saida').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    if (!tipoInput.value) {
+        showToast('Selecione o tipo sanguíneo.', 'error');
         return;
     }
 
-    const formData = new FormData();
-    formData.append('tipo',        tipo);
-    formData.append('litros',      litros);
-    formData.append('saida',       saida);
-    formData.append('csrf_token',  csrfToken);
+    const form = new FormData(e.target);
+    form.append('csrf_token', csrfToken);
+    form.append('tipo', tipoInput.value);  // hidden input já incluído, mas garante
 
-    fetch(BASE_URL + '/includes/actions/bolsas.php?action=saida', { method: 'POST', body: formData })
-        .then(r => r.json())
-        .then(result => {
-            if (result.status === 'success') {
-                showToast(result.message, 'success');
-                setTimeout(() => window.location.reload(), 1800);
-            } else {
-                showToast(result.message, 'error');
-            }
-        })
-        .catch(error => {
-            showToast('Erro ao enviar dados: ' + error, 'error');
-        });
+    const btn = e.target.querySelector('button[type="submit"]');
+    btn.disabled = true;
+
+    const res    = await fetch(BASE_URL + '/includes/actions/bolsas.php?action=saida', {
+        method: 'POST', body: form,
+    });
+    const result = await res.json();
+
+    btn.disabled = false;
+
+    if (result.status === 'success') {
+        showToast(result.message, 'success');
+        e.target.reset();
+        chips.forEach(c => c.classList.remove('selected'));
+        tipoInput.value = '';
+        carregarUltimas();
+    } else {
+        showToast(result.message, 'error');
+    }
 });

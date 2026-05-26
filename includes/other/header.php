@@ -47,6 +47,8 @@ $B = BASE_URL;
     <?php endif; ?>
 
     <!-- Favicon -->
+    <link rel="icon" href="<?= $B ?>/imagens/favicon/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="<?= $B ?>/imagens/favicon/favicon-32.png" sizes="32x32" type="image/png">
     <link rel="icon" href="<?= $B ?>/imagens/favicon/logo.ico" type="image/x-icon">
 
     <!-- Tags extras (Chart.js, etc.) -->
@@ -66,4 +68,7 @@ $B = BASE_URL;
 
 <?php if ($requer_sessao): ?>
     <script src="<?= $B ?>/assets/js/padrao/verificar_sessao.js"></script>
+<?php endif; ?>
+<?php if (($body_class ?? '') === 'dashboard-page'): ?>
+<div class="app-shell">
 <?php endif; ?>
