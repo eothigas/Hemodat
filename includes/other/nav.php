@@ -1,19 +1,28 @@
 <?php
 /**
- * nav.php - Bootstrap navbar compartilhada (páginas autenticadas).
- * Defina $active antes de incluir: 'home' | 'entrada' | 'saida' | 'relatorio' | 'historico' | 'admin'
+ * nav.php - Navbar HEMODAT v2 (dark navy + logo SVG Pixel Drop)
+ * $active: 'home' | 'entrada' | 'saida' | 'relatorio' | 'historico' | 'admin'
  */
-$active    = $active    ?? '';
-$B         = BASE_URL;
-$nome      = htmlspecialchars($_SESSION['usuario_nome'] ?? 'Usuário');
-$role      = $_SESSION['usuario_role'] ?? 'operador';
+$active = $active ?? '';
+$B      = BASE_URL;
+$nome   = htmlspecialchars($_SESSION['usuario_nome'] ?? 'Usuário');
+$role   = $_SESSION['usuario_role'] ?? 'operador';
 ?>
 <nav class="navbar navbar-expand-md navbar-hemodat py-0" style="min-height:60px;">
     <div class="container">
 
-        <!-- Brand / Logo -->
+        <!-- Brand -->
         <a class="navbar-brand py-2" href="<?= $B ?>/home.php">
-            <img src="<?= $B ?>/imagens/logo/logo.png" height="38" alt="Hemodat">
+            <!-- Pixel Drop logo SVG -->
+            <svg width="26" height="28" viewBox="0 0 26 28" fill="none" aria-hidden="true">
+                <rect x="0"   y="20" width="3.5" height="8"  rx="1.2" fill="white" opacity="0.40"/>
+                <rect x="4.5" y="13" width="3.5" height="15" rx="1.2" fill="white" opacity="0.58"/>
+                <rect x="9"   y="6"  width="3.5" height="22" rx="1.2" fill="white" opacity="0.80"/>
+                <rect x="13.5" y="2" width="3.5" height="26" rx="1.2" fill="white"/>
+                <rect x="18"  y="7"  width="3.5" height="21" rx="1.2" fill="white" opacity="0.78"/>
+                <rect x="22.5" y="14" width="3.5" height="14" rx="1.2" fill="white" opacity="0.55"/>
+            </svg>
+            HEMODAT
         </a>
 
         <!-- Toggler mobile -->
@@ -41,14 +50,14 @@ $role      = $_SESSION['usuario_role'] ?? 'operador';
                 <li class="nav-item">
                     <a class="nav-link px-3 <?= $active === 'entrada'   ? 'active-page' : '' ?>"
                        href="<?= $B ?>/entrada.php">
-                        <i class="bi bi-box-arrow-in-down me-1"></i>Entrada
+                        <i class="bi bi-arrow-down-circle me-1"></i>Entrada
                     </a>
                 </li>
 
                 <li class="nav-item">
                     <a class="nav-link px-3 <?= $active === 'saida'     ? 'active-page' : '' ?>"
                        href="<?= $B ?>/saida.php">
-                        <i class="bi bi-box-arrow-up me-1"></i>Saída
+                        <i class="bi bi-arrow-up-circle me-1"></i>Saída
                     </a>
                 </li>
 
@@ -75,16 +84,19 @@ $role      = $_SESSION['usuario_role'] ?? 'operador';
                 </li>
                 <?php endif; ?>
 
-                <!-- Nome do usuário -->
-                <li class="nav-item ms-md-1 d-flex align-items-center">
-                    <span class="text-white opacity-75 small px-2 d-none d-md-inline">
+                <!-- Divider + nome -->
+                <li class="nav-item d-none d-md-flex align-items-center ms-2"
+                    style="height:28px; border-left:1px solid rgba(255,255,255,.15);">
+                </li>
+
+                <li class="nav-item d-none d-md-flex align-items-center px-2">
+                    <span style="font-size:12px; color:rgba(255,255,255,.55); font-weight:500;">
                         <i class="bi bi-person-circle me-1"></i><?= $nome ?>
                     </span>
                 </li>
 
-                <li class="nav-item ms-md-1">
-                    <span id="logout" role="button"
-                          class="btn btn-outline-light btn-sm px-3">
+                <li class="nav-item">
+                    <span id="logout" role="button" class="btn btn-sm px-3" style="min-height:34px;">
                         <i class="bi bi-box-arrow-right me-1"></i>Sair
                     </span>
                 </li>

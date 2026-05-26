@@ -1,22 +1,70 @@
 /* ============================================================
-   padrao.css - Design system Hemodat (Bootstrap 5 overrides)
-   Cores: vermelho rgb(209,0,0) | bg rgb(230,230,230)
-   Fonte: Outfit (Google Fonts)
+   padrao.css — Design system HEMODAT v2
+   Branding: Inter (body) · Plus Jakarta Sans (headings)
+   Paleta:   #DC2626 (red-600) · #2563EB (blue-600) · #F8FAFC (bg)
+   Nav:      #0F172A (slate-900)
    ============================================================ */
 
-/* ── Variáveis Bootstrap ──────────────────────────────────── */
+/* ── Design tokens ────────────────────────────────────────── */
 :root {
-    --bs-primary:          rgb(209, 0, 0);
-    --bs-primary-rgb:      209, 0, 0;
-    --bs-font-sans-serif:  'Outfit', sans-serif;
-    --bs-body-font-family: 'Outfit', sans-serif;
-    --bs-body-bg:          rgb(230, 230, 230);
+    /* Brand — vermelho */
+    --hemo-red-50:      #FEF2F2;
+    --hemo-red-100:     #FEE2E2;
+    --hemo-red-200:     #FECACA;
+    --hemo-red-500:     #EF4444;
+    --hemo-red:         #DC2626;   /* primary */
+    --hemo-red-700:     #B91C1C;
+    --hemo-red-800:     #991B1B;
 
-    --hemo-red:            rgb(209, 0, 0);
-    --hemo-red-dark:       rgb(175, 0, 0);
-    --hemo-red-light:      rgba(209, 0, 0, 0.08);
-    --hemo-bg:             rgb(230, 230, 230);
-    --hemo-input-bg:       rgba(179, 179, 179, 0.3);
+    /* Secundária — azul ações */
+    --hemo-blue-50:     #EFF6FF;
+    --hemo-blue-100:    #DBEAFE;
+    --hemo-blue-500:    #3B82F6;
+    --hemo-blue:        #2563EB;
+    --hemo-blue-700:    #1D4ED8;
+
+    /* Status */
+    --hemo-success:     #16A34A;
+    --hemo-success-bg:  #F0FDF4;
+    --hemo-warning:     #F59E0B;
+    --hemo-warning-bg:  #FFFBEB;
+    --hemo-error:       #DC2626;
+    --hemo-error-bg:    #FEF2F2;
+
+    /* Superfícies — light */
+    --hemo-bg:          #F8FAFC;
+    --hemo-card:        #FFFFFF;
+    --hemo-border:      #E2E8F0;
+    --hemo-text-1:      #0F172A;
+    --hemo-text-2:      #475569;
+    --hemo-text-3:      #64748B;
+
+    /* Nav */
+    --hemo-nav-bg:      #0F172A;
+    --hemo-nav-border:  #1E293B;
+
+    /* Radius */
+    --radius-sm:        6px;
+    --radius-md:        8px;
+    --radius-lg:        12px;
+    --radius-xl:        16px;
+
+    /* Shadow */
+    --shadow-sm:  0 1px 3px rgba(15,23,42,.08), 0 1px 2px rgba(15,23,42,.04);
+    --shadow-md:  0 4px 12px rgba(15,23,42,.10), 0 2px 4px rgba(15,23,42,.06);
+    --shadow-lg:  0 8px 32px rgba(15,23,42,.14), 0 4px 8px rgba(15,23,42,.08);
+
+    /* Bootstrap overrides */
+    --bs-primary:           #DC2626;
+    --bs-primary-rgb:       220, 38, 38;
+    --bs-font-sans-serif:   'Inter', system-ui, sans-serif;
+    --bs-body-font-family:  'Inter', system-ui, sans-serif;
+    --bs-body-bg:           #F8FAFC;
+    --bs-body-color:        #0F172A;
+    --bs-border-color:      #E2E8F0;
+    --bs-border-radius:     8px;
+    --bs-border-radius-sm:  6px;
+    --bs-border-radius-lg:  12px;
 }
 
 /* ── Base ─────────────────────────────────────────────────── */
@@ -27,57 +75,109 @@
 html { scroll-behavior: smooth; }
 
 body {
-    font-family: 'Outfit', sans-serif;
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
     background-color: var(--hemo-bg);
+    color: var(--hemo-text-1);
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
-a { text-decoration: none; color: inherit; }
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    font-weight: 700;
+    color: var(--hemo-text-1);
+}
+
+a {
+    text-decoration: none;
+    color: var(--hemo-red);
+}
 
 img { display: block; max-width: 100%; }
 
 /* ── Botões ───────────────────────────────────────────────── */
-.btn-primary {
-    --bs-btn-bg:              var(--hemo-red);
-    --bs-btn-border-color:    var(--hemo-red);
-    --bs-btn-hover-bg:        var(--hemo-red-dark);
-    --bs-btn-hover-border-color: var(--hemo-red-dark);
-    --bs-btn-active-bg:       var(--hemo-red-dark);
-    --bs-btn-focus-shadow-rgb: 209, 0, 0;
-    border-radius: 30px !important;
-    font-weight: 700;
-    letter-spacing: 0.03em;
+.btn {
+    border-radius: var(--radius-md) !important;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: 0.01em;
+    transition: all 0.18s ease;
+    min-height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.btn-outline-light {
-    border-radius: 30px !important;
-    font-weight: 600;
+.btn-primary {
+    --bs-btn-bg:                var(--hemo-red);
+    --bs-btn-border-color:      var(--hemo-red);
+    --bs-btn-hover-bg:          var(--hemo-red-700);
+    --bs-btn-hover-border-color:var(--hemo-red-700);
+    --bs-btn-active-bg:         var(--hemo-red-800);
+    --bs-btn-focus-shadow-rgb:  220, 38, 38;
+    color: #fff !important;
+    box-shadow: 0 1px 2px rgba(220,38,38,.3);
+}
+
+.btn-primary:hover {
+    box-shadow: 0 3px 8px rgba(220,38,38,.35);
+    transform: translateY(-1px);
 }
 
 .btn-outline-danger {
-    --bs-btn-color:        var(--hemo-red);
-    --bs-btn-border-color: var(--hemo-red);
-    --bs-btn-hover-bg:     var(--hemo-red);
+    --bs-btn-color:              var(--hemo-red);
+    --bs-btn-border-color:       var(--hemo-red);
+    --bs-btn-hover-bg:           var(--hemo-red);
     --bs-btn-hover-border-color: var(--hemo-red);
-    border-radius: 30px !important;
-    font-weight: 600;
+    --bs-btn-hover-color:        #fff;
+}
+
+.btn-outline-light {
+    border-color: rgba(255,255,255,.4);
+    color: #fff;
+}
+
+.btn-outline-light:hover {
+    background-color: rgba(255,255,255,.12);
+    border-color: rgba(255,255,255,.7);
+    color: #fff;
+}
+
+.btn-outline-success {
+    --bs-btn-color:              var(--hemo-success);
+    --bs-btn-border-color:       var(--hemo-success);
+    --bs-btn-hover-bg:           var(--hemo-success);
+    --bs-btn-hover-border-color: var(--hemo-success);
+    --bs-btn-hover-color:        #fff;
 }
 
 /* ── Inputs / Selects ─────────────────────────────────────── */
 .form-control,
 .form-select {
-    background-color: var(--hemo-input-bg);
-    border: 1px solid transparent;
-    border-radius: 8px;
-    font-family: 'Outfit', sans-serif;
-    transition: border-color 0.2s, box-shadow 0.2s;
+    background-color: var(--hemo-card);
+    border: 1px solid var(--hemo-border);
+    border-radius: var(--radius-md);
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    color: var(--hemo-text-1);
+    transition: border-color 0.18s, box-shadow 0.18s;
+    min-height: 40px;
 }
 
 .form-control:focus,
 .form-select:focus {
-    background-color: rgba(179, 179, 179, 0.45);
-    border-color: rgba(209, 0, 0, 0.4);
-    box-shadow: 0 0 0 0.2rem rgba(209, 0, 0, 0.15);
+    background-color: var(--hemo-card);
+    border-color: var(--hemo-red);
+    box-shadow: 0 0 0 3px rgba(220,38,38,.12);
+    outline: none;
+}
+
+.form-control::placeholder {
+    color: var(--hemo-text-3);
+    font-size: 13px;
 }
 
 /* Input com ícone à esquerda */
@@ -90,8 +190,8 @@ img { display: block; max-width: 100%; }
     left: 12px;
     top: 50%;
     transform: translateY(-50%);
-    color: #888;
-    font-size: 1rem;
+    color: var(--hemo-text-3);
+    font-size: 14px;
     z-index: 5;
     pointer-events: none;
 }
@@ -101,36 +201,80 @@ img { display: block; max-width: 100%; }
     padding-left: 2.4rem;
 }
 
-/* ── Navbar ───────────────────────────────────────────────── */
-.navbar-hemodat {
-    background-color: var(--hemo-red);
-    box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+/* Input group */
+.input-group-text {
+    background-color: var(--hemo-bg);
+    border-color: var(--hemo-border);
+    color: var(--hemo-text-2);
+    font-size: 13px;
 }
 
-.navbar-hemodat .navbar-brand,
+/* ── Navbar ───────────────────────────────────────────────── */
+.navbar-hemodat {
+    background-color: var(--hemo-nav-bg);
+    border-bottom: 1px solid var(--hemo-nav-border);
+    box-shadow: 0 1px 4px rgba(0,0,0,.25);
+}
+
+.navbar-hemodat .navbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #fff;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 800;
+    font-size: 1.1rem;
+    letter-spacing: 0.04em;
+}
+
 .navbar-hemodat .nav-link {
-    color: white !important;
-    font-weight: 600;
+    color: rgba(255,255,255,.75) !important;
+    font-size: 13.5px;
+    font-weight: 500;
+    border-radius: var(--radius-sm);
+    transition: color .18s, background .18s;
 }
 
 .navbar-hemodat .nav-link:hover {
-    color: rgba(255, 255, 255, 0.80) !important;
+    color: #fff !important;
+    background-color: rgba(255,255,255,.08);
 }
 
 .navbar-hemodat .nav-link.active-page {
-    color: white !important;
-    border-bottom: 2px solid rgba(255,255,255,0.9);
+    color: #fff !important;
+    background-color: rgba(220,38,38,.25);
 }
 
 .navbar-hemodat .navbar-toggler {
-    border-color: rgba(255, 255, 255, 0.5);
+    border-color: rgba(255,255,255,.3);
+    border-radius: var(--radius-sm);
 }
 
 .navbar-hemodat .navbar-toggler-icon {
     filter: brightness(0) invert(1);
 }
 
-/* ── Auth pages - split-card layout ──────────────────────── */
+/* Logout btn in nav */
+#logout {
+    border-color: rgba(255,255,255,.3);
+    color: rgba(255,255,255,.85);
+    font-size: 13px;
+    border-radius: var(--radius-md) !important;
+    min-height: 34px;
+    padding: 0 14px;
+}
+
+#logout:hover {
+    background-color: rgba(220,38,38,.2);
+    border-color: rgba(220,38,38,.5);
+    color: #fff;
+}
+
+/* ── Auth pages — split-card ──────────────────────────────── */
+.auth-page {
+    background-color: var(--hemo-bg);
+}
+
 .auth-wrapper {
     min-height: 100vh;
     display: flex;
@@ -142,40 +286,63 @@ img { display: block; max-width: 100%; }
 
 .split-card {
     display: flex;
-    border-radius: 16px;
+    border-radius: var(--radius-xl);
     overflow: hidden;
-    box-shadow: 0 8px 40px rgba(0,0,0,0.18);
+    box-shadow: var(--shadow-lg);
     max-width: 900px;
     width: 100%;
-    background: #fff;
 }
 
+/* Painel esquerdo — navy escuro */
 .split-left {
-    background-color: var(--hemo-red);
-    color: white;
+    background-color: var(--hemo-nav-bg);
+    background-image:
+        radial-gradient(ellipse at 80% 20%, rgba(220,38,38,.12) 0%, transparent 60%),
+        radial-gradient(ellipse at 20% 80%, rgba(37,99,235,.08) 0%, transparent 60%);
+    color: #fff;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     text-align: center;
     padding: 3rem 2rem;
-    flex: 0 0 38%;
+    flex: 0 0 42%;
 }
 
-.split-left h1 {
-    font-size: 1.5rem;
+.split-left .auth-brand {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 2rem;
+}
+
+.split-left .auth-brand-name {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 800;
+    font-size: 1.6rem;
+    letter-spacing: 0.06em;
+    color: #fff;
+}
+
+.split-left .auth-tagline {
+    font-family: 'Plus Jakarta Sans', sans-serif;
     font-weight: 700;
-    margin-top: 1rem;
+    font-size: 1.3rem;
+    line-height: 1.3;
+    color: #fff;
+    margin: 0 0 0.5rem;
 }
 
-.split-left p {
-    font-size: 1rem;
-    margin-top: 0.75rem;
-    opacity: 0.9;
-    max-width: 220px;
+.split-left .auth-sub {
+    font-size: 0.875rem;
+    color: rgba(255,255,255,.6);
+    margin: 0 0 1.5rem;
 }
 
+/* Painel direito — branco */
 .split-right {
+    background: var(--hemo-card);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -185,37 +352,36 @@ img { display: block; max-width: 100%; }
 }
 
 .split-right h1 {
-    color: var(--hemo-red);
-    font-size: 1.6rem;
+    font-size: 1.5rem;
     font-weight: 700;
+    color: var(--hemo-text-1);
     margin-bottom: 0.25rem;
 }
 
 .split-right h2 {
-    color: #777;
-    font-size: 1rem;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9rem;
     font-weight: 400;
-    margin-bottom: 1.5rem;
+    color: var(--hemo-text-3);
+    margin-bottom: 1.75rem;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 640px) {
     .split-card {
         flex-direction: column;
-        border-radius: 12px;
-        max-width: 440px;
+        border-radius: var(--radius-lg);
+        max-width: 460px;
     }
-
     .split-left {
         flex: none;
         padding: 2rem 1.5rem;
     }
-
     .split-right {
         padding: 2rem 1.5rem;
     }
 }
 
-/* ── Centered card (forgot, code, alterar senha) ──────────── */
+/* ── Narrow card (forgot / código / alterar senha) ────────── */
 .narrow-card-wrapper {
     min-height: 100vh;
     display: flex;
@@ -226,9 +392,10 @@ img { display: block; max-width: 100%; }
 }
 
 .narrow-card {
-    background: #fff;
-    border-radius: 16px;
-    box-shadow: 0 8px 40px rgba(0,0,0,0.14);
+    background: var(--hemo-card);
+    border: 1px solid var(--hemo-border);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-md);
     padding: 2.5rem 2rem;
     width: 100%;
     max-width: 440px;
@@ -248,29 +415,34 @@ img { display: block; max-width: 100%; }
 }
 
 .narrow-card .card-header-area h1 {
-    font-size: 1.25rem;
+    font-size: 1.2rem;
     font-weight: 700;
-    color: #333;
+    color: var(--hemo-text-1);
     margin: 0;
 }
 
 .narrow-card .card-subtitle {
     font-size: 0.875rem;
-    color: #777;
+    color: var(--hemo-text-3);
     margin-bottom: 1.5rem;
 }
 
 /* ── Dashboard pages ──────────────────────────────────────── */
+.dashboard-page {
+    background-color: var(--hemo-bg);
+}
+
 .dashboard-main {
-    padding: 2rem 0;
+    padding: 1.75rem 0 3rem;
     min-height: calc(100vh - 60px);
 }
 
 .hemodat-card {
-    background: #fff;
-    border-radius: 16px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-    padding: 2rem;
+    background: var(--hemo-card);
+    border: 1px solid var(--hemo-border);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-sm);
+    padding: 1.75rem;
 }
 
 .page-header {
@@ -281,27 +453,108 @@ img { display: block; max-width: 100%; }
 }
 
 .page-header a {
-    color: var(--hemo-red);
-    font-size: 1.4rem;
+    color: var(--hemo-text-3);
+    font-size: 1.3rem;
     line-height: 1;
+    transition: color .18s;
+}
+
+.page-header a:hover {
+    color: var(--hemo-red);
 }
 
 .page-header h1 {
-    font-size: 1.5rem;
+    font-size: 1.35rem;
     font-weight: 700;
-    color: #222;
+    color: var(--hemo-text-1);
     margin: 0;
 }
 
 .page-header p {
-    font-size: 0.875rem;
-    color: #888;
+    font-size: 0.8rem;
+    color: var(--hemo-text-3);
     margin: 0;
+    font-weight: 400;
+}
+
+/* ── Tabelas ──────────────────────────────────────────────── */
+.table {
+    font-size: 13.5px;
+    color: var(--hemo-text-1);
+}
+
+.table thead th {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 700;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--hemo-text-3);
+    border-bottom: 1px solid var(--hemo-border);
+    padding: 0.6rem 0.75rem;
+}
+
+.table tbody td {
+    border-bottom: 1px solid rgba(226,232,240,.6);
+    padding: 0.65rem 0.75rem;
+    vertical-align: middle;
+}
+
+.table-hover tbody tr:hover td {
+    background-color: rgba(248,250,252,.8);
+}
+
+/* ── Badges ───────────────────────────────────────────────── */
+.badge {
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 11px;
+    border-radius: var(--radius-sm);
+    padding: 3px 8px;
+}
+
+/* ── Nav tabs (admin) ─────────────────────────────────────── */
+.nav-tabs .nav-link {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--hemo-text-2);
+    border-color: transparent;
+    border-radius: var(--radius-md) var(--radius-md) 0 0 !important;
+    padding: 0.5rem 1.25rem;
+}
+
+.nav-tabs .nav-link.active {
+    color: var(--hemo-red);
+    border-color: var(--hemo-border) var(--hemo-border) var(--hemo-card);
+    background: var(--hemo-card);
+}
+
+.nav-tabs .nav-link:hover:not(.active) {
+    color: var(--hemo-text-1);
+    background: rgba(0,0,0,.04);
+    border-color: transparent;
+}
+
+/* ── Alerts ───────────────────────────────────────────────── */
+.alert-hemo-warning {
+    background: var(--hemo-warning-bg);
+    border: 1px solid #FDE68A;
+    border-radius: var(--radius-md);
+    color: #92400E;
+    font-size: 13.5px;
+}
+
+.alert-hemo-error {
+    background: var(--hemo-red-50);
+    border: 1px solid var(--hemo-red-200);
+    border-radius: var(--radius-md);
+    color: var(--hemo-red-800);
+    font-size: 13.5px;
 }
 
 /* ── Link "Esqueci minha senha" ───────────────────────────── */
 .forgot-link {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     color: var(--hemo-red);
     font-weight: 500;
     text-align: right;
@@ -310,7 +563,7 @@ img { display: block; max-width: 100%; }
 }
 
 .forgot-link:hover {
-    color: var(--hemo-red-dark);
+    color: var(--hemo-red-700);
     text-decoration: underline;
 }
 
@@ -318,3 +571,15 @@ img { display: block; max-width: 100%; }
 #graficoBar {
     max-height: 400px;
 }
+
+/* ── Spinner ──────────────────────────────────────────────── */
+.spinner-border-sm {
+    --bs-spinner-width: 1rem;
+    --bs-spinner-height: 1rem;
+}
+
+/* ── Scrollbar (webkit) ───────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--hemo-border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--hemo-text-3); }

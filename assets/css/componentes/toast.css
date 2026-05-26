@@ -1,4 +1,4 @@
-/* toast.css - Estilos do sistema de notificação não-bloqueante */
+/* toast.css - Sistema de notificação HEMODAT v2 */
 
 #hd-toast-container {
     position: fixed;
@@ -15,37 +15,39 @@
     display: flex;
     align-items: center;
     gap: 0.6rem;
-    min-width: 260px;
+    min-width: 270px;
     max-width: 380px;
-    padding: 0.75rem 1rem;
+    padding: 0.8rem 1rem;
     border-radius: 8px;
-    font-family: inherit;
-    font-size: 0.9rem;
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 13.5px;
     font-weight: 500;
     color: #fff;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 4px 20px rgba(15,23,42,.22), 0 1px 4px rgba(15,23,42,.12);
     opacity: 0;
-    transform: translateY(12px);
-    transition: opacity 0.28s ease, transform 0.28s ease;
+    transform: translateX(16px);
+    transition: opacity 0.25s ease, transform 0.25s ease;
     pointer-events: auto;
+    border-left: 3px solid rgba(255,255,255,.3);
 }
 
 .hd-toast.hd-toast-show {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateX(0);
 }
 
-.hd-toast-success { background-color: #2e7d32; }
-.hd-toast-error   { background-color: #c62828; }
-.hd-toast-info    { background-color: #1565c0; }
+.hd-toast-success { background-color: #15803D; }
+.hd-toast-error   { background-color: #B91C1C; }
+.hd-toast-info    { background-color: #1D4ED8; }
 
 .hd-toast-icon {
-    font-size: 1.1rem;
+    font-size: 1rem;
     flex-shrink: 0;
+    opacity: .9;
 }
 
 .hd-toast-msg {
-    line-height: 1.4;
+    line-height: 1.45;
 }
 
 @media (max-width: 480px) {
