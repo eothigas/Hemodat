@@ -155,28 +155,22 @@ function action_validar(): void {
         echo json_encode(['status' => 'error', 'message' => 'Por favor, insira o código.']); return;
     }
 
-    try {
-        $stmt = $pdo->prepare(
-            "SELECT id, criado_em FROM recuperar_senha WHERE email = :email AND codigo = :codigo LIMIT 1"
-        );
-        $stmt->execute([':email' => $email, ':codigo' => $codigo]);
-        $record = $stmt->fetch(PDO::FETCH_ASSOC);
-    } catch (PDOException $e) {
-        $stmt = $pdo->prepare("SELECT id FROM recuperar_senha WHERE email = :email AND codigo = :codigo LIMIT 1");
-        $stmt->execute([':email' => $email, ':codigo' => $codigo]);
-        $record = $stmt->fetch(PDO::FETCH_ASSOC);
-    }
+    // TTL verificado no SQL — elimina mismatch de timezone PHP vs MySQL
+    $stmt = $pdo->prepare(
+        "SELECT id FROM recuperar_senha
+         WHERE email = :email
+           AND codigo = :codigo
+           AND criado_em >= NOW() - INTERVAL :ttl MINUTE
+         LIMIT 1"
+    );
+    $stmt->bindValue(':email',  $email);
+    $stmt->bindValue(':codigo', $codigo);
+    $stmt->bindValue(':ttl',    RESET_CODE_TTL, PDO::PARAM_INT);
+    $stmt->execute();
+    $record = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if (!$record) {
-        echo json_encode(['status' => 'error', 'message' => 'Código inválido ou expirado.']); return;
-    }
-
-    if (!empty($record['criado_em'])) {
-        $diff_min = (time() - strtotime($record['criado_em'])) / 60;
-        if ($diff_min > RESET_CODE_TTL) {
-            $pdo->prepare("DELETE FROM recuperar_senha WHERE email = :email")->execute([':email' => $email]);
-            echo json_encode(['status' => 'error', 'message' => 'Código expirado. Solicite um novo.']); return;
-        }
+        echo json_encode(['status' => 'error', 'message' => 'Código inválido ou expirado. Solicite um novo.']); return;
     }
 
     $pdo->prepare("DELETE FROM recuperar_senha WHERE email = :email")->execute([':email' => $email]);
