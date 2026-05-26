@@ -1,3 +1,16 @@
+// ── Password toggle ──────────────────────────────────────────
+document.querySelector('.pwd-toggle')?.addEventListener('click', function () {
+    const inp  = document.getElementById('senha');
+    const icon = this.querySelector('i');
+    if (inp.type === 'password') {
+        inp.type = 'text';
+        icon.className = 'bi bi-eye-slash';
+    } else {
+        inp.type = 'password';
+        icon.className = 'bi bi-eye';
+    }
+});
+
 // Busca token CSRF e armazena como Promise (evita race condition)
 const csrfReady = fetch(BASE_URL + '/includes/functions/csrf.php')
     .then(r => r.json())

@@ -58,7 +58,7 @@ function action_login(): void {
             'status'         => 'success',
             'message'        => 'Login bem-sucedido!',
             'usuario_logado' => true,
-            'redirect'       => BASE_URL . '/home.php',
+            'redirect'       => BASE_URL . '/home',
         ]);
     } else {
         echo json_encode(['status' => 'error', 'message' => 'Email ou senha incorretos. Tente novamente!']);

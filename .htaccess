@@ -1,0 +1,71 @@
+# ══════════════════════════════════════════════════════════════
+#  HEMODAT — .htaccess (raiz do projeto)
+# ══════════════════════════════════════════════════════════════
+
+# ── Segurança básica ────────────────────────────────────────
+Options -Indexes -MultiViews
+ServerSignature Off
+
+# ── Cabeçalhos de segurança ─────────────────────────────────
+<IfModule mod_headers.c>
+    Header always unset X-Powered-By
+    Header always set X-Content-Type-Options  "nosniff"
+    Header always set X-Frame-Options          "SAMEORIGIN"
+    Header always set X-XSS-Protection        "1; mode=block"
+    Header always set Referrer-Policy         "strict-origin-when-cross-origin"
+    Header always set Permissions-Policy      "geolocation=(), microphone=(), camera=()"
+</IfModule>
+
+# ── Cache de assets estáticos ───────────────────────────────
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType text/css             "access plus 1 month"
+    ExpiresByType application/javascript "access plus 1 month"
+    ExpiresByType image/png            "access plus 6 months"
+    ExpiresByType image/svg+xml        "access plus 6 months"
+    ExpiresByType image/x-icon         "access plus 1 year"
+</IfModule>
+
+# ── Rewrite engine ──────────────────────────────────────────
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # ── Bloquear includes/other/ (arquivos include-only) ────
+    RewriteRule ^includes/other/ - [F,L]
+
+    # ── Bloquear includes/functions/ EXCETO csrf.php ────────
+    #    (csrf.php é endpoint AJAX legítimo)
+    RewriteCond %{REQUEST_URI} !csrf\.php$
+    RewriteRule ^includes/functions/ - [F,L]
+
+    # ── Servir arquivos que existem diretamente ─────────────
+    RewriteCond %{REQUEST_FILENAME} -f
+    RewriteRule ^ - [L]
+
+    # ── Servir diretórios que existem diretamente ───────────
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
+
+    # ── URL limpa: /pagina → /pagina.php ────────────────────
+    #    Só aplica a nomes simples (sem barra, sem ponto)
+    RewriteRule ^([a-zA-Z_][a-zA-Z0-9_-]*)$ $1.php [L]
+
+</IfModule>
+
+# ── Bloquear acesso a arquivos sensíveis por nome ───────────
+<FilesMatch "^(config|session|header|sidebar|nav)\.php$">
+    Require all denied
+</FilesMatch>
+
+# ── Ocultar assinatura do servidor ──────────────────────────
+<IfModule mod_php.c>
+    php_flag expose_php Off
+</IfModule>
+
+# ── Bloquear hotlinking de imagens ──────────────────────────
+<IfModule mod_rewrite.c>
+    RewriteCond %{HTTP_REFERER} !^$
+    RewriteCond %{HTTP_REFERER} !^https?://(www\.)?hemodatgp\.com [NC]
+    RewriteCond %{HTTP_REFERER} !^https?://localhost [NC]
+    RewriteRule \.(png|jpg|gif|svg|ico)$ - [F,NC,L]
+</IfModule>

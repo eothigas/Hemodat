@@ -8,7 +8,7 @@ require_once __DIR__ . '/includes/other/header.php';
     <div class="narrow-card">
 
         <div class="card-header-area">
-            <a href="<?= BASE_URL ?>/login.php" title="Voltar">
+            <a href="<?= BASE_URL ?>/login" title="Voltar">
                 <i class="bi bi-arrow-left-circle-fill"></i>
             </a>
             <div>

@@ -792,6 +792,79 @@ img { display: block; max-width: 100%; }
     .split-right { padding: 2rem 1.5rem; }
 }
 
+/* ── Auth features list ───────────────────────────────────── */
+.auth-features {
+    list-style: none;
+    padding: 0;
+    margin: 1.75rem 0 0;
+    text-align: left;
+    width: 100%;
+    max-width: 260px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+}
+
+.auth-features li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13.5px;
+    color: rgba(255,255,255,.75);
+    font-weight: 500;
+}
+
+.auth-features li .bi {
+    font-size: 15px;
+    color: rgba(255,255,255,.5);
+    flex-shrink: 0;
+}
+
+/* ── Auth form fields ─────────────────────────────────────── */
+.auth-form-header { margin-bottom: 1.75rem; text-align: left; width: 100%; max-width: 360px; }
+.auth-form-header h1 { font-size: 1.45rem; font-weight: 700; margin-bottom: 0.15rem; }
+.auth-form-header h2 {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 400;
+    color: var(--hemo-text-3);
+    margin: 0;
+}
+
+.auth-form { width: 100%; max-width: 360px; display: flex; flex-direction: column; gap: 1rem; }
+
+.auth-field { display: flex; flex-direction: column; gap: 0.35rem; }
+
+.auth-field label {
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--hemo-text-2);
+}
+
+/* ── Password toggle ──────────────────────────────────────── */
+.input-icon--password .form-control { padding-right: 2.75rem; }
+
+.pwd-toggle {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    padding: 2px 4px;
+    color: var(--hemo-text-3);
+    font-size: 15px;
+    cursor: pointer;
+    z-index: 6;
+    line-height: 1;
+    border-radius: var(--radius-sm);
+    transition: color .15s;
+}
+
+.pwd-toggle:hover { color: var(--hemo-text-1); }
+
+html[data-theme="dark"] .pwd-toggle:hover { color: var(--hemo-text-1); }
+
 /* ── Narrow card (forgot/codigo/alterar senha) ────────────── */
 .narrow-card-wrapper {
     min-height: 100vh;

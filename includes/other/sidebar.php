@@ -56,31 +56,31 @@ try {
     <nav class="sidebar-nav">
         <div class="sidebar-section">Operação</div>
 
-        <a href="<?= $B ?>/home.php"
+        <a href="<?= $B ?>/home"
            class="sidebar-item <?= $active === 'home' ? 'active' : '' ?>">
             <i class="bi bi-grid-1x2"></i>
             Dashboard
         </a>
 
-        <a href="<?= $B ?>/entrada.php"
+        <a href="<?= $B ?>/entrada"
            class="sidebar-item <?= $active === 'entrada' ? 'active' : '' ?>">
             <i class="bi bi-arrow-down-circle"></i>
             Entrada
         </a>
 
-        <a href="<?= $B ?>/saida.php"
+        <a href="<?= $B ?>/saida"
            class="sidebar-item <?= $active === 'saida' ? 'active' : '' ?>">
             <i class="bi bi-arrow-up-circle"></i>
             Saída
         </a>
 
-        <a href="<?= $B ?>/relatorio.php"
+        <a href="<?= $B ?>/relatorio"
            class="sidebar-item <?= $active === 'relatorio' ? 'active' : '' ?>">
             <i class="bi bi-bar-chart-line"></i>
             Relatórios
         </a>
 
-        <a href="<?= $B ?>/historico.php"
+        <a href="<?= $B ?>/historico"
            class="sidebar-item <?= $active === 'historico' ? 'active' : '' ?>">
             <i class="bi bi-clock-history"></i>
             Histórico
@@ -88,7 +88,7 @@ try {
 
         <div class="sidebar-section">Sistema</div>
 
-        <a href="<?= $B ?>/admin.php"
+        <a href="<?= $B ?>/admin"
            class="sidebar-item <?= $active === 'admin' ? 'active' : '' ?>">
             <i class="bi bi-gear"></i>
             Configurações

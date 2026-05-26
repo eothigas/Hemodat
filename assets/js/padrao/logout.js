@@ -1,17 +1,12 @@
-document.getElementById('logout').addEventListener('click', function(event) {
-    event.preventDefault(); // Impede o comportamento padrão do link ou botão (se houver)
-    
-    // Fazendo uma requisição para o PHP que destruirá a sessão
-    fetch(BASE_URL + '/includes/actions/auth.php?action=logout') // Caminho para o arquivo PHP de logout
+document.getElementById('logout').addEventListener('click', function (event) {
+    event.preventDefault();
+    fetch(BASE_URL + '/includes/actions/auth.php?action=logout')
         .then(response => {
             if (response.ok) {
-                // Redireciona ou faz algo após o logout
-                window.location.href = BASE_URL + '/login.php';
-            } else {
-                console.error('Erro ao tentar fazer logout');
+                window.location.href = BASE_URL + '/login';
             }
         })
-        .catch(error => {
-            console.error('Erro na requisição de logout', error);
+        .catch(() => {
+            window.location.href = BASE_URL + '/login';
         });
 });

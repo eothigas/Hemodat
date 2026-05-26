@@ -3,7 +3,7 @@ require_once __DIR__ . '/includes/functions/config.php';
 require_auth();
 
 if (($_SESSION['usuario_role'] ?? '') !== 'admin') {
-    header('Location: ' . BASE_URL . '/home.php');
+    header('Location: ' . BASE_URL . '/home');
     exit;
 }
 

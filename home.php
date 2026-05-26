@@ -63,19 +63,19 @@ require_once __DIR__ . '/includes/other/sidebar.php';
             Ações rápidas
         </div>
         <div class="quick-actions">
-            <a href="<?= BASE_URL ?>/entrada.php" class="quick-action-btn">
+            <a href="<?= BASE_URL ?>/entrada" class="quick-action-btn">
                 <i class="bi bi-arrow-down-circle-fill"></i>
                 <span>Registrar Entrada</span>
             </a>
-            <a href="<?= BASE_URL ?>/saida.php" class="quick-action-btn">
+            <a href="<?= BASE_URL ?>/saida" class="quick-action-btn">
                 <i class="bi bi-arrow-up-circle-fill"></i>
                 <span>Registrar Saída</span>
             </a>
-            <a href="<?= BASE_URL ?>/relatorio.php" class="quick-action-btn">
+            <a href="<?= BASE_URL ?>/relatorio" class="quick-action-btn">
                 <i class="bi bi-bar-chart-line-fill"></i>
                 <span>Ver Relatórios</span>
             </a>
-            <a href="<?= BASE_URL ?>/historico.php" class="quick-action-btn">
+            <a href="<?= BASE_URL ?>/historico" class="quick-action-btn">
                 <i class="bi bi-clock-history"></i>
                 <span>Histórico</span>
             </a>

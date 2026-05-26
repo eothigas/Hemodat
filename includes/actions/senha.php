@@ -75,7 +75,7 @@ function action_recuperar(): void {
         echo json_encode([
             'status'   => 'success',
             'message'  => 'Código enviado com sucesso!',
-            'redirect' => BASE_URL . '/codigo.php',
+            'redirect' => BASE_URL . '/codigo',
         ]);
     } else {
         echo json_encode(['status' => 'error', 'message' => 'Erro ao enviar o e-mail. Tente novamente.']);
@@ -126,7 +126,7 @@ function action_validar(): void {
     echo json_encode([
         'status'   => 'success',
         'message'  => 'Código validado!',
-        'redirect' => BASE_URL . '/alterar_senha.php',
+        'redirect' => BASE_URL . '/alterar_senha',
     ]);
 }
 
@@ -162,6 +162,6 @@ function action_alterar(): void {
     echo json_encode([
         'status'   => 'success',
         'message'  => 'Senha alterada! Faça login novamente.',
-        'redirect' => BASE_URL . '/login.php',
+        'redirect' => BASE_URL . '/login',
     ]);
 }

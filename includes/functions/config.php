@@ -23,7 +23,7 @@ define('BASE_URL',  IS_LOCAL ? BASE_URL_LOCAL : BASE_URL_ONLINE);
  */
 function require_auth(): void {
     if (empty($_SESSION['usuario_logado']) || $_SESSION['usuario_logado'] !== true) {
-        header('Location: ' . BASE_URL . '/login.php');
+        header('Location: ' . BASE_URL . '/login');
         exit;
     }
 }

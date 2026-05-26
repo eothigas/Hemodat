@@ -19,6 +19,19 @@ $requer_sessao = $requer_sessao ?? false;
 $head_extras   = $head_extras   ?? [];
 
 $B = BASE_URL;
+
+// ── Minificação HTML ──────────────────────────────────────────────────────────
+if (!ob_get_level()) {
+    ob_start(function (string $html): string {
+        // Remove comentários HTML (preserva condicionais IE <!--[if...)
+        $html = preg_replace('/<!--(?!\[if\s)[\s\S]*?-->/U', '', $html);
+        // Colapsa espaços redundantes entre tags
+        $html = preg_replace('/>\s{2,}</s', '> <', $html);
+        // Remove linhas em branco
+        $html = preg_replace('/^\s*$/m', '', $html);
+        return $html;
+    });
+}
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -75,6 +88,9 @@ $B = BASE_URL;
 
     <!-- Dark mode (não-defer: precisa rodar cedo) -->
     <script src="<?= $B ?>/assets/js/padrao/darkmode.js"></script>
+
+    <!-- Segurança: console warning + bloqueia atalhos em produção -->
+    <script src="<?= $B ?>/assets/js/padrao/security.js" defer></script>
 </head>
 <body class="<?= htmlspecialchars($body_class) ?>">
 
