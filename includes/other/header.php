@@ -61,8 +61,20 @@ $B = BASE_URL;
     <!-- BASE_URL disponível globalmente nos scripts -->
     <script>const BASE_URL = '<?= $B ?>';</script>
 
+    <!-- Anti-FOUC: aplica tema dark ANTES do primeiro frame -->
+    <script>
+        (function(){
+            var t = localStorage.getItem('hemodat_theme');
+            if (!t) t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            if (t === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+        })();
+    </script>
+
     <!-- Bootstrap JS (defer para não bloquear render) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer></script>
+
+    <!-- Dark mode (não-defer: precisa rodar cedo) -->
+    <script src="<?= $B ?>/assets/js/padrao/darkmode.js"></script>
 </head>
 <body class="<?= htmlspecialchars($body_class) ?>">
 

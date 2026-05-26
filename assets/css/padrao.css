@@ -989,3 +989,188 @@ img { display: block; max-width: 100%; }
 
 .estoque-bar.ok { background: var(--hemo-success); }
 .estoque-bar.warn { background: var(--hemo-warning); }
+
+/* ══════════════════════════════════════════════════════════════
+   DARK MODE — html[data-theme="dark"]
+   ══════════════════════════════════════════════════════════════ */
+html[data-theme="dark"] {
+    /* Superfícies */
+    --hemo-bg:         #0B1222;
+    --hemo-card:       #162032;
+    --hemo-border:     #243448;
+
+    /* Texto */
+    --hemo-text-1:     #F1F5F9;
+    --hemo-text-2:     #CBD5E1;
+    --hemo-text-3:     #94A3B8;
+
+    /* Red alpha (manter a mesma cor base) */
+    --hemo-red-50:     rgba(220,38,38,.14);
+    --hemo-red-100:    rgba(220,38,38,.22);
+    --hemo-red-200:    rgba(220,38,38,.35);
+
+    /* Blue alpha */
+    --hemo-blue-50:    rgba(37,99,235,.14);
+    --hemo-blue-100:   rgba(37,99,235,.22);
+
+    /* Status */
+    --hemo-success-bg: rgba(22,163,74,.15);
+    --hemo-warning-bg: rgba(245,158,11,.12);
+
+    /* Sombras mais profundas */
+    --shadow-xs:  0 1px 2px rgba(0,0,0,.35);
+    --shadow-sm:  0 1px 3px rgba(0,0,0,.45), 0 1px 2px rgba(0,0,0,.35);
+    --shadow-md:  0 4px 12px rgba(0,0,0,.45), 0 2px 4px rgba(0,0,0,.35);
+    --shadow-lg:  0 8px 32px rgba(0,0,0,.55), 0 4px 8px rgba(0,0,0,.35);
+
+    /* Bootstrap dark overrides */
+    --bs-body-bg:    #0B1222;
+    --bs-body-color: #F1F5F9;
+    --bs-border-color: #243448;
+}
+
+/* Transição suave ao trocar tema */
+html { transition: background-color .22s ease, color .22s ease; }
+
+body,
+.app-sidebar,
+.app-topbar,
+.content-card,
+.stat-card,
+.split-right,
+.narrow-card,
+.form-control,
+.form-select,
+.topbar-search-input,
+.blood-chip,
+.quick-action-btn,
+.sidebar-alert {
+    transition:
+        background-color .22s ease,
+        border-color     .22s ease,
+        color            .22s ease;
+}
+
+/* ── Dark: componentes específicos ───────────────────────────── */
+html[data-theme="dark"] .form-control,
+html[data-theme="dark"] .form-select {
+    background: var(--hemo-bg);
+    color: var(--hemo-text-1);
+    border-color: var(--hemo-border);
+}
+
+html[data-theme="dark"] .form-control::placeholder { color: var(--hemo-text-3); }
+
+html[data-theme="dark"] .form-control:focus,
+html[data-theme="dark"] .form-select:focus {
+    background: var(--hemo-bg);
+    border-color: var(--hemo-red);
+    box-shadow: 0 0 0 3px rgba(220,38,38,.18);
+}
+
+/* Sidebar user section */
+html[data-theme="dark"] .sidebar-user-logout:hover {
+    background: var(--hemo-red-50);
+    color: var(--hemo-red);
+}
+
+/* Topbar search */
+html[data-theme="dark"] .topbar-search-input { background: var(--hemo-bg); }
+html[data-theme="dark"] .topbar-search-kbd   { background: #243448; color: var(--hemo-text-3); }
+
+/* Topbar icon btn */
+html[data-theme="dark"] .topbar-icon-btn:hover { background: rgba(255,255,255,.07); }
+
+/* Table */
+html[data-theme="dark"] .table { color: var(--hemo-text-1); }
+html[data-theme="dark"] .table-hover tbody tr:hover td { background: rgba(255,255,255,.04); }
+html[data-theme="dark"] .table tbody td {
+    border-bottom-color: rgba(255,255,255,.06);
+}
+html[data-theme="dark"] .table thead th { color: var(--hemo-text-3); }
+
+/* Nav tabs */
+html[data-theme="dark"] .nav-tabs .nav-link {
+    color: var(--hemo-text-3);
+}
+html[data-theme="dark"] .nav-tabs .nav-link.active {
+    background: var(--hemo-card);
+    border-color: var(--hemo-border) var(--hemo-border) var(--hemo-card);
+    color: var(--hemo-red);
+}
+html[data-theme="dark"] .nav-tabs .nav-link:hover:not(.active) {
+    background: rgba(255,255,255,.05);
+}
+
+/* Quick action btn */
+html[data-theme="dark"] .quick-action-btn {
+    background: var(--hemo-card);
+    border-color: var(--hemo-border);
+    color: var(--hemo-text-2);
+}
+html[data-theme="dark"] .quick-action-btn:hover {
+    background: var(--hemo-red-50);
+    border-color: var(--hemo-red-200);
+    color: var(--hemo-red);
+}
+
+/* Blood chips */
+html[data-theme="dark"] .blood-chip {
+    background: var(--hemo-card);
+    border-color: var(--hemo-border);
+    color: var(--hemo-text-2);
+}
+html[data-theme="dark"] .blood-chip:hover {
+    background: var(--hemo-red-50);
+    border-color: var(--hemo-red-200);
+    color: var(--hemo-red);
+}
+html[data-theme="dark"] .blood-chip.selected {
+    background: var(--hemo-red);
+    border-color: var(--hemo-red);
+    color: #fff;
+}
+
+/* Input group */
+html[data-theme="dark"] .input-group-text {
+    background: #1E3048;
+    border-color: var(--hemo-border);
+    color: var(--hemo-text-2);
+}
+
+/* Badges — ajuste de legibilidade */
+html[data-theme="dark"] .badge.bg-warning { color: #92400E !important; }
+
+/* Skeleton dark */
+html[data-theme="dark"] .skeleton {
+    background: linear-gradient(90deg, #1E3048 25%, #243D5C 50%, #1E3048 75%);
+    background-size: 200% 100%;
+}
+
+/* Sidebar alert (warning) */
+html[data-theme="dark"] .sidebar-alert {
+    background: rgba(245,158,11,.1);
+    border-color: rgba(245,158,11,.25);
+}
+
+/* Estoque bar wrap */
+html[data-theme="dark"] .estoque-bar-wrap { background: #243448; }
+
+/* Split-right (auth) */
+html[data-theme="dark"] .split-right { background: #162032; }
+html[data-theme="dark"] .split-right h1,
+html[data-theme="dark"] .split-right h2 { color: var(--hemo-text-1); }
+
+/* Narrow card */
+html[data-theme="dark"] .narrow-card { background: var(--hemo-card); }
+
+/* Scrollbar dark */
+html[data-theme="dark"] ::-webkit-scrollbar-thumb { background: #334155; }
+
+/* btn-outline-secondary dark */
+html[data-theme="dark"] .btn-outline-secondary {
+    --bs-btn-color:        var(--hemo-text-2);
+    --bs-btn-border-color: var(--hemo-border);
+    --bs-btn-hover-bg:     rgba(255,255,255,.07);
+    --bs-btn-hover-color:  var(--hemo-text-1);
+}

@@ -149,7 +149,7 @@ try {
 
         <!-- Ícones -->
         <div class="topbar-actions">
-            <button class="topbar-icon-btn" title="Tema"><i class="bi bi-moon"></i></button>
+            <button id="btn-tema" class="topbar-icon-btn" title="Modo escuro"><i class="bi bi-moon"></i></button>
             <button class="topbar-icon-btn topbar-notif-badge" title="Alertas">
                 <i class="bi bi-bell"></i>
             </button>
