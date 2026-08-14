@@ -149,6 +149,8 @@ function action_alterar_role(): void {
         echo json_encode(['status' => 'error', 'message' => 'Método inválido.']); exit;
     }
 
+    csrf_validate();
+
     $id   = (int) ($_POST['id']   ?? 0);
     $role = trim($_POST['role'] ?? '');
 
@@ -170,6 +172,8 @@ function action_salvar_estoque_min(): void {
     if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
         echo json_encode(['status' => 'error', 'message' => 'Método inválido.']); exit;
     }
+
+    csrf_validate();
 
     $pdo    = db_connect();
     $minimos = $_POST['minimos'] ?? [];

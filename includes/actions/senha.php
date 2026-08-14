@@ -7,6 +7,7 @@
 session_start();
 
 require_once __DIR__ . '/../functions/config.php';
+require_once __DIR__ . '/../functions/csrf.php';
 
 header('Content-Type: application/json');
 
@@ -27,6 +28,8 @@ function action_recuperar(): void {
     if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
         echo json_encode(['status' => 'error', 'message' => 'Método inválido.']); exit;
     }
+
+    csrf_validate();
 
     $pdo     = db_connect();
     $usuario = trim($_POST['usuario'] ?? '');
@@ -147,6 +150,8 @@ function action_validar(): void {
         echo json_encode(['status' => 'error', 'message' => 'Sessão inválida.']); return;
     }
 
+    csrf_validate();
+
     $pdo    = db_connect();
     $email  = trim($_SESSION['usuario_email']);
     $codigo = strtoupper(trim($_POST['code'] ?? ''));
@@ -188,6 +193,8 @@ function action_alterar(): void {
     if (!isset($_SESSION['usuario_email'])) {
         echo json_encode(['status' => 'error', 'message' => 'Sessão inválida.']); return;
     }
+
+    csrf_validate();
 
     $pdo          = db_connect();
     $email        = $_SESSION['usuario_email'];

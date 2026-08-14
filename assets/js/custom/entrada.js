@@ -1,11 +1,10 @@
 // entrada.js - blood chips + estoque resumo
 
-// CSRF
-let csrfToken = '';
-fetch(BASE_URL + '/includes/functions/csrf.php')
+// CSRF — Promise evita race condition entre fetch do token e submit do form
+const csrfReady = fetch(BASE_URL + '/includes/functions/csrf.php')
     .then(r => r.json())
-    .then(d => { csrfToken = d.token; })
-    .catch(() => {});
+    .then(d => d.token)
+    .catch(() => '');
 
 // ── Blood chip selection ────────────────────────────────────
 const chips     = document.querySelectorAll('.blood-chip');
@@ -13,8 +12,8 @@ const tipoInput = document.getElementById('tipo-hidden');
 
 chips.forEach(chip => {
     chip.addEventListener('click', () => {
-        chips.forEach(c => c.classList.remove('selected'));
-        chip.classList.add('selected');
+        chips.forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
         tipoInput.value = chip.dataset.tipo;
     });
 });
@@ -70,7 +69,7 @@ document.getElementById('entrada').addEventListener('submit', async (e) => {
     }
 
     const form = new FormData(e.target);
-    form.append('csrf_token', csrfToken);
+    form.append('csrf_token', await csrfReady);
 
     const btn = e.target.querySelector('button[type="submit"]');
     btn.disabled = true;
@@ -85,7 +84,7 @@ document.getElementById('entrada').addEventListener('submit', async (e) => {
     if (result.status === 'success') {
         showToast(result.message, 'success');
         e.target.reset();
-        chips.forEach(c => c.classList.remove('selected'));
+        chips.forEach(c => c.classList.remove('active'));
         tipoInput.value = '';
         carregarEstoque();
     } else {

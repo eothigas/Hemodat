@@ -3,6 +3,12 @@
  * config.php - Configuração central da aplicação Hemodat.
  */
 
+// Fixa timezone da aplicação independente do php.ini do host (produção/local
+// podem divergir, ex: servidor em UTC/Europa vs operação no Brasil) — evita
+// que date()/DateTime "hoje" fique horas à frente do horário real e rejeite
+// datas válidas (ex: saída de bolsa "hoje" perto da meia-noite).
+date_default_timezone_set('America/Sao_Paulo');
+
 // ─── Sessão ───────────────────────────────────────────────────────────────────
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
@@ -33,7 +39,7 @@ if (IS_LOCAL) {
     // XAMPP local - MySQL padrão: root sem senha
     // Crie o banco "hemodat" via phpMyAdmin ou rode: CREATE DATABASE hemodat CHARACTER SET utf8mb4;
     define('DB_HOST',    'localhost');
-    define('DB_NAME',    'efegduik_gphemodat');
+    define('DB_NAME',    'hemodat');
     define('DB_USER',    'root');
     define('DB_PASS',    '');
 } else {

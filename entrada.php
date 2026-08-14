@@ -13,94 +13,81 @@ $page_subtitle = 'Registre a entrada de sangue no estoque';
 require_once __DIR__ . '/includes/other/sidebar.php';
 ?>
 
-<div class="app-content">
-    <div class="page-2col">
+<div class="page">
+    <div class="page-head">
+        <div>
+            <h1>Registrar entrada de bolsa</h1>
+            <p>Cadastre uma nova entrada de sangue no estoque do hemocentro.</p>
+        </div>
+    </div>
 
-        <!-- ── Formulário ───────────────────────────────────── -->
-        <div class="content-card" style="flex:1.2;">
-            <div class="content-card-title">
-                <i class="bi bi-arrow-down-circle-fill" style="color:var(--hemo-red);"></i>
-                Dados da bolsa
-            </div>
+    <div class="grid grid-3-2">
+        <div class="card card-pad-lg">
+            <div class="card-head" style="margin-bottom:0;"><div><h3>Dados da entrada</h3><div class="ch-sub">Todos os campos são obrigatórios</div></div></div>
 
-            <form id="entrada"
-                  action="<?= BASE_URL ?>/includes/actions/bolsas.php?action=entrada"
-                  method="post">
-
-                <!-- Tipo sanguíneo - blood chips -->
-                <div class="form-section-label">Tipo sanguíneo</div>
-                <div class="blood-chips mb-4">
-                    <?php foreach (TIPOS_VALIDOS as $t): ?>
-                    <button type="button" class="blood-chip" data-tipo="<?= $t ?>"><?= $t ?></button>
-                    <?php endforeach; ?>
-                </div>
-                <input type="hidden" name="tipo" id="tipo-hidden" required>
-
-                <div class="row g-3">
-                    <div class="col-sm-6">
-                        <label class="form-label text-muted small">Quantidade (litros)</label>
-                        <div class="input-icon">
-                            <i class="bi bi-eyedropper"></i>
-                            <input type="number" name="litros"
-                                   class="form-control"
-                                   placeholder="Ex: 0.45"
-                                   min="0.01" step="0.01"
-                                   oninput="limitDigits(this, 10)" required>
-                        </div>
+            <form id="entrada" class="col" style="gap:20px; margin-top:16px;">
+                <div>
+                    <span class="field-lbl" style="display:block; margin-bottom:10px;">Tipo sanguíneo</span>
+                    <div class="row" style="gap:6px; flex-wrap:wrap;">
+                        <?php foreach (TIPOS_VALIDOS as $t): ?>
+                            <button type="button" class="chip blood-chip" data-tipo="<?= $t ?>" style="min-width:60px; justify-content:center;">
+                                <span style="font-family:var(--font-mono); font-weight:700;"><?= $t ?></span>
+                            </button>
+                        <?php endforeach; ?>
                     </div>
-                    <div class="col-sm-6">
-                        <label class="form-label text-muted small">Data de Coleta</label>
-                        <div class="input-icon">
-                            <i class="bi bi-calendar-check"></i>
-                            <input type="text" inputmode="numeric" name="coleta"
-                                   class="form-control"
-                                   placeholder="DD/MM/AAAA"
-                                   maxlength="10"
-                                   oninput="formatDate(this)" required>
-                        </div>
-                    </div>
-                    <div class="col-sm-6">
-                        <label class="form-label text-muted small">Data de Validade</label>
-                        <div class="input-icon">
-                            <i class="bi bi-calendar-event"></i>
-                            <input type="text" inputmode="numeric" name="validade"
-                                   class="form-control"
-                                   placeholder="DD/MM/AAAA"
-                                   maxlength="10"
-                                   oninput="formatDate(this)" required>
-                        </div>
-                    </div>
+                    <input type="hidden" id="tipo-hidden" name="tipo" required>
                 </div>
 
-                <div class="d-flex justify-content-end mt-4">
-                    <button type="submit" class="btn btn-primary px-5">
-                        <i class="bi bi-check-circle me-1"></i> Registrar Entrada
+                <hr class="divider">
+
+                <div class="grid grid-3">
+                    <label class="field">
+                        <span class="field-lbl">Volume (litros)</span>
+                        <span class="input-wrap">
+                            <span class="input-ic"><?= icon('droplet', ['size' => 16]) ?></span>
+                            <input type="number" name="litros" step="0.01" min="0.01" placeholder="0.45" required>
+                        </span>
+                    </label>
+                    <label class="field">
+                        <span class="field-lbl">Data da coleta</span>
+                        <span class="input-wrap">
+                            <span class="input-ic"><?= icon('calendar', ['size' => 16]) ?></span>
+                            <input type="text" name="coleta" placeholder="DD/MM/AAAA" required>
+                        </span>
+                    </label>
+                    <label class="field">
+                        <span class="field-lbl">Validade</span>
+                        <span class="input-wrap">
+                            <span class="input-ic"><?= icon('clock', ['size' => 16]) ?></span>
+                            <input type="text" name="validade" placeholder="DD/MM/AAAA" required>
+                        </span>
+                    </label>
+                </div>
+
+                <div class="row" style="justify-content:flex-end; gap:10px; margin-top:4px;">
+                    <button type="submit" class="btn btn-primary">
+                        <?= icon('check', ['size' => 16]) ?>
+                        Registrar entrada
                     </button>
                 </div>
-
             </form>
         </div>
 
-        <!-- ── Painel resumo estoque ─────────────────────────── -->
-        <div class="content-card" style="flex:1;">
-            <div class="content-card-title">
-                <i class="bi bi-layers-fill" style="color:var(--hemo-blue);"></i>
-                Estoque atual
-            </div>
-            <div id="estoque-resumo">
-                <div class="d-flex align-items-center gap-2 text-muted" style="font-size:13px;">
-                    <div class="spinner-border spinner-border-sm"></div> Carregando…
+        <div class="col" style="gap:16px;">
+            <div class="card">
+                <div class="card-head"><div><h3>Estoque atual</h3></div></div>
+                <div class="card-pad" id="estoque-resumo">
+                    <p class="small muted">Carregando…</p>
                 </div>
             </div>
         </div>
-
     </div>
-</div><!-- /app-content -->
-</div><!-- /app-main -->
-</div><!-- /app-shell -->
+</div>
+
+</div><!-- /main -->
+</div><!-- /app -->
 
 <script src="<?= BASE_URL ?>/assets/js/padrao/toast.js"></script>
-<script src="<?= BASE_URL ?>/assets/js/padrao/main.js"></script>
 <script src="<?= BASE_URL ?>/assets/js/padrao/logout.js"></script>
 <script src="<?= BASE_URL ?>/assets/js/custom/entrada.js"></script>
 </body>

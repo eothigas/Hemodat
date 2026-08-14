@@ -5,89 +5,111 @@ require_auth();
 $titulo        = 'HEMODAT - Dashboard';
 $body_class    = 'dashboard-page';
 $requer_sessao = true;
-$head_extras   = ['<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js" defer></script>'];
 require_once __DIR__ . '/includes/other/header.php';
 
 $active        = 'home';
 $page_title    = 'Dashboard';
-$page_subtitle = 'Visão geral do estoque';
+$page_subtitle = 'Visão executiva do estoque e movimentações';
 require_once __DIR__ . '/includes/other/sidebar.php';
 ?>
 
-<div class="app-content">
-
-    <!-- ── Stat cards ───────────────────────────────────────── -->
-    <div class="stat-grid" id="stat-grid">
-        <!-- preenchido por home.js -->
-        <?php for ($i = 0; $i < 4; $i++): ?>
-        <div class="stat-card skeleton-card">
-            <div class="skeleton" style="width:60%;height:13px;margin-bottom:8px;border-radius:6px;"></div>
-            <div class="skeleton" style="width:40%;height:28px;border-radius:6px;"></div>
+<div class="page">
+    <div class="page-head">
+        <div>
+            <h1>Dashboard</h1>
+            <p>Visão executiva do estoque e movimentações</p>
         </div>
-        <?php endfor; ?>
+        <div class="page-actions">
+            <a href="<?= BASE_URL ?>/entrada" class="btn btn-primary">
+                <?= icon('plus', ['size' => 16]) ?>
+                Registrar entrada
+            </a>
+        </div>
     </div>
 
-    <!-- ── Linha 2: Alertas + Estoque por tipo ──────────────── -->
-    <div class="dash-row">
+    <!-- Stat cards -->
+    <div class="grid grid-4" id="stat-grid">
+        <div class="card stat"><div class="stat-label">Carregando…</div></div>
+        <div class="card stat"><div class="stat-label">Carregando…</div></div>
+        <div class="card stat"><div class="stat-label">Carregando…</div></div>
+        <div class="card stat"><div class="stat-label">Carregando…</div></div>
+    </div>
 
-        <!-- Alertas vencimento / estoque crítico -->
-        <div class="content-card" style="flex:1; min-width:0;">
-            <div class="content-card-title">
-                <i class="bi bi-exclamation-triangle-fill" style="color:var(--hemo-warning);"></i>
-                Alertas
+    <!-- Charts row -->
+    <div class="grid grid-3-2">
+        <div class="card">
+            <div class="card-head">
+                <div>
+                    <h3>Entradas × Saídas</h3>
+                    <div class="ch-sub">Últimos 14 dias</div>
+                </div>
+                <div id="io-legend"></div>
             </div>
-            <div id="alertas-container">
-                <div class="d-flex align-items-center gap-2 text-muted" style="font-size:13px; padding:.5rem 0;">
-                    <div class="spinner-border spinner-border-sm"></div> Carregando…
+            <div class="card-pad" style="height:260px;" id="io-chart"></div>
+        </div>
+
+        <div class="card">
+            <div class="card-head">
+                <div>
+                    <h3>Estoque por tipo sanguíneo</h3>
+                    <div class="ch-sub" id="estoque-total-sub">—</div>
+                </div>
+            </div>
+            <div class="card-pad" style="height:260px;" id="estoque-chart"></div>
+        </div>
+    </div>
+
+    <!-- Movimentações + alertas -->
+    <div class="grid grid-3-2">
+        <div class="card">
+            <div class="card-head">
+                <div>
+                    <h3>Últimas movimentações</h3>
+                    <div class="ch-sub">Entradas e saídas mais recentes</div>
+                </div>
+                <a href="<?= BASE_URL ?>/historico" class="btn btn-secondary btn-sm">Ver tudo</a>
+            </div>
+            <div class="tbl-wrap">
+                <table class="tbl">
+                    <thead>
+                        <tr>
+                            <th>Tipo mov.</th>
+                            <th>Tipo sang.</th>
+                            <th class="num">Volume</th>
+                            <th>Responsável</th>
+                            <th class="num">Data</th>
+                        </tr>
+                    </thead>
+                    <tbody id="movs-body">
+                        <tr><td colspan="5" class="text-center small muted" style="padding:20px;">Carregando…</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="col" style="gap:16px;">
+            <div class="card">
+                <div class="card-head"><div><h3>Alertas operacionais</h3></div></div>
+                <div class="card-pad" id="alertas-container">
+                    <div class="small muted">Carregando…</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-head"><div><h3>Distribuição por tipo</h3></div></div>
+                <div class="card-pad" id="donut-container" style="display:flex; justify-content:center;">
                 </div>
             </div>
         </div>
-
-        <!-- Gráfico estoque por tipo -->
-        <div class="content-card" style="flex:1.8; min-width:0;">
-            <div class="content-card-title">
-                <i class="bi bi-bar-chart-fill" style="color:var(--hemo-blue);"></i>
-                Estoque por tipo sanguíneo
-            </div>
-            <div style="position:relative; height:220px;">
-                <canvas id="graficoEstoque"></canvas>
-            </div>
-        </div>
-
     </div>
+</div>
 
-    <!-- ── Ações rápidas ────────────────────────────────────── -->
-    <div class="content-card">
-        <div class="content-card-title">
-            <i class="bi bi-lightning-fill" style="color:var(--hemo-red);"></i>
-            Ações rápidas
-        </div>
-        <div class="quick-actions">
-            <a href="<?= BASE_URL ?>/entrada" class="quick-action-btn">
-                <i class="bi bi-arrow-down-circle-fill"></i>
-                <span>Registrar Entrada</span>
-            </a>
-            <a href="<?= BASE_URL ?>/saida" class="quick-action-btn">
-                <i class="bi bi-arrow-up-circle-fill"></i>
-                <span>Registrar Saída</span>
-            </a>
-            <a href="<?= BASE_URL ?>/relatorio" class="quick-action-btn">
-                <i class="bi bi-bar-chart-line-fill"></i>
-                <span>Ver Relatórios</span>
-            </a>
-            <a href="<?= BASE_URL ?>/historico" class="quick-action-btn">
-                <i class="bi bi-clock-history"></i>
-                <span>Histórico</span>
-            </a>
-        </div>
-    </div>
-
-</div><!-- /app-content -->
-</div><!-- /app-main -->
-</div><!-- /app-shell -->
+</div><!-- /main -->
+</div><!-- /app -->
 
 <script src="<?= BASE_URL ?>/assets/js/padrao/toast.js"></script>
 <script src="<?= BASE_URL ?>/assets/js/padrao/logout.js"></script>
+<script src="<?= BASE_URL ?>/assets/js/padrao/charts.js"></script>
 <script src="<?= BASE_URL ?>/assets/js/custom/home.js"></script>
 </body>
 </html>

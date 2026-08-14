@@ -22,6 +22,8 @@ switch ($action) {
     case 'estoque_alerta':  action_estoque_alerta();  break;
     case 'historico':       action_historico();       break;
     case 'estoque_min_get': action_estoque_min_get(); break;
+    case 'serie_diaria':    action_serie_diaria();    break;
+    case 'movimentacoes_hoje': action_movimentacoes_hoje(); break;
     default:
         http_response_code(400);
         echo json_encode(['status' => 'error', 'message' => 'Ação inválida.']);
@@ -355,6 +357,61 @@ function action_estoque_min_get(): void {
         $rows = array_map(fn($t) => ['tipo_sanguineo' => $t, 'minimo_litros' => '2.00'], TIPOS_VALIDOS);
     }
     echo json_encode($rows);
+}
+
+/**
+ * Série diária de entradas x saídas dos últimos N dias (dashboard).
+ * GET params: days (default 14, máx 90)
+ */
+function action_serie_diaria(): void {
+    $pdo  = db_connect();
+    $days = min(90, max(1, (int) ($_GET['days'] ?? 14)));
+
+    $entradas = [];
+    try {
+        $stmt = $pdo->prepare(
+            "SELECT DATE(criado_em) AS dia, SUM(quantidade) AS total
+             FROM entradas_log
+             WHERE criado_em >= CURDATE() - INTERVAL :dias DAY
+             GROUP BY DATE(criado_em)"
+        );
+        $stmt->execute([':dias' => $days - 1]);
+        foreach ($stmt->fetchAll(PDO::FETCH_KEY_PAIR) as $dia => $total) $entradas[$dia] = (float) $total;
+    } catch (PDOException $e) {}
+
+    $saidas = [];
+    $stmt = $pdo->prepare(
+        "SELECT data_saida AS dia, SUM(quantidade) AS total
+         FROM saida_bolsas_sangue
+         WHERE data_saida >= CURDATE() - INTERVAL :dias DAY
+         GROUP BY data_saida"
+    );
+    $stmt->execute([':dias' => $days - 1]);
+    foreach ($stmt->fetchAll(PDO::FETCH_KEY_PAIR) as $dia => $total) $saidas[$dia] = (float) $total;
+
+    $serie = [];
+    for ($i = $days - 1; $i >= 0; $i--) {
+        $dia = date('Y-m-d', strtotime("-$i day"));
+        $serie[] = [
+            'label'    => date('d/m', strtotime($dia)),
+            'entradas' => round($entradas[$dia] ?? 0, 2),
+            'saidas'   => round($saidas[$dia] ?? 0, 2),
+        ];
+    }
+    echo json_encode($serie);
+}
+
+/**
+ * Contagem de movimentações (entradas + saídas) de hoje.
+ */
+function action_movimentacoes_hoje(): void {
+    $pdo = db_connect();
+    $ent = 0;
+    try {
+        $ent = (int) $pdo->query("SELECT COUNT(*) FROM entradas_log WHERE DATE(criado_em) = CURDATE()")->fetchColumn();
+    } catch (PDOException $e) {}
+    $sai = (int) $pdo->query("SELECT COUNT(*) FROM saida_bolsas_sangue WHERE data_saida = CURDATE()")->fetchColumn();
+    echo json_encode(['entradas' => $ent, 'saidas' => $sai, 'total' => $ent + $sai]);
 }
 
 // ─────────────────────────────────────────────────────────────────────────────

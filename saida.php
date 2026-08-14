@@ -13,83 +13,79 @@ $page_subtitle = 'Registre a saída de sangue do estoque';
 require_once __DIR__ . '/includes/other/sidebar.php';
 ?>
 
-<div class="app-content">
-    <div class="page-2col">
+<div class="page">
+    <div class="page-head">
+        <div>
+            <h1>Registrar saída</h1>
+            <p>Registre a saída de sangue do estoque (FEFO — libera o lote mais próximo do vencimento).</p>
+        </div>
+    </div>
 
-        <!-- ── Formulário ───────────────────────────────────── -->
-        <div class="content-card" style="flex:1.2;">
-            <div class="content-card-title">
-                <i class="bi bi-arrow-up-circle-fill" style="color:var(--hemo-red);"></i>
-                Dados da saída
-            </div>
+    <div class="grid grid-3-2">
+        <div class="card card-pad-lg">
+            <div class="card-head" style="margin-bottom:0;"><div><h3>Dados da saída</h3></div></div>
 
-            <form id="saida"
-                  action="<?= BASE_URL ?>/includes/actions/bolsas.php?action=saida"
-                  method="post">
-
-                <!-- Tipo sanguíneo - blood chips -->
-                <div class="form-section-label">Tipo sanguíneo</div>
-                <div class="blood-chips mb-4">
-                    <?php foreach (TIPOS_VALIDOS as $t): ?>
-                    <button type="button" class="blood-chip" data-tipo="<?= $t ?>"><?= $t ?></button>
-                    <?php endforeach; ?>
-                </div>
-                <input type="hidden" name="tipo" id="tipo-hidden" required>
-
-                <div class="row g-3">
-                    <div class="col-sm-6">
-                        <label class="form-label text-muted small">Quantidade (litros)</label>
-                        <div class="input-icon">
-                            <i class="bi bi-eyedropper"></i>
-                            <input type="number" name="litros"
-                                   class="form-control"
-                                   placeholder="Ex: 0.45"
-                                   min="0.01" step="0.01"
-                                   oninput="limitDigits(this, 10)" required>
-                        </div>
+            <form id="saida" class="col" style="gap:20px; margin-top:16px;">
+                <div>
+                    <span class="field-lbl" style="display:block; margin-bottom:10px;">Tipo sanguíneo</span>
+                    <div class="row" style="gap:6px; flex-wrap:wrap;">
+                        <?php foreach (TIPOS_VALIDOS as $t): ?>
+                            <button type="button" class="chip blood-chip" data-tipo="<?= $t ?>" style="min-width:60px; justify-content:center;">
+                                <span style="font-family:var(--font-mono); font-weight:700;"><?= $t ?></span>
+                            </button>
+                        <?php endforeach; ?>
                     </div>
-                    <div class="col-sm-6">
-                        <label class="form-label text-muted small">Data de Saída</label>
-                        <div class="input-icon">
-                            <i class="bi bi-calendar"></i>
-                            <input type="text" inputmode="numeric" name="saida"
-                                   class="form-control"
-                                   placeholder="DD/MM/AAAA"
-                                   maxlength="10"
-                                   oninput="formatDate(this)" required>
-                        </div>
-                    </div>
+                    <input type="hidden" id="tipo-hidden" name="tipo" required>
                 </div>
 
-                <div class="d-flex justify-content-end mt-4">
-                    <button type="submit" class="btn btn-primary px-5">
-                        <i class="bi bi-check-circle me-1"></i> Registrar Saída
+                <hr class="divider">
+
+                <div class="grid grid-2">
+                    <label class="field">
+                        <span class="field-lbl">Volume a liberar (litros)</span>
+                        <span class="input-wrap">
+                            <span class="input-ic"><?= icon('droplet', ['size' => 16]) ?></span>
+                            <input type="number" name="litros" step="0.01" min="0.01" placeholder="0.45" required>
+                        </span>
+                    </label>
+                    <label class="field">
+                        <span class="field-lbl">Data da saída</span>
+                        <span class="input-wrap">
+                            <span class="input-ic"><?= icon('calendar', ['size' => 16]) ?></span>
+                            <input type="text" name="saida" placeholder="DD/MM/AAAA" required>
+                        </span>
+                    </label>
+                </div>
+
+                <div class="alert alert-amber" style="font-size:12.5px;">
+                    <?= icon('alert', ['size' => 15]) ?>
+                    <span>A saída retira automaticamente do lote com validade mais próxima (FEFO) para o tipo selecionado.</span>
+                </div>
+
+                <div class="row" style="justify-content:flex-end; gap:10px;">
+                    <button type="submit" class="btn btn-primary">
+                        <?= icon('arrow-up', ['size' => 16]) ?>
+                        Registrar saída
                     </button>
                 </div>
-
             </form>
         </div>
 
-        <!-- ── Últimas saídas ────────────────────────────────── -->
-        <div class="content-card" style="flex:1;">
-            <div class="content-card-title">
-                <i class="bi bi-clock-history" style="color:var(--hemo-blue);"></i>
-                Últimas saídas
-            </div>
-            <div id="ultimas-saidas">
-                <div class="d-flex align-items-center gap-2 text-muted" style="font-size:13px;">
-                    <div class="spinner-border spinner-border-sm"></div> Carregando…
+        <div class="col" style="gap:16px;">
+            <div class="card">
+                <div class="card-head"><div><h3>Últimas saídas</h3></div></div>
+                <div class="card-pad" id="ultimas-saidas">
+                    <p class="small muted">Carregando…</p>
                 </div>
             </div>
         </div>
-
     </div>
-</div><!-- /app-content -->
-</div><!-- /app-main -->
-</div><!-- /app-shell -->
+</div>
+
+</div><!-- /main -->
+</div><!-- /app -->
 
 <script src="<?= BASE_URL ?>/assets/js/padrao/toast.js"></script>
-<script src="<?= BASE_URL ?>/assets/js/padrao/main.js"></script>
 <script src="<?= BASE_URL ?>/assets/js/padrao/logout.js"></script>
 <script src="<?= BASE_URL ?>/assets/js/custom/saida.js"></script>
 </body>

@@ -12,9 +12,9 @@ function buildUrl(page) {
 }
 
 function badgeOperacao(op) {
-    if (op === 'Entrada') return '<span class="badge" style="background:rgba(25,135,84,0.15);color:#146c43;">↓ Entrada</span>';
-    if (op === 'Saída')   return '<span class="badge" style="background:rgba(209,0,0,0.12);color:rgb(175,0,0);">↑ Saída</span>';
-    return `<span class="badge bg-secondary">${op}</span>`;
+    if (op === 'Entrada') return '<span class="badge badge-green"><span class="dot"></span>Entrada</span>';
+    if (op === 'Saída')   return '<span class="badge badge-blue"><span class="dot"></span>Saída</span>';
+    return `<span class="badge badge-gray">${op}</span>`;
 }
 
 function fmtData(val) {
@@ -44,10 +44,10 @@ async function carregar(page) {
         tbody.innerHTML = data.rows.map(r => `
             <tr>
                 <td>${badgeOperacao(r.operacao)}</td>
-                <td><strong>${r.tipo_sanguineo}</strong></td>
-                <td>${parseFloat(r.quantidade).toFixed(2)} L</td>
-                <td>${fmtData(r.data_evento)}</td>
-                <td class="text-muted small">${r.responsavel ?? '-'}</td>
+                <td><span class="bt">${r.tipo_sanguineo}</span></td>
+                <td class="num tnum">${parseFloat(r.quantidade).toFixed(2)} L</td>
+                <td class="num tnum small">${fmtData(r.data_evento)}</td>
+                <td class="small muted">${r.responsavel ?? '-'}</td>
             </tr>
         `).join('');
 

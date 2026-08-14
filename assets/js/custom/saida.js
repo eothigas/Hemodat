@@ -1,11 +1,10 @@
 // saida.js - blood chips + últimas saídas
 
-// CSRF
-let csrfToken = '';
-fetch(BASE_URL + '/includes/functions/csrf.php')
+// CSRF — Promise evita race condition entre fetch do token e submit do form
+const csrfReady = fetch(BASE_URL + '/includes/functions/csrf.php')
     .then(r => r.json())
-    .then(d => { csrfToken = d.token; })
-    .catch(() => {});
+    .then(d => d.token)
+    .catch(() => '');
 
 // ── Blood chip selection ────────────────────────────────────
 const chips     = document.querySelectorAll('.blood-chip');
@@ -13,8 +12,8 @@ const tipoInput = document.getElementById('tipo-hidden');
 
 chips.forEach(chip => {
     chip.addEventListener('click', () => {
-        chips.forEach(c => c.classList.remove('selected'));
-        chip.classList.add('selected');
+        chips.forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
         tipoInput.value = chip.dataset.tipo;
     });
 });
@@ -42,7 +41,7 @@ async function carregarUltimas() {
             return `<li>
                 <span class="estoque-tipo">${r.tipo_sanguineo}</span>
                 <span class="estoque-litros">${parseFloat(r.quantidade).toFixed(2)} L</span>
-                <span style="font-size:11.5px;color:var(--hemo-text-3);margin-left:auto;">${fmt}</span>
+                <span style="font-size:11.5px;color:var(--text-3);margin-left:auto;">${fmt}</span>
             </li>`;
         }).join('');
 
@@ -64,7 +63,7 @@ document.getElementById('saida').addEventListener('submit', async (e) => {
     }
 
     const form = new FormData(e.target);
-    form.append('csrf_token', csrfToken);
+    form.append('csrf_token', await csrfReady);
     form.append('tipo', tipoInput.value);  // hidden input já incluído, mas garante
 
     const btn = e.target.querySelector('button[type="submit"]');
@@ -80,7 +79,7 @@ document.getElementById('saida').addEventListener('submit', async (e) => {
     if (result.status === 'success') {
         showToast(result.message, 'success');
         e.target.reset();
-        chips.forEach(c => c.classList.remove('selected'));
+        chips.forEach(c => c.classList.remove('active'));
         tipoInput.value = '';
         carregarUltimas();
     } else {

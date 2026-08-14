@@ -11,6 +11,10 @@ ALTER TABLE usuarios
 -- UPDATE usuarios SET role = 'admin' WHERE id = 1;
 
 -- 2. Log de entradas (histórico real)
+-- COLLATE explícito é obrigatório: sem ele a tabela herda o collation
+-- default do banco, que pode divergir de utf8mb4_unicode_ci (usado nas
+-- demais tabelas) e quebra o UNION ALL em action_historico() com
+-- "Illegal mix of collations".
 CREATE TABLE IF NOT EXISTS entradas_log (
     id              INT AUTO_INCREMENT PRIMARY KEY,
     tipo_sanguineo  VARCHAR(5)     NOT NULL,
@@ -18,13 +22,13 @@ CREATE TABLE IF NOT EXISTS entradas_log (
     data_coleta     DATE           NOT NULL,
     data_validade   DATE           NOT NULL,
     criado_em       TIMESTAMP      DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- 3. Estoque mínimo por tipo
 CREATE TABLE IF NOT EXISTS estoque_minimo (
     tipo_sanguineo  VARCHAR(5)    NOT NULL PRIMARY KEY,
     minimo_litros   DECIMAL(10,2) NOT NULL DEFAULT 2.00
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 INSERT IGNORE INTO estoque_minimo (tipo_sanguineo, minimo_litros) VALUES
     ('A+',  2.00), ('A-',  2.00),

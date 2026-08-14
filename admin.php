@@ -18,79 +18,58 @@ $page_subtitle = 'Usuários e parâmetros do sistema';
 require_once __DIR__ . '/includes/other/sidebar.php';
 ?>
 
-<div class="app-content">
-
-    <!-- ── Tabs nav ─────────────────────────────────────────── -->
-    <div class="content-card p-0 overflow-hidden">
-        <ul class="nav nav-tabs px-4 pt-3" id="adminTabs" role="tablist"
-            style="border-bottom:1px solid var(--hemo-border);">
-            <li class="nav-item">
-                <button class="nav-link active fw-semibold" id="tab-usuarios-btn"
-                        data-bs-toggle="tab" data-bs-target="#tab-usuarios" type="button">
-                    <i class="bi bi-people me-1"></i>Usuários
-                </button>
-            </li>
-            <li class="nav-item">
-                <button class="nav-link fw-semibold" id="tab-estoque-btn"
-                        data-bs-toggle="tab" data-bs-target="#tab-estoque" type="button">
-                    <i class="bi bi-sliders me-1"></i>Estoque Mínimo
-                </button>
-            </li>
-        </ul>
-
-        <div class="tab-content p-4">
-
-            <!-- ── Aba Usuários ─────────────────────────────── -->
-            <div class="tab-pane fade show active" id="tab-usuarios">
-                <p class="text-muted small mb-3">Altere as permissões de acesso dos usuários cadastrados.</p>
-                <div class="table-responsive">
-                    <table class="table table-hover align-middle mb-0">
-                        <thead>
-                            <tr>
-                                <th>Nome</th>
-                                <th>E-mail</th>
-                                <th>Permissão</th>
-                                <th style="width:140px;">Ação</th>
-                            </tr>
-                        </thead>
-                        <tbody id="usuarios-body">
-                            <tr>
-                                <td colspan="4" class="text-center py-4 text-muted">
-                                    <div class="spinner-border spinner-border-sm me-2"></div>
-                                    Carregando…
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- ── Aba Estoque Mínimo ───────────────────────── -->
-            <div class="tab-pane fade" id="tab-estoque">
-                <p class="text-muted small mb-3">
-                    Define o limite abaixo do qual um alerta é exibido no dashboard.
-                </p>
-                <form id="form-estoque-min">
-                    <div class="row g-3" id="estoque-min-campos">
-                        <div class="col-12 text-center text-muted py-3">
-                            <div class="spinner-border spinner-border-sm me-2"></div>
-                            Carregando…
-                        </div>
-                    </div>
-                    <div class="d-flex justify-content-end mt-4">
-                        <button type="submit" class="btn btn-primary px-5">
-                            <i class="bi bi-floppy me-1"></i> Salvar
-                        </button>
-                    </div>
-                </form>
-            </div>
-
-        </div><!-- /tab-content -->
+<div class="page">
+    <div class="page-head">
+        <div>
+            <h1>Configurações</h1>
+            <p>Usuários e parâmetros do sistema.</p>
+        </div>
     </div>
 
-</div><!-- /app-content -->
-</div><!-- /app-main -->
-</div><!-- /app-shell -->
+    <div class="tabs" id="admin-tabs">
+        <button class="tab active" data-tab="usuarios">Usuários</button>
+        <button class="tab" data-tab="estoque">Estoque mínimo</button>
+    </div>
+
+    <!-- ── Aba Usuários ─────────────────────────────────────── -->
+    <div class="card" id="tab-usuarios" data-panel>
+        <div class="card-head"><div><h3>Usuários</h3><div class="ch-sub">Altere as permissões de acesso dos usuários cadastrados</div></div></div>
+        <div class="tbl-wrap">
+            <table class="tbl">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>E-mail</th>
+                        <th>Permissão</th>
+                        <th style="width:140px;">Ação</th>
+                    </tr>
+                </thead>
+                <tbody id="usuarios-body">
+                    <tr><td colspan="4" class="text-center small muted" style="padding:24px;">Carregando…</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- ── Aba Estoque Mínimo ───────────────────────────────── -->
+    <div class="card d-none" id="tab-estoque" data-panel>
+        <div class="card-head"><div><h3>Estoque mínimo</h3><div class="ch-sub">Define o limite abaixo do qual um alerta é exibido no dashboard</div></div></div>
+        <form id="form-estoque-min" class="card-pad">
+            <div class="grid grid-4" id="estoque-min-campos">
+                <div class="small muted">Carregando…</div>
+            </div>
+            <div class="row" style="justify-content:flex-end; margin-top:20px;">
+                <button type="submit" class="btn btn-primary">
+                    <?= icon('check', ['size' => 16]) ?>
+                    Salvar
+                </button>
+            </div>
+        </form>
+    </div>
+
+</div><!-- /page -->
+</div><!-- /main -->
+</div><!-- /app -->
 
 <script src="<?= BASE_URL ?>/assets/js/padrao/toast.js"></script>
 <script src="<?= BASE_URL ?>/assets/js/padrao/logout.js"></script>

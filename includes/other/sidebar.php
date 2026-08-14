@@ -1,7 +1,7 @@
 <?php
 /**
- * sidebar.php - Sidebar fixa HEMODAT v2
- * Vars esperadas (defina antes de incluir):
+ * sidebar.php - Sidebar + Topbar HEMODAT (design system v2).
+ * Vars esperadas:
  *   $active        string  'home'|'entrada'|'saida'|'relatorio'|'historico'|'admin'
  *   $page_title    string  Título exibido na topbar
  *   $page_subtitle string  Subtítulo na topbar
@@ -13,15 +13,19 @@ $B              = BASE_URL;
 $nome           = htmlspecialchars($_SESSION['usuario_nome'] ?? 'Usuário');
 $role           = $_SESSION['usuario_role'] ?? 'operador';
 
-// Iniciais do usuário para o avatar
-$partes  = explode(' ', trim($nome));
-$iniciais = strtoupper(substr($partes[0], 0, 1) . (isset($partes[1]) ? substr($partes[1], 0, 1) : ''));
+$NAV_PRIMARY = [
+    ['key' => 'home',      'href' => 'home',      'label' => 'Dashboard',  'icon' => 'dashboard'],
+    ['key' => 'entrada',   'href' => 'entrada',   'label' => 'Entrada',    'icon' => 'arrow-down'],
+    ['key' => 'saida',     'href' => 'saida',     'label' => 'Saída',      'icon' => 'arrow-up'],
+    ['key' => 'relatorio', 'href' => 'relatorio', 'label' => 'Relatórios','icon' => 'chart'],
+    ['key' => 'historico', 'href' => 'historico', 'label' => 'Histórico', 'icon' => 'clock'],
+];
 
-// Contagem de bolsas vencendo (sidebar alert)
+// Contagem de bolsas vencendo (alerta na sidebar)
 $vencendo_count = 0;
 try {
-    $pdo_sb   = db_connect();
-    $stmt_sb  = $pdo_sb->prepare(
+    $pdo_sb  = db_connect();
+    $stmt_sb = $pdo_sb->prepare(
         "SELECT COUNT(*) FROM bolsas_sangue
          WHERE quantidade > 0
            AND data_validade BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL :dias DAY)"
@@ -32,129 +36,82 @@ try {
 ?>
 
 <!-- ── Sidebar ─────────────────────────────────────────────── -->
-<aside class="app-sidebar">
+<aside class="sidebar">
 
-    <!-- Logo -->
-    <a class="sidebar-logo" href="<?= $B ?>/home.php">
-        <img src="<?= $B ?>/imagens/logo/logo.png" height="28" alt="HEMODAT"
-             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <!-- Fallback text logo -->
-        <span style="display:none; align-items:center; gap:8px;">
-            <svg width="22" height="22" viewBox="0 0 26 28" fill="none">
-                <rect x="0"    y="20" width="3.5" height="8"  rx="1.2" fill="#DC2626" opacity="0.6"/>
-                <rect x="4.5"  y="13" width="3.5" height="15" rx="1.2" fill="#DC2626" opacity="0.75"/>
-                <rect x="9"    y="6"  width="3.5" height="22" rx="1.2" fill="#DC2626" opacity="0.88"/>
-                <rect x="13.5" y="2"  width="3.5" height="26" rx="1.2" fill="#DC2626"/>
-                <rect x="18"   y="7"  width="3.5" height="21" rx="1.2" fill="#DC2626" opacity="0.85"/>
-                <rect x="22.5" y="14" width="3.5" height="14" rx="1.2" fill="#DC2626" opacity="0.65"/>
-            </svg>
-            <span class="sidebar-logo-text">HEMODAT</span>
-        </span>
+    <a class="sb-brand" href="<?= $B ?>/home" style="text-decoration:none;">
+        <?= logo_horizontal(26) ?>
     </a>
 
-    <!-- Nav -->
-    <nav class="sidebar-nav">
-        <div class="sidebar-section">Operação</div>
+    <nav class="sb-nav">
+        <div class="sb-section-label">Operação</div>
+        <?php foreach ($NAV_PRIMARY as $it): ?>
+            <a href="<?= $B ?>/<?= $it['href'] ?>"
+               class="sb-item<?= $active === $it['key'] ? ' active' : '' ?>">
+                <?= icon($it['icon'], ['size' => 17, 'class' => 'sb-ic']) ?>
+                <span><?= $it['label'] ?></span>
+            </a>
+        <?php endforeach; ?>
 
-        <a href="<?= $B ?>/home"
-           class="sidebar-item <?= $active === 'home' ? 'active' : '' ?>">
-            <i class="bi bi-grid-1x2"></i>
-            Dashboard
-        </a>
-
-        <a href="<?= $B ?>/entrada"
-           class="sidebar-item <?= $active === 'entrada' ? 'active' : '' ?>">
-            <i class="bi bi-arrow-down-circle"></i>
-            Entrada
-        </a>
-
-        <a href="<?= $B ?>/saida"
-           class="sidebar-item <?= $active === 'saida' ? 'active' : '' ?>">
-            <i class="bi bi-arrow-up-circle"></i>
-            Saída
-        </a>
-
-        <a href="<?= $B ?>/relatorio"
-           class="sidebar-item <?= $active === 'relatorio' ? 'active' : '' ?>">
-            <i class="bi bi-bar-chart-line"></i>
-            Relatórios
-        </a>
-
-        <a href="<?= $B ?>/historico"
-           class="sidebar-item <?= $active === 'historico' ? 'active' : '' ?>">
-            <i class="bi bi-clock-history"></i>
-            Histórico
-        </a>
-
-        <div class="sidebar-section">Sistema</div>
-
+        <div class="sb-section-label">Sistema</div>
         <a href="<?= $B ?>/admin"
-           class="sidebar-item <?= $active === 'admin' ? 'active' : '' ?>">
-            <i class="bi bi-gear"></i>
-            Configurações
+           class="sb-item<?= $active === 'admin' ? ' active' : '' ?>">
+            <?= icon('settings', ['size' => 17, 'class' => 'sb-ic']) ?>
+            <span>Configurações</span>
             <?php if ($role !== 'admin'): ?>
-                <i class="bi bi-lock ms-auto" style="font-size:11px; opacity:.5;"></i>
+                <?= icon('lock', ['size' => 12, 'class' => 'sb-badge']) ?>
             <?php endif; ?>
         </a>
-
     </nav>
 
-    <!-- Alerta vencimento -->
-    <?php if ($vencendo_count > 0): ?>
-    <div class="sidebar-alert">
-        <div class="sidebar-alert-title">
-            <i class="bi bi-exclamation-triangle-fill"></i>
-            <?= $vencendo_count ?> bolsa<?= $vencendo_count > 1 ? 's' : '' ?> próxima<?= $vencendo_count > 1 ? 's' : '' ?> do vencimento
+    <div class="sb-foot">
+        <?php if ($vencendo_count > 0): ?>
+        <div class="alert alert-amber" style="margin-bottom:10px; font-size:12px;">
+            <?= icon('alert', ['size' => 16]) ?>
+            <div>
+                <div style="font-weight:600;">
+                    <?= $vencendo_count ?> bolsa<?= $vencendo_count > 1 ? 's' : '' ?> próxima<?= $vencendo_count > 1 ? 's' : '' ?> do vencimento
+                </div>
+                <div style="opacity:.8; margin-top:2px;">Revisar antes de <?= DIAS_ALERTA_VENCIMENTO * 24 ?>h</div>
+            </div>
         </div>
-        <div class="sidebar-alert-sub">Revisar antes de <?= DIAS_ALERTA_VENCIMENTO * 24 ?>h</div>
-    </div>
-    <?php endif; ?>
+        <?php endif; ?>
 
-    <!-- Usuário -->
-    <div class="sidebar-user">
-        <div class="sidebar-user-avatar"><?= $iniciais ?></div>
-        <div style="min-width:0;">
-            <div class="sidebar-user-name"><?= $nome ?></div>
-            <div class="sidebar-user-role"><?= ucfirst($role) ?></div>
+        <div class="sb-user">
+            <span class="sb-avatar"><?= strtoupper(mb_substr($nome, 0, 1)) ?></span>
+            <div class="sb-user-meta">
+                <span class="sb-user-name"><?= $nome ?></span>
+                <span class="sb-user-role"><?= ucfirst($role) ?></span>
+            </div>
+            <button id="logout" class="tb-icon-btn" style="margin-left:auto;" title="Sair">
+                <?= icon('logout', ['size' => 16]) ?>
+            </button>
         </div>
-        <button id="logout" class="sidebar-user-logout" title="Sair">
-            <i class="bi bi-box-arrow-right"></i>
-        </button>
     </div>
 
 </aside>
 
 <!-- ── Main area ───────────────────────────────────────────── -->
-<div class="app-main">
+<div class="main">
 
-    <!-- Topbar -->
-    <header class="app-topbar">
-        <div class="topbar-title">
-            <h2><?= htmlspecialchars($page_title) ?></h2>
+    <header class="topbar">
+        <div>
+            <div class="tb-title"><?= htmlspecialchars($page_title) ?></div>
             <?php if ($page_subtitle): ?>
-                <p><?= htmlspecialchars($page_subtitle) ?></p>
+                <div class="small muted" style="margin-top:2px;"><?= htmlspecialchars($page_subtitle) ?></div>
             <?php endif; ?>
         </div>
-
-        <!-- Search -->
-        <div class="topbar-search">
-            <div class="topbar-search-wrap">
-                <i class="bi bi-search topbar-search-icon"></i>
-                <input type="text" class="topbar-search-input"
-                       placeholder="Buscar bolsas, doadores, lotes…"
-                       readonly>
-                <span class="topbar-search-kbd">⌘K</span>
-            </div>
+        <div class="tb-spacer"></div>
+        <div class="tb-search">
+            <?= icon('search', ['size' => 15]) ?>
+            <input placeholder="Buscar bolsas, doadores, lotes…" readonly>
+            <kbd>⌘K</kbd>
         </div>
-
-        <!-- Ícones -->
-        <div class="topbar-actions">
-            <button id="btn-tema" class="topbar-icon-btn" title="Modo escuro"><i class="bi bi-moon"></i></button>
-            <button class="topbar-icon-btn topbar-notif-badge" title="Alertas">
-                <i class="bi bi-bell"></i>
+        <div class="tb-actions">
+            <button id="btn-tema" class="tb-icon-btn" title="Modo escuro"><?= icon('moon', ['size' => 17]) ?></button>
+            <button class="tb-icon-btn" title="Alertas">
+                <?= icon('bell', ['size' => 17]) ?>
+                <?php if ($vencendo_count > 0): ?><span class="dot"></span><?php endif; ?>
             </button>
-            <button class="topbar-icon-btn" title="Ajuda"><i class="bi bi-question-circle"></i></button>
+            <button class="tb-icon-btn" title="Ajuda"><?= icon('help', ['size' => 17]) ?></button>
         </div>
     </header>
-
-<!-- app-content aberto pela página -->
